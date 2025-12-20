@@ -182,6 +182,73 @@ watch(time, ({ now }) => {
         //         }
         //     }
         // }
+        // =======
+        //         if (entity.noteType === 'trace') {
+        //             if (isFlick) {
+        //                 if (entity.isCritical) {
+        //                     targets.criticalFlick.add(entity.beat)
+        //                 } else {
+        //                     targets.normalFlick.add(entity.beat)
+        //                 }
+        //             } else {
+        //                 if (entity.isCritical) {
+        //                     targets.criticalTrace.add(entity.beat)
+        //                 } else {
+        //                     targets.normalTrace.add(entity.beat)
+        //                 }
+        //             }
+        //         } else if (entity.noteType === 'forceTick') {
+        //             if (entity.isCritical) {
+        //                 targets.criticalTick.add(entity.beat)
+        //             } else {
+        //                 targets.normalTick.add(entity.beat)
+        //             }
+        //         } else if (!isInActive) {
+        //             if (isFlick) {
+        //                 if (entity.isCritical) {
+        //                     targets.criticalFlick.add(entity.beat)
+        //                 } else {
+        //                     targets.normalFlick.add(entity.beat)
+        //                 }
+        //             } else {
+        //                 if (entity.isCritical) {
+        //                     targets.criticalTap.add(entity.beat)
+        //                 } else {
+        //                     targets.normalTap.add(entity.beat)
+        //                 }
+        //             }
+        //         } else if (isActiveHead || isActiveTail) {
+        //             if (isFlick) {
+        //                 if (entity.isCritical) {
+        //                     targets.criticalFlick.add(entity.beat)
+        //                 } else {
+        //                     targets.normalFlick.add(entity.beat)
+        //                 }
+        //             } else {
+        //                 targets.normalTap.add(entity.beat)
+        //             }
+        //         } else if (entity.noteType === 'default') {
+        //             if (entity.isCritical) {
+        //                 targets.criticalTick.add(entity.beat)
+        //             } else {
+        //                 targets.normalTick.add(entity.beat)
+        //             }
+        //         } else {
+        //             if (isFlick) {
+        //                 if (entity.isCritical) {
+        //                     targets.criticalFlick.add(entity.beat)
+        //                 } else {
+        //                     targets.normalFlick.add(entity.beat)
+        //                 }
+        //             } else {
+        //                 if (entity.isCritical) {
+        //                     targets.criticalTap.add(entity.beat)
+        //                 } else {
+        //                     targets.normalTap.add(entity.beat)
+        //                 }
+        //             }
+        //         }
+        // >>>>>>> 392a765d1527e3410ba779872c993250350c7851
     }
 
     for (const [type, beats] of entries(targets)) {
