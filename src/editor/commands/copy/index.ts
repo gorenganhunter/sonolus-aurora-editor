@@ -58,7 +58,7 @@ const getAnchor = (entities: Entity[], x: number, y: number) => {
         sortedEntities.find((entity) => entity.type === 'note')
     if (note)
         return {
-            lane: note.left + note.size / 2,
+            lane: note.lane,
             beat: note.beat,
         }
 

@@ -355,6 +355,9 @@
                 "auto": "Auto",
                 "top": "Top",
                 "left": "Left"
+            },
+            "noteSpeed": {
+                "title": "Note Speed"
             }
         },
         "toolbar": {
@@ -555,12 +558,10 @@
             "flickDirection": {
                 "label": "Flick Direction",
                 "none": "None",
+                "left": "Left",
+                "right": "Right",
                 "up": "Up",
-                "upLeft": "Up Left",
-                "upRight": "Up Right",
-                "down": "Down",
-                "downLeft": "Down Left",
-                "downRight": "Down Right"
+                "down": "Down"
             },
             "group": {
                 "label": "Group",
@@ -581,7 +582,7 @@
             "isFake": {
                 "label": "Fake"
             },
-            "left": {
+            "lane": {
                 "label": "Lane"
             },
             "key": {

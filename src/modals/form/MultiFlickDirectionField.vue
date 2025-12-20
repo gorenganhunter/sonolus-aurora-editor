@@ -12,12 +12,10 @@ const modelValue = defineModel<FlickDirection | undefined>({ required: true })
         :label="i18n.modals.form.flickDirection.label"
         :options="[
             [i18n.modals.form.flickDirection.none, 'none'],
+            [i18n.modals.form.flickDirection.left, 'left'],
+            [i18n.modals.form.flickDirection.right, 'right'],
             [i18n.modals.form.flickDirection.up, 'up'],
-            [i18n.modals.form.flickDirection.upLeft, 'upLeft'],
-            [i18n.modals.form.flickDirection.upRight, 'upRight'],
             [i18n.modals.form.flickDirection.down, 'down'],
-            [i18n.modals.form.flickDirection.downLeft, 'downLeft'],
-            [i18n.modals.form.flickDirection.downRight, 'downRight'],
         ]"
     />
 </template>

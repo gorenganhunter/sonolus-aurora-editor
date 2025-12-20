@@ -19,8 +19,8 @@ const y = computed(() => time.value * ups.value)
 <template>
     <g>
         <line
-            :x1="-6"
-            :x2="6"
+            :x1="-4.5"
+            :x2="4.5"
             :y1="y"
             :y2="y"
             stroke="#ff0"
@@ -29,12 +29,12 @@ const y = computed(() => time.value * ups.value)
             stroke-dashoffset="0"
         />
 
-        <text :x="-6.1" :y text-anchor="end" dominant-baseline="middle" fill="#ff0">
+        <text :x="-4.6" :y text-anchor="end" dominant-baseline="middle" fill="#ff0">
             {{ formatTimeScale(entity.timeScale, entity.skip, entity.ease) }}
         </text>
         <text
             v-if="entity.group && (isHighlighted || isViewRecentlyActive)"
-            :x="-6.1"
+            :x="-4.6"
             :y
             font-size="0.4"
             text-anchor="start"

@@ -46,18 +46,18 @@ type ActiveAudio = {
 
 let state:
     | {
-          speed: number
-          time: number
-          bgmTime: number
-          contextTime: number
+        speed: number
+        time: number
+        bgmTime: number
+        contextTime: number
 
-          lastTime: number
-          nodes: Set<AudioNode>
-          actives: {
-              normalActive: Set<ActiveAudio>
-              criticalActive: Set<ActiveAudio>
-          }
-      }
+        lastTime: number
+        nodes: Set<AudioNode>
+        actives: {
+            normalActive: Set<ActiveAudio>
+            criticalActive: Set<ActiveAudio>
+        }
+    }
     | undefined
 
 let preview: AudioNode | undefined
@@ -89,19 +89,19 @@ watch(time, ({ now }) => {
     for (const entity of cullEntities('note', keys.min, keys.max)) {
         if (entity.beat < beats.min || entity.beat >= beats.max) continue
 
-        if (entity.isFake) continue
+        // if (entity.isFake) continue
 
-        if (entity.sfx === 'none') continue
-        if (entity.sfx === 'damage') continue
-
-        if (entity.sfx !== 'default') {
-            targets[entity.sfx].add(entity.beat)
-            continue
-        }
-
-        if (entity.noteType === 'anchor') continue
-
-        if (entity.noteType === 'damage') continue
+        // if (entity.sfx === 'none') continue
+        // if (entity.sfx === 'damage') continue
+        //
+        // if (entity.sfx !== 'default') {
+        // targets[''].add(entity.beat)
+        //     continue
+        // }
+        //
+        // if (entity.noteType === 'anchor') continue
+        //
+        // if (entity.noteType === 'damage') continue
 
         const infos = store.value.slides.info.get(entity.slideId)
         if (!infos) throw new Error('Unexpected missing infos')
@@ -114,73 +114,74 @@ watch(time, ({ now }) => {
         const isActiveTail = info.activeTail === info.note
         const isFlick = info.note.flickDirection !== 'none'
 
-        if (entity.noteType === 'trace') {
-            if (isFlick) {
-                if (entity.isCritical) {
-                    targets.criticalFlick.add(entity.beat)
-                } else {
-                    targets.normalFlick.add(entity.beat)
-                }
-            } else {
-                if (entity.isCritical) {
-                    targets.criticalTrace.add(entity.beat)
-                } else {
-                    targets.normalTrace.add(entity.beat)
-                }
-            }
-        } else if (entity.noteType === 'forceTick') {
-            if (entity.isCritical) {
-                targets.criticalTick.add(entity.beat)
-            } else {
-                targets.normalTick.add(entity.beat)
-            }
-        } else if (!isInActive) {
-            if (isFlick) {
-                if (entity.isCritical) {
-                    targets.criticalFlick.add(entity.beat)
-                } else {
-                    targets.normalFlick.add(entity.beat)
-                }
-            } else {
-                if (entity.isCritical) {
-                    targets.criticalTap.add(entity.beat)
-                } else {
-                    targets.normalTap.add(entity.beat)
-                }
-            }
-        } else if (isActiveHead) {
-            targets.normalTap.add(entity.beat)
-        } else if (isActiveTail) {
-            if (isFlick) {
-                if (entity.isCritical) {
-                    targets.criticalFlick.add(entity.beat)
-                } else {
-                    targets.normalFlick.add(entity.beat)
-                }
-            } else {
-                targets.normalTap.add(entity.beat)
-            }
-        } else if (entity.noteType === 'default') {
-            if (entity.isCritical) {
-                targets.criticalTick.add(entity.beat)
-            } else {
-                targets.normalTick.add(entity.beat)
-            }
-        } else {
-            if (isFlick) {
-                if (entity.isCritical) {
-                    targets.criticalFlick.add(entity.beat)
-                } else {
-                    targets.normalFlick.add(entity.beat)
-                }
-            } else {
-                if (entity.isCritical) {
-                    targets.criticalTap.add(entity.beat)
-                } else {
-                    targets.normalTap.add(entity.beat)
-                }
-            }
-        }
+        // targets.normalTap.add(entity.beat)
+        // if (entity.noteType === 'trace') {
+        //     if (isFlick) {
+        //         if (entity.isCritical) {
+        //             targets.criticalFlick.add(entity.beat)
+        //         } else {
+        //             targets.normalFlick.add(entity.beat)
+        //         }
+        //     } else {
+        //         if (entity.isCritical) {
+        //             targets.criticalTrace.add(entity.beat)
+        //         } else {
+        //             targets.normalTrace.add(entity.beat)
+        //         }
+        //     }
+        // } else if (entity.noteType === 'forceTick') {
+        //     if (entity.isCritical) {
+        //         targets.criticalTick.add(entity.beat)
+        //     } else {
+        //         targets.normalTick.add(entity.beat)
+        //     }
+        // } else if (!isInActive) {
+        //     if (isFlick) {
+        //         if (entity.isCritical) {
+        //             targets.criticalFlick.add(entity.beat)
+        //         } else {
+        //             targets.normalFlick.add(entity.beat)
+        //         }
+        //     } else {
+        //         if (entity.isCritical) {
+        //             targets.criticalTap.add(entity.beat)
+        //         } else {
+        //             targets.normalTap.add(entity.beat)
+        //         }
+        //     }
+        // } else if (isActiveHead) {
+        //     targets.normalTap.add(entity.beat)
+        // } else if (isActiveTail) {
+        //     if (isFlick) {
+        //         if (entity.isCritical) {
+        //             targets.criticalFlick.add(entity.beat)
+        //         } else {
+        //             targets.normalFlick.add(entity.beat)
+        //         }
+        //     } else {
+        //         targets.normalTap.add(entity.beat)
+        //     }
+        // } else if (entity.noteType === 'default') {
+        //     if (entity.isCritical) {
+        //         targets.criticalTick.add(entity.beat)
+        //     } else {
+        //         targets.normalTick.add(entity.beat)
+        //     }
+        // } else {
+        //     if (isFlick) {
+        //         if (entity.isCritical) {
+        //             targets.criticalFlick.add(entity.beat)
+        //         } else {
+        //             targets.normalFlick.add(entity.beat)
+        //         }
+        //     } else {
+        //         if (entity.isCritical) {
+        //             targets.criticalTap.add(entity.beat)
+        //         } else {
+        //             targets.normalTap.add(entity.beat)
+        //         }
+        //     }
+        // }
     }
 
     for (const [type, beats] of entries(targets)) {
@@ -192,8 +193,8 @@ watch(time, ({ now }) => {
                 sfxBuffers[type],
                 settings.playSfxVolume,
                 (beatToTime(bpms.value, beat) - state.bgmTime) / state.speed +
-                    state.contextTime +
-                    delay,
+                state.contextTime +
+                delay,
             )
         }
     }
@@ -206,13 +207,14 @@ watch(time, ({ now }) => {
     for (const entity of cullEntities('connector', keys.min, keys.max)) {
         if (entity.head.beat < beats.min || entity.head.beat >= beats.max) continue
 
-        if (entity.segmentHead.connectorType !== 'active') continue
-
-        if (entity.segmentHead.connectorActiveIsCritical) {
-            activeTargets.criticalActive.push(entity)
-        } else {
-            activeTargets.normalActive.push(entity)
-        }
+        // activeTargets.normalActive.push(entity)
+        // if (entity.segmentHead.connectorType !== 'active') continue
+        //
+        // if (entity.segmentHead.connectorActiveIsCritical) {
+        //     activeTargets.criticalActive.push(entity)
+        // } else {
+        //     activeTargets.normalActive.push(entity)
+        // }
     }
 
     for (const [type, entities] of entries(activeTargets)) {
@@ -226,11 +228,11 @@ watch(time, ({ now }) => {
                 entity.tail.beat,
                 settings.playSfxVolume,
                 (beatToTime(bpms.value, entity.head.beat) - state.bgmTime) / state.speed +
-                    state.contextTime +
-                    delay,
+                state.contextTime +
+                delay,
                 (beatToTime(bpms.value, entity.tail.beat) - state.bgmTime) / state.speed +
-                    state.contextTime +
-                    delay,
+                state.contextTime +
+                delay,
             )
         }
     }

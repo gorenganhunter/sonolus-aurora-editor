@@ -9,5 +9,5 @@ defineProps<{
 </script>
 
 <template>
-    <component :is="bodyComponents.none" :size="entity.size" :is-highlighted="isHighlighted" />
+    <component :is="bodyComponents.none" :is-highlighted="isHighlighted" />
 </template>

@@ -18,9 +18,9 @@ const y = computed(() => time.value * ups.value)
 
 <template>
     <g>
-        <line :x1="-6" :x2="6" :y1="y" :y2="y" stroke="#f0f" stroke-opacity="0.5" />
+        <line :x1="-4.5" :x2="4.5" :y1="y" :y2="y" stroke="#f0f" stroke-opacity="0.5" />
 
-        <text :x="6.1" :y text-anchor="start" dominant-baseline="middle" fill="#f0f">
+        <text :x="4.6" :y text-anchor="start" dominant-baseline="middle" fill="#f0f">
             {{ formatBpm(entity.bpm) }}
         </text>
     </g>

@@ -4,6 +4,7 @@ import {
     getGroup,
     getOptionalRef,
     getOptionalValue,
+    getRef,
     getValue,
     type ParseToChart,
     type TimeScaleNames,
@@ -12,47 +13,79 @@ import type { Chart, NoteObject } from '../..'
 import { beatSchema } from './schemas'
 
 export const parseSlidesToChart: ParseToChart = (chart, timeScaleNames, entities) => {
-    const refs = new Map<string, NoteEntity>()
+    const refs = new Map<string, LevelDataEntity>()
     const slides = new Map<string, string[]>()
+    const used: string[] = []
 
     for (const entity of entities) {
+        if (entity.name) refs.set(entity.name, entity)
+
         if (!isNoteEntity(entity)) continue
 
         if (!entity.name) {
-            chart.slides.push([toNoteObject(chart, timeScaleNames, entity, true, undefined)])
+            chart.slides.push([toNoteObject(chart, timeScaleNames, entity)])
             continue
         }
 
-        refs.set(entity.name, entity)
+        // let slide = slides.get(entity.name)
+        // if (!slide) {
+        //     slides.set(entity.name, (slide = [entity.name]))
+        // }
+        //
+        // const nextName = getOptionalRef(entity, 'next')
+        // if (nextName === undefined) continue
+        //
+        // const nextSlide = slides.get(nextName)
+        // if (nextSlide) {
+        //     slide.push(...nextSlide)
+        //
+        //     for (const name of nextSlide) {
+        //         slides.set(name, slide)
+        //     }
+        // } else {
+        //     slide.push(nextName)
+        //     slides.set(nextName, slide)
+        // }
+    }
 
-        let slide = slides.get(entity.name)
-        if (!slide) {
-            slides.set(entity.name, (slide = [entity.name]))
+    for (const entity of entities) {
+        if (entity.archetype !== "HoldConnector") continue
+        const prev = getOptionalRef(entity, "prev")
+
+        if (prev) continue
+
+        let slide = [getRef(entity, "head")]
+        let connector: LevelDataEntity | undefined = entity
+        used.push(slide[0]!)
+
+        while (true) {
+            let tail = getRef(connector!, "tail")
+            slide.push(tail)
+            used.push(tail)
+            const nextRef = getOptionalRef(connector!, "next")
+            if (!nextRef) break
+            connector = refs.get(nextRef)
         }
 
-        const nextName = getOptionalRef(entity, 'next')
-        if (nextName === undefined) continue
+        slides.set(slide[0]!, slide)
+    }
 
-        const nextSlide = slides.get(nextName)
-        if (nextSlide) {
-            slide.push(...nextSlide)
+    for (const entity of entities) {
+        if (!isNoteEntity(entity)) continue
+        if (!entity.name) continue
+        if (used.includes(entity.name)) continue
 
-            for (const name of nextSlide) {
-                slides.set(name, slide)
-            }
-        } else {
-            slide.push(nextName)
-            slides.set(nextName, slide)
-        }
+        chart.slides.push([toNoteObject(chart, timeScaleNames, entity)])
     }
 
     for (const slide of new Set(slides.values())) {
-        let prevActiveHead: NoteObject | undefined
+        // let prevActiveHead: NoteObject | undefined
         chart.slides.push(
             slide
                 .map((name) => {
                     const entity = refs.get(name)
                     if (!entity) throw new Error(`Invalid level: ref "${name}" not found`)
+                    else if (!isNoteEntity(entity)) throw new Error(`Invalid level: ref "${name}" is not a note`)
 
                     return {
                         entity,
@@ -64,18 +97,16 @@ export const parseSlidesToChart: ParseToChart = (chart, timeScaleNames, entities
                     const object = toNoteObject(
                         chart,
                         timeScaleNames,
-                        entity,
-                        i === slide.length - 1,
-                        prevActiveHead,
+                        entity
                     )
 
-                    if (i === 0 || object.isConnectorSeparator) {
-                        if (object.connectorType === 'active') {
-                            prevActiveHead ??= object
-                        } else {
-                            prevActiveHead = undefined
-                        }
-                    }
+                    // if (i === 0 || object.isConnectorSeparator) {
+                    //     if (object.connectorType === 'active') {
+                    //         prevActiveHead ??= object
+                    //     } else {
+                    // prevActiveHead = undefined
+                    //     }
+                    // }
 
                     return object
                 }),
@@ -84,74 +115,11 @@ export const parseSlidesToChart: ParseToChart = (chart, timeScaleNames, entities
 }
 
 const noteArchetypeNames = [
-    'NormalTapNote',
-    'NormalFlickNote',
-    'NormalTraceNote',
-    'NormalTraceFlickNote',
-    'NormalReleaseNote',
-    'NormalHeadTapNote',
-    'NormalHeadFlickNote',
-    'NormalHeadTraceNote',
-    'NormalHeadTraceFlickNote',
-    'NormalHeadReleaseNote',
-    'NormalTailTapNote',
-    'NormalTailFlickNote',
-    'NormalTailTraceNote',
-    'NormalTailTraceFlickNote',
-    'NormalTailReleaseNote',
-    'NormalTickNote',
-    'CriticalTapNote',
-    'CriticalFlickNote',
-    'CriticalTraceNote',
-    'CriticalTraceFlickNote',
-    'CriticalReleaseNote',
-    'CriticalHeadTapNote',
-    'CriticalHeadFlickNote',
-    'CriticalHeadTraceNote',
-    'CriticalHeadTraceFlickNote',
-    'CriticalHeadReleaseNote',
-    'CriticalTailTapNote',
-    'CriticalTailFlickNote',
-    'CriticalTailTraceNote',
-    'CriticalTailTraceFlickNote',
-    'CriticalTailReleaseNote',
-    'CriticalTickNote',
-    'DamageNote',
-    'AnchorNote',
-    'FakeNormalTapNote',
-    'FakeNormalFlickNote',
-    'FakeNormalTraceNote',
-    'FakeNormalTraceFlickNote',
-    'FakeNormalReleaseNote',
-    'FakeNormalHeadTapNote',
-    'FakeNormalHeadFlickNote',
-    'FakeNormalHeadTraceNote',
-    'FakeNormalHeadTraceFlickNote',
-    'FakeNormalHeadReleaseNote',
-    'FakeNormalTailTapNote',
-    'FakeNormalTailFlickNote',
-    'FakeNormalTailTraceNote',
-    'FakeNormalTailTraceFlickNote',
-    'FakeNormalTailReleaseNote',
-    'FakeNormalTickNote',
-    'FakeCriticalTapNote',
-    'FakeCriticalFlickNote',
-    'FakeCriticalTraceNote',
-    'FakeCriticalTraceFlickNote',
-    'FakeCriticalReleaseNote',
-    'FakeCriticalHeadTapNote',
-    'FakeCriticalHeadFlickNote',
-    'FakeCriticalHeadTraceNote',
-    'FakeCriticalHeadTraceFlickNote',
-    'FakeCriticalHeadReleaseNote',
-    'FakeCriticalTailTapNote',
-    'FakeCriticalTailFlickNote',
-    'FakeCriticalTailTraceNote',
-    'FakeCriticalTailTraceFlickNote',
-    'FakeCriticalTailReleaseNote',
-    'FakeCriticalTickNote',
-    'FakeDamageNote',
-    'FakeAnchorNote',
+    'TapNote',
+    'FlickNote',
+    'HoldStartNote',
+    'HoldTickNote',
+    'IgnoredNote'
 ] as const
 
 type NoteArchetypeName = (typeof noteArchetypeNames)[number]
@@ -163,174 +131,176 @@ const isNoteEntity = (entity: LevelDataEntity): entity is NoteEntity =>
 
 const isAttachedSchema = Type.Number()
 
-const laneSchema = Type.Number()
+const laneSchema = Type.Number({ minimum: -4, maximum: 4 })
 
-const sizeSchema = Type.Number({ minimum: 0 })
+// const sizeSchema = Type.Number({ minimum: 0 })
 
 const directionSchema = Type.Union([
     Type.Literal(0),
     Type.Literal(1),
     Type.Literal(2),
     Type.Literal(3),
-    Type.Literal(4),
-    Type.Literal(5),
 ])
 
 const directions = {
-    0: 'up',
-    1: 'upLeft',
-    2: 'upRight',
-    3: 'down',
-    4: 'downLeft',
-    5: 'downRight',
+    0: 'left',
+    1: 'right',
+    2: 'up',
+    3: 'down'
+    // 0: 'up',
+    // 1: 'upLeft',
+    // 2: 'upRight',
+    // 3: 'down',
+    // 4: 'downLeft',
+    // 5: 'downRight',
 } as const
 
-const sfxSchema = Type.Union([
-    Type.Literal(0),
-    Type.Literal(1),
-    Type.Literal(2),
-    Type.Literal(3),
-    Type.Literal(4),
-    Type.Literal(5),
-    Type.Literal(6),
-    Type.Literal(7),
-    Type.Literal(8),
-    Type.Literal(9),
-    Type.Literal(10),
-])
-
-const sfxs = {
-    0: 'default',
-    1: 'none',
-    2: 'normalTap',
-    3: 'normalFlick',
-    4: 'normalTrace',
-    5: 'normalTick',
-    6: 'criticalTap',
-    7: 'criticalFlick',
-    8: 'criticalTrace',
-    9: 'criticalTick',
-    10: 'damage',
-} as const
-
-const isSeparatorSchema = Type.Number()
-
-const segmentKindSchema = Type.Union([
-    Type.Literal(1),
-    Type.Literal(2),
-    Type.Literal(51),
-    Type.Literal(52),
-    Type.Literal(101),
-    Type.Literal(102),
-    Type.Literal(103),
-    Type.Literal(104),
-    Type.Literal(105),
-    Type.Literal(106),
-    Type.Literal(107),
-    Type.Literal(108),
-])
-
-const segmentKinds = {
-    1: {
-        connectorType: 'active',
-        connectorActiveIsCritical: false,
-        connectorActiveIsFake: false,
-        connectorGuideColor: 'green',
-    },
-    2: {
-        connectorType: 'active',
-        connectorActiveIsCritical: true,
-        connectorActiveIsFake: false,
-        connectorGuideColor: 'yellow',
-    },
-    51: {
-        connectorType: 'active',
-        connectorActiveIsCritical: false,
-        connectorActiveIsFake: true,
-        connectorGuideColor: 'green',
-    },
-    52: {
-        connectorType: 'active',
-        connectorActiveIsCritical: true,
-        connectorActiveIsFake: true,
-        connectorGuideColor: 'yellow',
-    },
-    101: {
-        connectorType: 'guide',
-        connectorActiveIsCritical: false,
-        connectorActiveIsFake: false,
-        connectorGuideColor: 'neutral',
-    },
-    102: {
-        connectorType: 'guide',
-        connectorActiveIsCritical: false,
-        connectorActiveIsFake: false,
-        connectorGuideColor: 'red',
-    },
-    103: {
-        connectorType: 'guide',
-        connectorActiveIsCritical: false,
-        connectorActiveIsFake: false,
-        connectorGuideColor: 'green',
-    },
-    104: {
-        connectorType: 'guide',
-        connectorActiveIsCritical: false,
-        connectorActiveIsFake: false,
-        connectorGuideColor: 'blue',
-    },
-    105: {
-        connectorType: 'guide',
-        connectorActiveIsCritical: false,
-        connectorActiveIsFake: false,
-        connectorGuideColor: 'yellow',
-    },
-    106: {
-        connectorType: 'guide',
-        connectorActiveIsCritical: false,
-        connectorActiveIsFake: false,
-        connectorGuideColor: 'purple',
-    },
-    107: {
-        connectorType: 'guide',
-        connectorActiveIsCritical: false,
-        connectorActiveIsFake: false,
-        connectorGuideColor: 'cyan',
-    },
-    108: {
-        connectorType: 'guide',
-        connectorActiveIsCritical: false,
-        connectorActiveIsFake: false,
-        connectorGuideColor: 'black',
-    },
-} as const
-
-const connectorEaseSchema = Type.Union([
-    Type.Literal(0),
-    Type.Literal(1),
-    Type.Literal(2),
-    Type.Literal(3),
-    Type.Literal(4),
-    Type.Literal(5),
-])
-
-const connectorEases = {
-    0: 'none',
-    1: 'linear',
-    2: 'in',
-    3: 'out',
-    4: 'inOut',
-    5: 'outIn',
-} as const
-
-const segmentAlphaSchema = Type.Number({ minimum: 0, maximum: 1 })
-
-const segmentLayerSchema = Type.Union([Type.Literal(0), Type.Literal(1)])
-
-const connectorLayers = {
-    0: 'top',
-    1: 'bottom',
-} as const
+// const sfxSchema = Type.Union([
+//     Type.Literal(0),
+//     Type.Literal(1),
+//     Type.Literal(2),
+//     Type.Literal(3),
+//     Type.Literal(4),
+//     Type.Literal(5),
+//     Type.Literal(6),
+//     Type.Literal(7),
+//     Type.Literal(8),
+//     Type.Literal(9),
+//     Type.Literal(10),
+// ])
+//
+// const sfxs = {
+//     0: 'default',
+//     1: 'none',
+//     2: 'normalTap',
+//     3: 'normalFlick',
+//     4: 'normalTrace',
+//     5: 'normalTick',
+//     6: 'criticalTap',
+//     7: 'criticalFlick',
+//     8: 'criticalTrace',
+//     9: 'criticalTick',
+//     10: 'damage',
+// } as const
+//
+// const isSeparatorSchema = Type.Number()
+//
+// const segmentKindSchema = Type.Union([
+//     Type.Literal(1),
+//     Type.Literal(2),
+//     Type.Literal(51),
+//     Type.Literal(52),
+//     Type.Literal(101),
+//     Type.Literal(102),
+//     Type.Literal(103),
+//     Type.Literal(104),
+//     Type.Literal(105),
+//     Type.Literal(106),
+//     Type.Literal(107),
+//     Type.Literal(108),
+// ])
+//
+// const segmentKinds = {
+//     1: {
+//         connectorType: 'active',
+//         connectorActiveIsCritical: false,
+//         connectorActiveIsFake: false,
+//         connectorGuideColor: 'green',
+//     },
+//     2: {
+//         connectorType: 'active',
+//         connectorActiveIsCritical: true,
+//         connectorActiveIsFake: false,
+//         connectorGuideColor: 'yellow',
+//     },
+//     51: {
+//         connectorType: 'active',
+//         connectorActiveIsCritical: false,
+//         connectorActiveIsFake: true,
+//         connectorGuideColor: 'green',
+//     },
+//     52: {
+//         connectorType: 'active',
+//         connectorActiveIsCritical: true,
+//         connectorActiveIsFake: true,
+//         connectorGuideColor: 'yellow',
+//     },
+//     101: {
+//         connectorType: 'guide',
+//         connectorActiveIsCritical: false,
+//         connectorActiveIsFake: false,
+//         connectorGuideColor: 'neutral',
+//     },
+//     102: {
+//         connectorType: 'guide',
+//         connectorActiveIsCritical: false,
+//         connectorActiveIsFake: false,
+//         connectorGuideColor: 'red',
+//     },
+//     103: {
+//         connectorType: 'guide',
+//         connectorActiveIsCritical: false,
+//         connectorActiveIsFake: false,
+//         connectorGuideColor: 'green',
+//     },
+//     104: {
+//         connectorType: 'guide',
+//         connectorActiveIsCritical: false,
+//         connectorActiveIsFake: false,
+//         connectorGuideColor: 'blue',
+//     },
+//     105: {
+//         connectorType: 'guide',
+//         connectorActiveIsCritical: false,
+//         connectorActiveIsFake: false,
+//         connectorGuideColor: 'yellow',
+//     },
+//     106: {
+//         connectorType: 'guide',
+//         connectorActiveIsCritical: false,
+//         connectorActiveIsFake: false,
+//         connectorGuideColor: 'purple',
+//     },
+//     107: {
+//         connectorType: 'guide',
+//         connectorActiveIsCritical: false,
+//         connectorActiveIsFake: false,
+//         connectorGuideColor: 'cyan',
+//     },
+//     108: {
+//         connectorType: 'guide',
+//         connectorActiveIsCritical: false,
+//         connectorActiveIsFake: false,
+//         connectorGuideColor: 'black',
+//     },
+// } as const
+//
+// const connectorEaseSchema = Type.Union([
+//     Type.Literal(0),
+//     Type.Literal(1),
+//     Type.Literal(2),
+//     Type.Literal(3),
+//     Type.Literal(4),
+//     Type.Literal(5),
+// ])
+//
+// const connectorEases = {
+//     0: 'none',
+//     1: 'linear',
+//     2: 'in',
+//     3: 'out',
+//     4: 'inOut',
+//     5: 'outIn',
+// } as const
+//
+// const segmentAlphaSchema = Type.Number({ minimum: 0, maximum: 1 })
+//
+// const segmentLayerSchema = Type.Union([Type.Literal(0), Type.Literal(1)])
+//
+// const connectorLayers = {
+//     0: 'top',
+//     1: 'bottom',
+// } as const
 
 const trimStart = <T extends string, U extends string>(
     name: T,
@@ -348,72 +318,59 @@ const toNoteObject = (
     chart: Chart,
     timeScaleNames: TimeScaleNames,
     entity: NoteEntity,
-    isLast: boolean,
-    prevActiveHead: NoteObject | undefined,
 ) => {
     const lane = getValue(entity, 'lane', laneSchema)
-    const size = getValue(entity, 'size', sizeSchema)
+    const direction = getOptionalValue(entity, 'direction', directionSchema)
 
     const object: NoteObject = {
         group: getGroup(chart, timeScaleNames, entity),
         beat: getValue(entity, EngineArchetypeDataName.Beat, beatSchema),
         noteType: 'default',
-        isAttached: !!getValue(entity, 'isAttached', isAttachedSchema),
-        left: lane - size,
-        size: size * 2,
-        isCritical: false,
-        flickDirection: directions[getValue(entity, 'direction', directionSchema)],
-        isFake: false,
-        sfx: sfxs[getOptionalValue(entity, 'effectKind', sfxSchema) ?? 0],
-        isConnectorSeparator: !!getOptionalValue(entity, 'isSeparator', isSeparatorSchema),
-        ...segmentKinds[getValue(entity, 'segmentKind', segmentKindSchema)],
-        connectorEase: connectorEases[getValue(entity, 'connectorEase', connectorEaseSchema)],
-        connectorGuideAlpha: getValue(entity, 'segmentAlpha', segmentAlphaSchema),
-        connectorLayer:
-            connectorLayers[getOptionalValue(entity, 'segmentLayer', segmentLayerSchema) ?? 0],
+        lane,
+        flickDirection: direction === undefined ? "none" : directions[direction],
     }
 
-    const [isFake, archetype1] = startsWith(entity.archetype, 'Fake')
-    object.isFake = isFake
+    // const [isFake, archetype1] = startsWith(entity.archetype, 'Fake')
+    // object.isFake = isFake
 
-    if (archetype1 === 'AnchorNote') {
+    if (entity.archetype === 'IgnoredNote') {
         object.noteType = 'anchor'
-        object.flickDirection = 'none'
-
-        return object
-    } else if (archetype1 === 'DamageNote') {
-        object.noteType = 'damage'
-        object.flickDirection = 'none'
-
-        return object
+    } else if (entity.archetype === "HoldTickNote") {
+        object.noteType = 'default'
     }
+    /* else if (archetype1 === 'AccidentNote') {
+    object.noteType = 'damage'
+    object.flickDirection = 'none'
 
-    const archetype2 = trimStart(archetype1, 'Normal')
-    const [isCritical, archetype3] = startsWith(archetype2, 'Critical')
-    object.isCritical = isCritical
+    return object
+}*/
 
-    const [isTrace, archetype4] = startsWith(
-        trimStart(trimStart(archetype3, 'Head'), 'Tail'),
-        'Trace',
-    )
-    if (isTrace) {
-        object.noteType = 'trace'
-        if (archetype4 !== 'FlickNote') object.flickDirection = 'none'
+    // const archetype2 = trimStart(archetype1, 'Normal')
+    // const [isCritical, archetype3] = startsWith(archetype2, 'Critical')
+    // object.isCritical = isCritical
 
-        return object
-    }
+    // const [isTrace, archetype4] = startsWith(
+    //     trimStart(trimStart(archetype3, 'Head'), 'Tail'),
+    //     'Trace',
+    // )
+    // if (isTrace) {
+    //     object.noteType = 'trace'
+    //     if (archetype4 !== 'FlickNote') object.flickDirection = 'none'
+    //
+    //     return object
+    // }
 
-    if (
-        !prevActiveHead ||
-        isLast ||
-        (object.isConnectorSeparator && object.connectorType !== 'active')
-    ) {
-        if (archetype4 === 'TickNote') object.noteType = 'forceTick'
-    } else {
-        if (archetype4 !== 'TickNote') object.noteType = 'forceNonTick'
-    }
+    // if (
+    //     !prevActiveHead ||
+    //     isLast ||
+    //     (object.isConnectorSeparator && object.connectorType !== 'active')
+    // ) {
+    //     if (archetype4 === 'TickNote') object.noteType = 'forceTick'
+    // } else {
+    //     if (archetype4 !== 'TickNote') object.noteType = 'forceNonTick'
+    // }
 
-    if (archetype4 !== 'FlickNote') object.flickDirection = 'none'
+    if (entity.archetype !== 'FlickNote') object.flickDirection = 'none'
 
     return object
 }

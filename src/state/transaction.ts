@@ -1,7 +1,9 @@
 import type { State } from '.'
+import { view } from '../editor/view'
 import type { Entity } from './entities'
 import type { SlideId } from './entities/slides'
 import { calculateBpms, type BpmIntegral } from './integrals/bpms'
+import { calculateTimeScales, type TimeScaleIntegral } from './integrals/timeScales'
 import { rebuildSlide } from './mutations/slides'
 
 export type Transaction = ReturnType<typeof createTransaction>
@@ -10,10 +12,11 @@ export const createTransaction = (state: State) => {
     const grid = createMapObjectTransaction(state.store.grid)
     const slides = createMapObjectTransaction(state.store.slides)
     const dirtySlideIds = new Set<SlideId>()
-
+    // state.store.slides.note.get(0)[0]?.
     let groupCount = state.groupCount
 
     let bpms: BpmIntegral[] | undefined
+    let timeScales: TimeScaleIntegral[] | undefined
 
     return {
         store: {
@@ -32,9 +35,14 @@ export const createTransaction = (state: State) => {
         get bpms() {
             return (bpms ??= [...state.bpms])
         },
+        get timeScales() {
+            return (timeScales ??= [...state.timeScales])
+        },
 
         commit(selectedEntities: Entity[]): State {
             if (bpms) bpms = calculateBpms(bpms)
+            if (bpms || timeScales)
+                timeScales = calculateTimeScales(bpms ?? state.bpms, timeScales ?? [...state.timeScales.filter(({ group }) => group === view.group)])
 
             for (const slideId of dirtySlideIds) {
                 rebuildSlide(this.store, slideId, selectedEntities)
@@ -53,6 +61,7 @@ export const createTransaction = (state: State) => {
                     },
                 },
                 bpms: bpms ?? state.bpms,
+                timeScales: timeScales ?? state.timeScales,
                 groupCount,
 
                 selectedEntities,

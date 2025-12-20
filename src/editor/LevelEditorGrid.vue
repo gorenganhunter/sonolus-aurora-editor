@@ -47,16 +47,16 @@ const timeNumbers = computed(() =>
 <template>
     <g stroke="#fff">
         <g
-            :transform="`translate(-7, ${Math.min(0, viewBox.b)}) scale(1, ${viewBox.t - Math.min(0, viewBox.b)})`"
+            :transform="`translate(-5.5, ${Math.min(0, viewBox.b)}) scale(1, ${viewBox.t - Math.min(0, viewBox.b)})`"
         >
             <line
-                v-for="i in 13"
+                v-for="i in 10"
                 :key="i"
                 :x1="i"
                 :x2="i"
                 :y1="0"
                 :y2="1"
-                :stroke-opacity="i === 1 || i === 13 ? 0.5 : i % 2 ? 0.25 : 0.05"
+                :stroke-opacity="i === 1 || i === 10 ? 0.5 : 0.25"
             />
         </g>
 
@@ -64,8 +64,8 @@ const timeNumbers = computed(() =>
             <line
                 v-for="{ y, isBeat } in lines"
                 :key="y"
-                :x1="-6"
-                :x2="6"
+                :x1="-4.5"
+                :x2="4.5"
                 :y1="y"
                 :y2="y"
                 :stroke-opacity="isBeat ? 0.5 : 0.25"

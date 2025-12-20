@@ -1,13 +1,13 @@
 import { type BaseEntity } from '.'
-import type { TimeScaleEase, TimeScaleObject } from '../../chart'
+import type { /*TimeScaleEase,*/ TimeScaleObject } from '../../chart'
 
 export type TimeScaleEntity = BaseEntity & {
     type: 'timeScale'
     group: number
     timeScale: number
-    skip: number
-    ease: TimeScaleEase
-    hideNotes: boolean
+    // skip: number
+    // ease: TimeScaleEase
+    // hideNotes: boolean
 }
 
 export const toTimeScaleEntity = (object: TimeScaleObject): TimeScaleEntity => ({
@@ -22,7 +22,7 @@ export const toTimeScaleEntity = (object: TimeScaleObject): TimeScaleEntity => (
     group: object.group,
     beat: object.beat,
     timeScale: object.timeScale,
-    skip: object.skip,
-    ease: object.ease,
-    hideNotes: object.hideNotes,
+    // skip: object.skip,
+    // ease: object.ease,
+    // hideNotes: object.hideNotes,
 })

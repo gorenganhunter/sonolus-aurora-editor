@@ -14,15 +14,14 @@ defineProps<{
     <component
         :is="
             bodyComponents.single[
-                entity.isCritical ? 'yellow' : entity.flickDirection !== 'none' ? 'red' : 'green'
+                /*entity.isCritical ? 'yellow' : entity.flickDirection !== 'none' ? 'red' : */'green'
             ]
         "
-        :size="entity.size"
     />
-    <component
+    <!--component
         :is="arrowComponents[entity.isCritical ? 'yellow' : 'red'][entity.flickDirection]"
         v-if="entity.flickDirection !== 'none'"
         :size="entity.size"
     />
-    <component :is="fakeMarkerComponent" v-if="entity.isFake" :size="entity.size" />
+    <component :is="fakeMarkerComponent" v-if="entity.isFake" :size="entity.size" /-->
 </template>

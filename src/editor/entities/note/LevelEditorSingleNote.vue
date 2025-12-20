@@ -8,21 +8,30 @@ defineProps<{
     entity: NoteEntity
     isHighlighted: boolean
 }>()
+
+const colors = {
+    none: "blue",
+    left: "red",
+    right: "orange",
+    up: "pink",
+    down: "purple"
+}
+
 </script>
 
 <template>
     <component
         :is="
             bodyComponents.single[
-                entity.isCritical ? 'yellow' : entity.flickDirection !== 'none' ? 'red' : 'cyan'
+                colors[entity.flickDirection]
+                /*entity.isCritical ? 'yellow' : entity.flickDirection !== 'none' ? 'red' : 'cyan'*/
             ]
         "
-        :size="entity.size"
     />
-    <component
+    <!--component
         :is="arrowComponents[entity.isCritical ? 'yellow' : 'red'][entity.flickDirection]"
         v-if="entity.flickDirection !== 'none'"
-        :size="entity.size"
+        :size="1"
     />
-    <component :is="fakeMarkerComponent" v-if="entity.isFake" :size="entity.size" />
+    <component :is="fakeMarkerComponent" v-if="entity.isFake" :size="entity.size" /-->
 </template>

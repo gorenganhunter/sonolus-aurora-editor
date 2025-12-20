@@ -6,13 +6,26 @@ export const serializeToLevelData = (
     bgmOffset: number,
     store: Store,
     groupCount: number,
-): LevelData => ({
-    bgmOffset,
-    entities: [
-        {
-            archetype: 'Initialization',
-            data: [],
-        },
-        ...serializeToLevelDataEntities(store, groupCount),
-    ],
-})
+): LevelData => {
+    const data = {
+        bgmOffset,
+        entities: [
+            {
+                archetype: 'Initialization',
+                data: [
+                    {
+                        name: 'life',
+                        value: 30
+                    }
+                ],
+            },
+            {
+                archetype: 'Stage',
+                data: []
+            },
+            ...serializeToLevelDataEntities(store, groupCount),
+        ],
+    }
+    // console.log(store, data)
+    return data
+}

@@ -6,7 +6,7 @@ import type { Store } from '../../../state/store'
 export const serializeTimeScaleGroupsToLevelDataEntities = (groupCount: number) =>
     [...Array(groupCount - 1).keys()].map(
         (): LevelDataEntity => ({
-            archetype: '#TIMESCALE_GROUP',
+            archetype: 'TimeScaleGroup',
             data: [],
         }),
     )
@@ -39,10 +39,10 @@ export const serializeTimeScaleChangesToLevelDataEntities = (
                 .sort((a, b) => a.beat - b.beat)
                 .map((timeScale) => {
                     const entity: LevelDataEntity = {
-                        archetype: EngineArchetypeName.TimeScaleChange,
+                        archetype: 'TimeScaleChange',
                         data: [
                             {
-                                name: '#TIMESCALE_GROUP',
+                                name: 'group',
                                 ref: (timeScaleGroup.name ??= getName()),
                             },
                             {
@@ -52,18 +52,6 @@ export const serializeTimeScaleChangesToLevelDataEntities = (
                             {
                                 name: EngineArchetypeDataName.TimeScale,
                                 value: timeScale.timeScale,
-                            },
-                            {
-                                name: '#TIMESCALE_SKIP',
-                                value: timeScale.skip,
-                            },
-                            {
-                                name: '#TIMESCALE_EASE',
-                                value: timeScaleEases[timeScale.ease],
-                            },
-                            {
-                                name: 'hideNotes',
-                                value: +timeScale.hideNotes,
                             },
                         ],
                     }
@@ -75,7 +63,7 @@ export const serializeTimeScaleChangesToLevelDataEntities = (
                         })
                     } else {
                         timeScaleGroup.data.push({
-                            name: 'first',
+                            name: 'head',
                             ref: (entity.name ??= getName()),
                         })
                     }
@@ -86,9 +74,4 @@ export const serializeTimeScaleChangesToLevelDataEntities = (
     }
 
     return entities
-}
-
-const timeScaleEases = {
-    none: 0,
-    linear: 1,
 }

@@ -8,10 +8,10 @@ import LevelEditorTraceNote from './LevelEditorTraceNote.vue'
 
 export const noteComponents = {
     anchor: LevelEditorAnchorNote,
-    damage: LevelEditorDamageNote,
-    trace: LevelEditorTraceNote,
+    // damage: LevelEditorDamageNote,
+    // trace: LevelEditorTraceNote,
     single: LevelEditorSingleNote,
     head: LevelEditorHeadNote,
     tick: LevelEditorTickNote,
-    tail: LevelEditorTailNote,
+    // tail: LevelEditorTailNote,
 }

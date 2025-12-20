@@ -14,10 +14,10 @@ import { hitAllEntitiesAtPoint, hitAllEntitiesInSelection, toSelection } from '.
 
 let active:
     | {
-          lane: number
-          time: number
-          count: number
-      }
+        lane: number
+        time: number
+        count: number
+    }
     | undefined
 
 export const eraser: Tool = {
@@ -112,6 +112,7 @@ const canRemoves: {
     [T in Entity as T['type']]?: (entity: T) => boolean
 } = {
     bpm: (entity) => entity.beat > 0,
+    timeScale: (entity) => entity.beat > 0
 }
 
 const removes: {

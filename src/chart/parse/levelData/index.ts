@@ -75,7 +75,7 @@ export const getOptionalRef = (entity: LevelDataEntity, name: string) => {
 }
 
 export const getGroup = (chart: Chart, timeScaleNames: TimeScaleNames, entity: LevelDataEntity) => {
-    const group = getRef(entity, '#TIMESCALE_GROUP')
+    const group = getRef(entity, 'group')
     const index = timeScaleNames.indexOf(group)
     if (index === -1) throw new Error(`Invalid level: ref "${group}" not found`)
 

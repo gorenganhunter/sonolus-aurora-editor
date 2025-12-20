@@ -16,62 +16,66 @@ const defaultNoteSlidePropertiesSchema = Type.Partial(
     Type.Object({
         noteType: Type.Union([
             Type.Literal('default'),
-            Type.Literal('trace'),
+            // Type.Literal('trace'),
             Type.Literal('anchor'),
-            Type.Literal('damage'),
-            Type.Literal('forceTick'),
-            Type.Literal('forceNonTick'),
+            // Type.Literal('damage'),
+            // Type.Literal('forceTick'),
+            // Type.Literal('forceNonTick'),
         ]),
-        isAttached: Type.Boolean(),
-        size: Type.Number(),
-        isCritical: Type.Boolean(),
+        // isAttached: Type.Boolean(),
+        // size: Type.Number(),
+        // isCritical: Type.Boolean(),
         flickDirection: Type.Union([
             Type.Literal('none'),
+            Type.Literal('left'),
+            Type.Literal('right'),
             Type.Literal('up'),
-            Type.Literal('upLeft'),
-            Type.Literal('upRight'),
-            Type.Literal('down'),
-            Type.Literal('downLeft'),
-            Type.Literal('downRight'),
+            Type.Literal('down')
+            // Type.Literal('up'),
+            // Type.Literal('upLeft'),
+            // Type.Literal('upRight'),
+            // Type.Literal('down'),
+            // Type.Literal('downLeft'),
+            // Type.Literal('downRight'),
         ]),
-        isFake: Type.Boolean(),
-        sfx: Type.Union([
-            Type.Literal('default'),
-            Type.Literal('none'),
-            Type.Literal('normalTap'),
-            Type.Literal('criticalTap'),
-            Type.Literal('normalFlick'),
-            Type.Literal('criticalFlick'),
-            Type.Literal('normalTrace'),
-            Type.Literal('criticalTrace'),
-            Type.Literal('normalTick'),
-            Type.Literal('criticalTick'),
-            Type.Literal('damage'),
-        ]),
-        isConnectorSeparator: Type.Boolean(),
-        connectorType: Type.Union([Type.Literal('active'), Type.Literal('guide')]),
-        connectorEase: Type.Union([
-            Type.Literal('linear'),
-            Type.Literal('in'),
-            Type.Literal('out'),
-            Type.Literal('inOut'),
-            Type.Literal('outIn'),
-            Type.Literal('none'),
-        ]),
-        connectorActiveIsCritical: Type.Boolean(),
-        connectorActiveIsFake: Type.Boolean(),
-        connectorGuideColor: Type.Union([
-            Type.Literal('neutral'),
-            Type.Literal('red'),
-            Type.Literal('green'),
-            Type.Literal('blue'),
-            Type.Literal('yellow'),
-            Type.Literal('purple'),
-            Type.Literal('cyan'),
-            Type.Literal('black'),
-        ]),
-        connectorGuideAlpha: Type.Number(),
-        connectorLayer: Type.Union([Type.Literal('top'), Type.Literal('bottom')]),
+        // isFake: Type.Boolean(),
+        // sfx: Type.Union([
+        //     Type.Literal('default'),
+        //     Type.Literal('none'),
+        //     Type.Literal('normalTap'),
+        //     Type.Literal('criticalTap'),
+        //     Type.Literal('normalFlick'),
+        //     Type.Literal('criticalFlick'),
+        //     Type.Literal('normalTrace'),
+        //     Type.Literal('criticalTrace'),
+        //     Type.Literal('normalTick'),
+        //     Type.Literal('criticalTick'),
+        //     Type.Literal('damage'),
+        // ]),
+        // isConnectorSeparator: Type.Boolean(),
+        // connectorType: Type.Union([Type.Literal('active'), Type.Literal('guide')]),
+        // connectorEase: Type.Union([
+        //     Type.Literal('linear'),
+        //     Type.Literal('in'),
+        //     Type.Literal('out'),
+        //     Type.Literal('inOut'),
+        //     Type.Literal('outIn'),
+        //     Type.Literal('none'),
+        // ]),
+        // connectorActiveIsCritical: Type.Boolean(),
+        // connectorActiveIsFake: Type.Boolean(),
+        // connectorGuideColor: Type.Union([
+        //     Type.Literal('neutral'),
+        //     Type.Literal('red'),
+        //     Type.Literal('green'),
+        //     Type.Literal('blue'),
+        //     Type.Literal('yellow'),
+        //     Type.Literal('purple'),
+        //     Type.Literal('cyan'),
+        //     Type.Literal('black'),
+        // ]),
+        // connectorGuideAlpha: Type.Number(),
+        // connectorLayer: Type.Union([Type.Literal('top'), Type.Literal('bottom')]),
     }),
 )
 
@@ -86,11 +90,13 @@ const settingsProperties = {
 
     showPreview: Type.Boolean({ default: true }),
 
+    previewNoteSpeed: number(8, 1, 15),
+
     previewWidth: Type.Number(),
 
     previewHeight: Type.Number(),
 
-    width: number(16, 16, 100),
+    width: number(14, 10, 20),
 
     pps: number(1000, 100, 10000),
 
@@ -132,8 +138,8 @@ const settingsProperties = {
                         'deselect',
                         'select',
                     ],
-                    ['note3', 'note2', 'note1', 'note0', 'note'],
-                    ['slide4', 'slide3', 'slide2', 'slide1', 'slide0', 'slide'],
+                    ['note4', 'note3', 'note2', 'note1', 'note0', 'note'],
+                    ['slide5', 'slide4', 'slide3', 'slide2', 'slide1', 'slide0', 'slide'],
                     ['timeScale', 'bpm'],
                     ['groupPrev', 'groupNext', 'groupAll'],
                     [
@@ -249,39 +255,58 @@ const settingsProperties = {
         .Encode((values) => values),
 
     defaultNotePropertiesPresets: Type.Array(defaultNoteSlidePropertiesSchema, {
-        minItems: 4,
-        maxItems: 4,
+        minItems: 5,
+        maxItems: 5,
         default: [
-            {},
             {
-                isCritical: true,
+                noteType: 'default',
+                flickDirection: 'none'
             },
             {
+                noteType: 'default',
+                flickDirection: 'left',
+            },
+            {
+                noteType: 'default',
+                flickDirection: 'right',
+            },
+            {
+                noteType: 'default',
                 flickDirection: 'up',
             },
             {
-                noteType: 'trace',
+                noteType: 'default',
+                flickDirection: 'down',
             },
         ] satisfies DefaultNoteSlideProperties[],
     }),
 
     defaultSlidePropertiesPresets: Type.Array(defaultNoteSlidePropertiesSchema, {
-        minItems: 5,
-        maxItems: 5,
+        minItems: 6,
+        maxItems: 6,
         default: [
             {
-                connectorEase: 'linear',
+                noteType: 'default',
+                flickDirection: 'none'
             },
             {
-                isCritical: true,
+                noteType: 'default',
+                flickDirection: 'left',
             },
             {
+                noteType: 'default',
+                flickDirection: 'right',
+            },
+            {
+                noteType: 'default',
                 flickDirection: 'up',
             },
             {
-                noteType: 'trace',
+                noteType: 'default',
+                flickDirection: 'down',
             },
             {
+                flickDirection: 'none',
                 noteType: 'anchor',
             },
         ] satisfies DefaultNoteSlideProperties[],
@@ -317,5 +342,5 @@ export const settings = Object.defineProperties(
         }),
     ),
 ) as {
-    [K in keyof typeof settingsProperties]: StaticDecode<(typeof settingsProperties)[K]>
-}
+        [K in keyof typeof settingsProperties]: StaticDecode<(typeof settingsProperties)[K]>
+    }

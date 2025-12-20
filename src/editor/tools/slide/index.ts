@@ -19,6 +19,7 @@ import { isSidebarVisible } from '../../sidebars'
 import { quickEdit } from '../../utils/quickEdit'
 import {
     focusViewAtBeat,
+    laneToValidLane,
     setViewHover,
     snapYToBeat,
     view,
@@ -45,19 +46,19 @@ export const defaultSlideProperties = computed(
 
 let active:
     | {
-          type: 'add'
-          lane: number
-      }
+        type: 'add'
+        lane: number
+    }
     | {
-          type: 'edit'
-          entity: NoteEntity
-          lane: number
-      }
+        type: 'edit'
+        entity: NoteEntity
+        lane: number
+    }
     | {
-          type: 'move'
-          entity: NoteEntity
-          lane: number
-      }
+        type: 'move'
+        entity: NoteEntity
+        lane: number
+    }
     | undefined
 
 export const slide: Tool = {
@@ -71,13 +72,20 @@ export const slide: Tool = {
                 creating: [],
             }
         } else {
+            let id = getSelectedSlideId()
+            // if (id) {
+            //     const sl = store.value.slides.info.get(id)
+            //     if (sl) {
+            //         if (sl.length === 1 && sl[0]!.note.flickDirection !== "none") id = undefined
+            //     }
+            // }
             view.entities = {
                 hovered: [],
                 creating: [
-                    toNoteEntity(getSelectedSlideId() ?? createSlideId(), {
+                    toNoteEntity(id ?? createSlideId(), {
                         group: view.group ?? 0,
                         beat,
-                        left: lane,
+                        lane: lane,
                         ...getPropertiesFromSelection(beat),
                     }),
                 ],
@@ -134,10 +142,17 @@ export const slide: Tool = {
                 }
             }
         } else {
-            add(getSelectedSlideId() ?? createSlideId(), {
+            let id = getSelectedSlideId()
+            // if (id) {
+            //     const sl = store.value.slides.info.get(id)
+            //     if (sl) {
+            //         if (sl.length === 1 && sl[0]!.note.flickDirection !== "none") id = undefined
+            //     }
+            // }
+            add(id ?? createSlideId(), {
                 group: view.group ?? 0,
                 beat,
-                left: lane,
+                lane: lane,
                 ...getPropertiesFromSelection(beat),
             })
             focusViewAtBeat(beat)
@@ -158,7 +173,7 @@ export const slide: Tool = {
             focusViewAtBeat(entity.beat)
 
             const lane = xToLane(x)
-            if (lane > entity.left + 0.5 && lane < entity.left + entity.size - 0.5) {
+            if (lane === entity.lane) {
                 notify(interpolate(() => i18n.value.tools.slide.moving, '1'))
 
                 active = {
@@ -172,10 +187,7 @@ export const slide: Tool = {
                 active = {
                     type: 'edit',
                     entity,
-                    lane:
-                        lane > entity.left + entity.size / 2
-                            ? entity.left
-                            : entity.left + entity.size - 1,
+                    lane: entity.lane
                 }
             }
         } else {
@@ -203,15 +215,22 @@ export const slide: Tool = {
             case 'add': {
                 const beat = yToValidBeat(y)
 
+                let id = getSelectedSlideId()
+                // if (id) {
+                //     const sl = store.value.slides.info.get(id)
+                //     if (sl) {
+                //         if (sl.length === 1 && sl[0]!.note.flickDirection !== "none") id = undefined
+                //     }
+                // }
+
                 view.entities = {
                     hovered: [],
                     creating: [
-                        toNoteEntity(getSelectedSlideId() ?? createSlideId(), {
+                        toNoteEntity(id ?? createSlideId(), {
                             group: view.group ?? 0,
                             beat,
                             ...getPropertiesFromSelection(beat),
-                            left: Math.min(active.lane, lane),
-                            size: Math.abs(active.lane - lane) + 1,
+                            lane: lane,
                         }),
                     ],
                 }
@@ -226,8 +245,7 @@ export const slide: Tool = {
                             active.entity.slideId,
                             {
                                 ...active.entity,
-                                left: Math.min(active.lane, lane),
-                                size: Math.abs(active.lane - lane) + 1,
+                                lane: lane,
                             },
                             active.entity,
                         ),
@@ -246,7 +264,7 @@ export const slide: Tool = {
                             {
                                 ...active.entity,
                                 beat,
-                                left: active.entity.left + lane - active.lane,
+                                lane: laneToValidLane(active.entity.lane + lane - active.lane),
                             },
                             active.entity,
                         ),
@@ -267,12 +285,19 @@ export const slide: Tool = {
             case 'add': {
                 const beat = yToValidBeat(y)
 
-                add(getSelectedSlideId() ?? createSlideId(), {
+                let id = getSelectedSlideId()
+                // if (id) {
+                //     const sl = store.value.slides.info.get(id)
+                //     if (sl) {
+                //         if (sl.length === 1 && sl[0]!.note.flickDirection !== "none") id = undefined
+                //     }
+                // }
+
+                add(id ?? createSlideId(), {
                     group: view.group ?? 0,
                     beat,
                     ...getPropertiesFromSelection(beat),
-                    left: Math.min(active.lane, lane),
-                    size: Math.abs(active.lane - lane) + 1,
+                    lane: lane,
                 })
                 focusViewAtBeat(beat)
                 break
@@ -280,8 +305,7 @@ export const slide: Tool = {
             case 'edit': {
                 edit(active.entity, {
                     ...active.entity,
-                    left: Math.min(active.lane, lane),
-                    size: Math.abs(active.lane - lane) + 1,
+                    lane,
                 })
                 break
             }
@@ -291,7 +315,7 @@ export const slide: Tool = {
                 move(active.entity, {
                     ...active.entity,
                     beat,
-                    left: active.entity.left + lane - active.lane,
+                    lane: laneToValidLane(active.entity.lane + lane - active.lane),
                 })
                 focusViewAtBeat(beat)
                 break
@@ -325,35 +349,35 @@ const getPropertiesFromSelection = (beat: number) => {
 
     return {
         noteType: defaultSlideProperties.value.noteType ?? note?.noteType ?? 'default',
-        isAttached: defaultSlideProperties.value.isAttached ?? note?.isAttached ?? false,
-        size: defaultSlideProperties.value.size ?? note?.size ?? 3,
-        isCritical: defaultSlideProperties.value.isCritical ?? note?.isCritical ?? false,
+        // isAttached: defaultSlideProperties.value.isAttached ?? note?.isAttached ?? false,
+        // size: defaultSlideProperties.value.size ?? note?.size ?? 3,
+        // isCritical: defaultSlideProperties.value.isCritical ?? note?.isCritical ?? false,
         flickDirection:
             defaultSlideProperties.value.flickDirection ?? note?.flickDirection ?? 'none',
-        isFake: defaultSlideProperties.value.isFake ?? note?.isFake ?? false,
-        sfx: defaultSlideProperties.value.sfx ?? note?.sfx ?? 'default',
-        isConnectorSeparator: defaultSlideProperties.value.isConnectorSeparator ?? false,
-        connectorType:
-            defaultSlideProperties.value.connectorType ?? nearest?.connectorType ?? 'active',
-        connectorEase: defaultSlideProperties.value.connectorEase ?? 'linear',
-        connectorActiveIsCritical:
-            defaultSlideProperties.value.connectorActiveIsCritical ??
-            defaultSlideProperties.value.isCritical ??
-            nearest?.connectorActiveIsCritical ??
-            false,
-        connectorActiveIsFake:
-            defaultSlideProperties.value.connectorActiveIsFake ??
-            defaultSlideProperties.value.isFake ??
-            nearest?.connectorActiveIsFake ??
-            false,
-        connectorGuideColor:
-            defaultSlideProperties.value.connectorGuideColor ??
-            nearest?.connectorGuideColor ??
-            'green',
-        connectorGuideAlpha:
-            defaultSlideProperties.value.connectorGuideAlpha ?? nearest?.connectorGuideAlpha ?? 1,
-        connectorLayer:
-            defaultSlideProperties.value.connectorLayer ?? nearest?.connectorLayer ?? 'top',
+        // isFake: defaultSlideProperties.value.isFake ?? note?.isFake ?? false,
+        // sfx: defaultSlideProperties.value.sfx ?? note?.sfx ?? 'default',
+        // isConnectorSeparator: defaultSlideProperties.value.isConnectorSeparator ?? false,
+        // connectorType:
+        //     defaultSlideProperties.value.connectorType ?? nearest?.connectorType ?? 'active',
+        // connectorEase: defaultSlideProperties.value.connectorEase ?? 'linear',
+        // connectorActiveIsCritical:
+        //     defaultSlideProperties.value.connectorActiveIsCritical ??
+        //     defaultSlideProperties.value.isCritical ??
+        //     nearest?.connectorActiveIsCritical ??
+        //     false,
+        // connectorActiveIsFake:
+        //     defaultSlideProperties.value.connectorActiveIsFake ??
+        //     defaultSlideProperties.value.isFake ??
+        //     nearest?.connectorActiveIsFake ??
+        //     false,
+        // connectorGuideColor:
+        //     defaultSlideProperties.value.connectorGuideColor ??
+        //     nearest?.connectorGuideColor ??
+        //     'green',
+        // connectorGuideAlpha:
+        //     defaultSlideProperties.value.connectorGuideAlpha ?? nearest?.connectorGuideAlpha ?? 1,
+        // connectorLayer:
+        //     defaultSlideProperties.value.connectorLayer ?? nearest?.connectorLayer ?? 'top',
     }
 }
 

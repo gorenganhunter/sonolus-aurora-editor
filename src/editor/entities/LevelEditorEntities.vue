@@ -27,7 +27,7 @@ const isEntityVisible = (entity: Entity) => {
         case 'note':
             return entity.group === view.group
         case 'connector':
-            return entity.attachHead.group === view.group || entity.attachTail.group === view.group
+            return entity.head.group === view.group || entity.tail.group === view.group
     }
 }
 

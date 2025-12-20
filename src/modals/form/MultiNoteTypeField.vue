@@ -12,11 +12,7 @@ const modelValue = defineModel<NoteType | undefined>({ required: true })
         :label="i18n.modals.form.noteType.label"
         :options="[
             [i18n.modals.form.noteType.default, 'default'],
-            [i18n.modals.form.noteType.trace, 'trace'],
             [i18n.modals.form.noteType.anchor, 'anchor'],
-            [i18n.modals.form.noteType.damage, 'damage'],
-            [i18n.modals.form.noteType.forceTick, 'forceTick'],
-            [i18n.modals.form.noteType.forceNonTick, 'forceNonTick'],
         ]"
     />
 </template>

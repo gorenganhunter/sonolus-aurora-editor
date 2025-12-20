@@ -19,12 +19,12 @@ import TimeScalePropertiesModal from './TimeScalePropertiesModal.vue'
 
 let active:
     | {
-          type: 'add'
-      }
+        type: 'add'
+    }
     | {
-          type: 'move'
-          entity: TimeScaleEntity
-      }
+        type: 'move'
+        entity: TimeScaleEntity
+    }
     | undefined
 
 export const timeScale: Tool = {
@@ -43,9 +43,6 @@ export const timeScale: Tool = {
                         group: view.group ?? 0,
                         beat,
                         timeScale: 1,
-                        skip: 0,
-                        ease: 'none',
-                        hideNotes: false,
                     }),
                 ],
             }
@@ -101,9 +98,6 @@ export const timeScale: Tool = {
                 group: view.group ?? 0,
                 beat,
                 timeScale: 1,
-                skip: 0,
-                ease: 'none',
-                hideNotes: false,
             }
 
             const overlap = find(view.group, object.beat)
@@ -172,9 +166,6 @@ export const timeScale: Tool = {
                                 group: view.group ?? 0,
                                 beat,
                                 timeScale: 1,
-                                skip: 0,
-                                ease: 'none',
-                                hideNotes: false,
                             }),
                         ],
                     }
@@ -192,9 +183,6 @@ export const timeScale: Tool = {
                             group: active.entity.group,
                             beat,
                             timeScale: active.entity.timeScale,
-                            skip: active.entity.skip,
-                            ease: active.entity.ease,
-                            hideNotes: false,
                         }),
                     ],
                 }
@@ -227,9 +215,6 @@ export const timeScale: Tool = {
                         group: view.group ?? 0,
                         beat,
                         timeScale: 1,
-                        skip: 0,
-                        ease: 'none',
-                        hideNotes: false,
                     }
 
                     const overlap = find(view.group, object.beat)
@@ -251,9 +236,6 @@ export const timeScale: Tool = {
                     group: active.entity.group,
                     beat,
                     timeScale: active.entity.timeScale,
-                    skip: active.entity.skip,
-                    ease: active.entity.ease,
-                    hideNotes: active.entity.hideNotes,
                 })
                 focusViewAtBeat(beat)
                 break
@@ -269,9 +251,6 @@ export const editTimeScale = (entity: TimeScaleEntity, object: Partial<TimeScale
         group: object.group ?? entity.group,
         beat: object.beat ?? entity.beat,
         timeScale: object.timeScale ?? entity.timeScale,
-        skip: object.skip ?? entity.skip,
-        ease: object.ease ?? entity.ease,
-        hideNotes: object.hideNotes ?? entity.hideNotes,
     })
 }
 
@@ -285,9 +264,6 @@ export const editSelectedTimeScale = (
         group: object.group ?? entity.group,
         beat: object.beat ?? entity.beat,
         timeScale: object.timeScale ?? entity.timeScale,
-        skip: object.skip ?? entity.skip,
-        ease: object.ease ?? entity.ease,
-        hideNotes: object.hideNotes ?? entity.hideNotes,
     })
 }
 

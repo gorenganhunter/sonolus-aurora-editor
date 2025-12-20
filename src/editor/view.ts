@@ -47,37 +47,37 @@ export const view = shallowReactive({
 
     scrollingX: optional<
         | {
-              type: 'inertia'
-              value: number
-          }
+            type: 'inertia'
+            value: number
+        }
         | {
-              type: 'ease'
-              from: {
-                  time: number
-                  viewLane: number
-              }
-              to: {
-                  time: number
-                  viewLane: number
-              }
-          }
+            type: 'ease'
+            from: {
+                time: number
+                viewLane: number
+            }
+            to: {
+                time: number
+                viewLane: number
+            }
+        }
     >(),
     scrollingY: optional<
         | {
-              type: 'inertia'
-              value: number
-          }
+            type: 'inertia'
+            value: number
+        }
         | {
-              type: 'ease'
-              from: {
-                  time: number
-                  viewTime: number
-              }
-              to: {
-                  time: number
-                  viewTime: number
-              }
-          }
+            type: 'ease'
+            from: {
+                time: number
+                viewTime: number
+            }
+            to: {
+                time: number
+                viewTime: number
+            }
+        }
     >(),
 })
 
@@ -197,7 +197,7 @@ export const scrollViewXBy = (dx: number, smooth = false) => {
                 time: time.value.now + 0.25,
                 viewLane: clamp(
                     (view.scrollingX?.type === 'ease' ? view.scrollingX.to.viewLane : view.lane) +
-                        (dx / view.w) * settings.width,
+                    (dx / view.w) * settings.width,
                     -12,
                     12,
                 ),
@@ -223,7 +223,7 @@ export const scrollViewYBy = (dy: number, smooth = false) => {
                 viewTime: Math.max(
                     0,
                     (view.scrollingY?.type === 'ease' ? view.scrollingY.to.viewTime : view.time) +
-                        dy / settings.pps,
+                    dy / settings.pps,
                 ),
             },
         }
@@ -275,11 +275,16 @@ export const updateViewLastActive = () => {
     view.lastActive = time.value.now
 }
 
-export const laneToValidLane = (lane: number) => align(lane - 0.5)
+export const laneToValidLane = (lane: number) => Math.max(-4, Math.min(4, align(lane)))
 
 export const xToLane = (x: number) => ((x - view.x) / view.w - 0.5) * settings.width + view.lane
 
-export const xToValidLane = (x: number) => laneToValidLane(xToLane(x))
+export const xToValidLane = (x: number) => /*{
+    const l = xToLane(x)
+    const vl = laneToValidLane(l)
+    console.log(l, vl)
+    return vl
+} */laneToValidLane(xToLane(x))
 
 export const yToTime = (y: number) => (0.5 * view.h - y + view.y) / settings.pps + view.time
 

@@ -5,8 +5,8 @@ import { ups, view } from './view'
 <template>
     <line
         :transform="`translate(0, ${view.cursorTime * ups})`"
-        :x1="-7"
-        :x2="7"
+        :x1="-5.5"
+        :x2="5.5"
         y1="0"
         y2="0"
         stroke="#fff"

@@ -21,22 +21,24 @@ const type = computed(() => {
 
     if (entity.noteType === 'anchor') return 'anchor'
 
-    if (entity.noteType === 'damage') return 'damage'
-
-    if (entity.noteType === 'trace') return 'trace'
-
-    if (entity.noteType === 'forceTick') return 'tick'
+    // if (entity.noteType === 'damage') return 'damage'
+    //
+    // if (entity.noteType === 'trace') return 'trace'
+    //
+    // if (entity.noteType === 'forceTick') return 'tick'
+    if (entity.flickDirection !== "none") return 'single'
 
     if (!infos.value) return 'single'
 
     const infoEntity = entity.useInfoOf ?? entity
     const info = infos.value.find((info) => info.note === infoEntity)
     if (info) {
-        if (info.activeHead === info.activeTail) return 'single'
+        // console.log(entity, info)
+        if (info.segmentHead === info.segmentTail) return 'single'
 
-        if (info.activeHead === infoEntity) return 'head'
-
-        if (info.activeTail === infoEntity) return 'tail'
+        if (info.segmentHead === infoEntity) return 'head'
+        //
+        // if (info.segmentTail === infoEntity) return 'tail'
 
         if (infoEntity.noteType === 'default') return 'tick'
 
@@ -45,33 +47,33 @@ const type = computed(() => {
 
     if (!infos.value.length) return 'single'
 
-    let isActive = false
+    let isActive = true
     let i = 0
-    for (; i < infos.value.length; i++) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const { note } = infos.value[i]!
-
-        if (entity.beat < note.beat) break
-
-        if (i === 0 || note.isConnectorSeparator) {
-            isActive = note.connectorType === 'active'
-        }
-    }
+    // for (; i < infos.value.length; i++) {
+    //     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    //     const { note } = infos.value[i]!
+    //
+    //     if (entity.beat < note.beat) break
+    //
+    //     if (i === 0/* || note.isConnectorSeparator*/) {
+    //         isActive = note.connectorType === 'active'
+    //     }
+    // }
 
     if (isActive) {
-        if (!infos.value[i]) return 'tail'
-
-        if (entity.isConnectorSeparator && entity.connectorType === 'guide') return 'tail'
+        // if (!infos.value[i]) return 'tick'
+        //
+        // if (entity.isConnectorSeparator && entity.connectorType === 'guide') return 'tail'
 
         return 'tick'
     } else if (!infos.value[i - 1]) {
-        if (entity.connectorType === 'guide') return 'single'
+        // if (entity.connectorType === 'guide') return 'single'
 
         return 'head'
     } else {
         if (!infos.value[i]) return 'single'
 
-        if (entity.isConnectorSeparator && entity.connectorType === 'active') return 'head'
+/*        if (entity.isConnectorSeparator && entity.connectorType === 'active')*/ return 'head'
 
         return 'single'
     }
@@ -79,11 +81,11 @@ const type = computed(() => {
 </script>
 
 <template>
-    <g :transform="`translate(${entity.left}, ${time * ups - 0.4})`">
+    <g :transform="`translate(${entity.lane}, ${time * ups})`">
         <component :is="noteComponents[type]" :entity :is-highlighted="isHighlighted" />
         <text
             v-if="entity.group && (isHighlighted || isViewRecentlyActive)"
-            :x="entity.size / 2"
+            :x="1"
             y="0.4"
             font-size="0.4"
             text-anchor="middle"

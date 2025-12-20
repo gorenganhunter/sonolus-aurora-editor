@@ -34,18 +34,18 @@ import {
 
 let active:
     | {
-          type: 'move'
-          lane: number
-          focus: Entity
-          entities: Entity[]
-      }
+        type: 'move'
+        lane: number
+        focus: Entity
+        entities: Entity[]
+    }
     | {
-          type: 'select'
-          lane: number
-          time: number
-          count: number
-          entities: Entity[]
-      }
+        type: 'select'
+        lane: number
+        time: number
+        count: number
+        entities: Entity[]
+    }
     | undefined
 
 export const select: Tool = {
@@ -313,9 +313,9 @@ const toMovedTimeScaleObject = (entity: TimeScaleEntity, beat: number): TimeScal
     group: entity.group,
     beat,
     timeScale: entity.timeScale,
-    skip: entity.skip,
-    ease: entity.ease,
-    hideNotes: entity.hideNotes,
+    // skip: entity.skip,
+    // ease: entity.ease,
+    // hideNotes: entity.hideNotes,
 })
 
 const toMovedNoteObject = (
@@ -326,33 +326,33 @@ const toMovedNoteObject = (
     beat: number,
     focus: Entity,
 ): NoteObject => {
-    if (focus.type === 'note' && entities.every((entity) => entity.type === 'note')) {
-        if (startLane <= focus.left + 0.5) {
-            const a = entity.left + entity.size - 1
-            const b = entity.left + (laneToValidLane(lane) - laneToValidLane(startLane))
-
-            return {
-                ...entity,
-                left: Math.min(a, b),
-                size: Math.abs(a - b) + 1,
-            }
-        } else if (startLane >= focus.left + focus.size - 0.5) {
-            const a = entity.left
-            const b =
-                entity.left + entity.size - 1 + (laneToValidLane(lane) - laneToValidLane(startLane))
-
-            return {
-                ...entity,
-                left: Math.min(a, b),
-                size: Math.abs(a - b) + 1,
-            }
-        }
-    }
+    // if (focus.type === 'note' && entities.every((entity) => entity.type === 'note')) {
+    //     if (startLane <= focus.lane + 0.5) {
+    //         const a = entity.lane + entity.size - 1
+    //         const b = entity.lane + (laneToValidLane(lane) - laneToValidLane(startLane))
+    //
+    //         return {
+    //             ...entity,
+    //             lane: Math.min(a, b),
+    //             size: Math.abs(a - b) + 1,
+    //         }
+    //     } else if (startLane >= focus.lane + focus.size - 0.5) {
+    //         const a = entity.lane
+    //         const b =
+    //             entity.lane + entity.size - 1 + (laneToValidLane(lane) - laneToValidLane(startLane))
+    //
+    //         return {
+    //             ...entity,
+    //             lane: Math.min(a, b),
+    //             size: Math.abs(a - b) + 1,
+    //         }
+    //     }
+    // }
 
     return {
         ...entity,
         beat,
-        left: entity.left + align(lane) - align(startLane),
+        lane: entity.lane + align(lane) - align(startLane),
     }
 }
 
@@ -408,7 +408,7 @@ const moves: {
     timeScale: (transaction, entities, entity, startLane, lane, beat) => {
         const object = toMovedTimeScaleObject(entity, beat)
 
-        removeTimeScale(transaction, entity)
+        if (entity.beat) removeTimeScale(transaction, entity)
 
         const overlap = getInStoreGrid(transaction.store.grid, 'timeScale', object.beat)?.find(
             (entity) => entity.beat === object.beat && entity.group === object.group,

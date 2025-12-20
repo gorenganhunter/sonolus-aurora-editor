@@ -14,7 +14,13 @@ const defaultChart: Chart = {
         },
     ],
     groupCount: 2,
-    timeScales: [],
+    timeScales: [
+        {
+            beat: 0,
+            timeScale: 1,
+            group: 0
+        }
+    ],
     slides: [],
 }
 
@@ -45,6 +51,7 @@ export const replaceState = (state: State) => {
         name: current.value.name,
         state,
     }
+    console.log(state)
 }
 
 export const pushState = (name: () => string, state: State) => {
@@ -52,6 +59,7 @@ export const pushState = (name: () => string, state: State) => {
         name,
         state,
     })
+    console.log(state)
     index.value++
 }
 

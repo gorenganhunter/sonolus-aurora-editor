@@ -5,8 +5,8 @@ import { ups, view } from './view'
 <template>
     <line
         :transform="`translate(0, ${view.hoverTime * ups})`"
-        :x1="-6"
-        :x2="6"
+        :x1="-4.5"
+        :x2="4.5"
         y1="0"
         y2="0"
         stroke="#fff"

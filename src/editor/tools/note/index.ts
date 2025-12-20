@@ -17,6 +17,7 @@ import { isSidebarVisible } from '../../sidebars'
 import { quickEdit } from '../../utils/quickEdit'
 import {
     focusViewAtBeat,
+    laneToValidLane,
     setViewHover,
     snapYToBeat,
     view,
@@ -43,19 +44,19 @@ export const defaultNoteProperties = computed(
 
 let active:
     | {
-          type: 'add'
-          lane: number
-      }
+        type: 'add'
+        lane: number
+    }
     | {
-          type: 'edit'
-          entity: NoteEntity
-          lane: number
-      }
+        type: 'edit'
+        entity: NoteEntity
+        lane: number
+    }
     | {
-          type: 'move'
-          entity: NoteEntity
-          lane: number
-      }
+        type: 'move'
+        entity: NoteEntity
+        lane: number
+    }
     | undefined
 
 export const note: Tool = {
@@ -75,7 +76,7 @@ export const note: Tool = {
                     toNoteEntity(createSlideId(), {
                         group: view.group ?? 0,
                         beat,
-                        left: lane,
+                        lane,
                         ...getPropertiesFromSelection(),
                     }),
                 ],
@@ -135,7 +136,7 @@ export const note: Tool = {
             add({
                 group: view.group ?? 0,
                 beat,
-                left: lane,
+                lane,
                 ...getPropertiesFromSelection(),
             })
             focusViewAtBeat(beat)
@@ -155,8 +156,8 @@ export const note: Tool = {
             }
             focusViewAtBeat(entity.beat)
 
-            const lane = xToLane(x)
-            if (lane > entity.left + 0.5 && lane < entity.left + entity.size - 0.5) {
+            const lane = xToValidLane(x)
+            if (lane === entity.lane) {
                 notify(interpolate(() => i18n.value.tools.note.moving, '1'))
 
                 active = {
@@ -170,10 +171,7 @@ export const note: Tool = {
                 active = {
                     type: 'edit',
                     entity,
-                    lane:
-                        lane > entity.left + entity.size / 2
-                            ? entity.left
-                            : entity.left + entity.size - 1,
+                    lane: entity.lane,
                 }
             }
         } else {
@@ -208,8 +206,7 @@ export const note: Tool = {
                             group: view.group ?? 0,
                             beat,
                             ...getPropertiesFromSelection(),
-                            left: Math.min(active.lane, lane),
-                            size: Math.abs(active.lane - lane) + 1,
+                            lane,
                         }),
                     ],
                 }
@@ -224,8 +221,7 @@ export const note: Tool = {
                             active.entity.slideId,
                             {
                                 ...active.entity,
-                                left: Math.min(active.lane, lane),
-                                size: Math.abs(active.lane - lane) + 1,
+                                lane,
                             },
                             active.entity,
                         ),
@@ -235,7 +231,7 @@ export const note: Tool = {
             }
             case 'move': {
                 const beat = snapYToBeat(y, active.entity.beat)
-
+                console.log(y, active.entity.beat, beat)
                 view.entities = {
                     hovered: [],
                     creating: [
@@ -244,7 +240,7 @@ export const note: Tool = {
                             {
                                 ...active.entity,
                                 beat,
-                                left: active.entity.left + lane - active.lane,
+                                lane: laneToValidLane(active.entity.lane + lane - active.lane),
                             },
                             active.entity,
                         ),
@@ -269,8 +265,7 @@ export const note: Tool = {
                     group: view.group ?? 0,
                     beat,
                     ...getPropertiesFromSelection(),
-                    left: Math.min(active.lane, lane),
-                    size: Math.abs(active.lane - lane) + 1,
+                    lane: lane,
                 })
                 focusViewAtBeat(beat)
                 break
@@ -278,8 +273,7 @@ export const note: Tool = {
             case 'edit': {
                 edit(active.entity, {
                     ...active.entity,
-                    left: Math.min(active.lane, lane),
-                    size: Math.abs(active.lane - lane) + 1,
+                    lane: lane,
                 })
                 break
             }
@@ -289,7 +283,7 @@ export const note: Tool = {
                 move(active.entity, {
                     ...active.entity,
                     beat,
-                    left: active.entity.left + lane - active.lane,
+                    lane: laneToValidLane(active.entity.lane + lane - active.lane),
                 })
                 focusViewAtBeat(beat)
                 break
@@ -305,25 +299,24 @@ export const editNote = (entity: NoteEntity, object: Partial<NoteObject>) => {
         group: object.group ?? entity.group,
         beat: object.beat ?? entity.beat,
         noteType: object.noteType ?? entity.noteType,
-        isAttached: object.isAttached ?? entity.isAttached,
-        left: object.left ?? entity.left,
-        size: object.size ?? entity.size,
-        isCritical: object.isCritical ?? entity.isCritical,
+        lane: object.lane ?? entity.lane,
+        // size: object.size ?? entity.size,
+        // isCritical: object.isCritical ?? entity.isCritical,
         flickDirection: object.flickDirection ?? entity.flickDirection,
-        isFake: object.isFake ?? entity.isFake,
-        sfx: object.sfx ?? entity.sfx,
-        isConnectorSeparator: object.isConnectorSeparator ?? entity.isConnectorSeparator,
-        connectorType: object.connectorType ?? entity.connectorType,
-        connectorEase: object.connectorEase ?? entity.connectorEase,
-        connectorActiveIsCritical:
-            object.connectorActiveIsCritical ??
-            object.isCritical ??
-            entity.connectorActiveIsCritical,
-        connectorActiveIsFake:
-            object.connectorActiveIsFake ?? object.isFake ?? entity.connectorActiveIsFake,
-        connectorGuideColor: object.connectorGuideColor ?? entity.connectorGuideColor,
-        connectorGuideAlpha: object.connectorGuideAlpha ?? entity.connectorGuideAlpha,
-        connectorLayer: object.connectorLayer ?? entity.connectorLayer,
+        // isFake: object.isFake ?? entity.isFake,
+        // sfx: object.sfx ?? entity.sfx,
+        // isConnectorSeparator: object.isConnectorSeparator ?? entity.isConnectorSeparator,
+        // connectorType: object.connectorType ?? entity.connectorType,
+        // connectorEase: object.connectorEase ?? entity.connectorEase,
+        // connectorActiveIsCritical:
+        //     object.connectorActiveIsCritical ??
+        //     object.isCritical ??
+        //     entity.connectorActiveIsCritical,
+        // connectorActiveIsFake:
+        //     object.connectorActiveIsFake ?? object.isFake ?? entity.connectorActiveIsFake,
+        // connectorGuideColor: object.connectorGuideColor ?? entity.connectorGuideColor,
+        // connectorGuideAlpha: object.connectorGuideAlpha ?? entity.connectorGuideAlpha,
+        // connectorLayer: object.connectorLayer ?? entity.connectorLayer,
     })
 }
 
@@ -336,25 +329,25 @@ export const editSelectedNote = (
         group: object.group ?? entity.group,
         beat: object.beat ?? entity.beat,
         noteType: object.noteType ?? entity.noteType,
-        isAttached: object.isAttached ?? entity.isAttached,
-        left: object.left ?? entity.left,
-        size: object.size ?? entity.size,
-        isCritical: object.isCritical ?? entity.isCritical,
+        // isAttached: object.isAttached ?? entity.isAttached,
+        lane: object.lane ?? entity.lane,
+        // size: object.size ?? entity.size,
+        // isCritical: object.isCritical ?? entity.isCritical,
         flickDirection: object.flickDirection ?? entity.flickDirection,
-        isFake: object.isFake ?? entity.isFake,
-        sfx: object.sfx ?? entity.sfx,
-        isConnectorSeparator: object.isConnectorSeparator ?? entity.isConnectorSeparator,
-        connectorType: object.connectorType ?? entity.connectorType,
-        connectorEase: object.connectorEase ?? entity.connectorEase,
-        connectorActiveIsCritical:
-            object.connectorActiveIsCritical ??
-            object.isCritical ??
-            entity.connectorActiveIsCritical,
-        connectorActiveIsFake:
-            object.connectorActiveIsFake ?? object.isFake ?? entity.connectorActiveIsFake,
-        connectorGuideColor: object.connectorGuideColor ?? entity.connectorGuideColor,
-        connectorGuideAlpha: object.connectorGuideAlpha ?? entity.connectorGuideAlpha,
-        connectorLayer: object.connectorLayer ?? entity.connectorLayer,
+        // isFake: object.isFake ?? entity.isFake,
+        // sfx: object.sfx ?? entity.sfx,
+        // isConnectorSeparator: object.isConnectorSeparator ?? entity.isConnectorSeparator,
+        // connectorType: object.connectorType ?? entity.connectorType,
+        // connectorEase: object.connectorEase ?? entity.connectorEase,
+        // connectorActiveIsCritical:
+        //     object.connectorActiveIsCritical ??
+        //     object.isCritical ??
+        //     entity.connectorActiveIsCritical,
+        // connectorActiveIsFake:
+        //     object.connectorActiveIsFake ?? object.isFake ?? entity.connectorActiveIsFake,
+        // connectorGuideColor: object.connectorGuideColor ?? entity.connectorGuideColor,
+        // connectorGuideAlpha: object.connectorGuideAlpha ?? entity.connectorGuideAlpha,
+        // connectorLayer: object.connectorLayer ?? entity.connectorLayer,
     })
 }
 
@@ -372,27 +365,27 @@ const getPropertiesFromSelection = () => {
 
     return {
         noteType: defaultNoteProperties.value.noteType ?? note?.noteType ?? 'default',
-        isAttached: defaultNoteProperties.value.isAttached ?? note?.isAttached ?? false,
-        size: defaultNoteProperties.value.size ?? note?.size ?? 3,
-        isCritical: defaultNoteProperties.value.isCritical ?? note?.isCritical ?? false,
+        // isAttached: defaultNoteProperties.value.isAttached ?? note?.isAttached ?? false,
+        // size: defaultNoteProperties.value.size ?? note?.size ?? 3,
+        // isCritical: defaultNoteProperties.value.isCritical ?? note?.isCritical ?? false,
         flickDirection:
             defaultNoteProperties.value.flickDirection ?? note?.flickDirection ?? 'none',
-        isFake: defaultNoteProperties.value.isFake ?? note?.isFake ?? false,
-        sfx: defaultNoteProperties.value.sfx ?? note?.sfx ?? 'default',
-        isConnectorSeparator: defaultNoteProperties.value.isConnectorSeparator ?? false,
-        connectorType: defaultNoteProperties.value.connectorType ?? 'active',
-        connectorEase: defaultNoteProperties.value.connectorEase ?? 'linear',
-        connectorActiveIsCritical:
-            defaultNoteProperties.value.connectorActiveIsCritical ??
-            defaultNoteProperties.value.isCritical ??
-            false,
-        connectorActiveIsFake:
-            defaultNoteProperties.value.connectorActiveIsFake ??
-            defaultNoteProperties.value.isFake ??
-            false,
-        connectorGuideColor: defaultNoteProperties.value.connectorGuideColor ?? 'green',
-        connectorGuideAlpha: defaultNoteProperties.value.connectorGuideAlpha ?? 1,
-        connectorLayer: defaultNoteProperties.value.connectorLayer ?? 'top',
+        // isFake: defaultNoteProperties.value.isFake ?? note?.isFake ?? false,
+        // sfx: defaultNoteProperties.value.sfx ?? note?.sfx ?? 'default',
+        // isConnectorSeparator: defaultNoteProperties.value.isConnectorSeparator ?? false,
+        // connectorType: defaultNoteProperties.value.connectorType ?? 'active',
+        // connectorEase: defaultNoteProperties.value.connectorEase ?? 'linear',
+        // connectorActiveIsCritical:
+        //     defaultNoteProperties.value.connectorActiveIsCritical ??
+        //     defaultNoteProperties.value.isCritical ??
+        //     false,
+        // connectorActiveIsFake:
+        //     defaultNoteProperties.value.connectorActiveIsFake ??
+        //     defaultNoteProperties.value.isFake ??
+        //     false,
+        // connectorGuideColor: defaultNoteProperties.value.connectorGuideColor ?? 'green',
+        // connectorGuideAlpha: defaultNoteProperties.value.connectorGuideAlpha ?? 1,
+        // connectorLayer: defaultNoteProperties.value.connectorLayer ?? 'top',
     }
 }
 

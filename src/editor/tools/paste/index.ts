@@ -189,19 +189,14 @@ const toMovedTimeScaleObject = (entity: TimeScaleEntity, beat: number): TimeScal
     group: view.group ?? entity.group,
     beat,
     timeScale: entity.timeScale,
-    skip: entity.skip,
-    ease: entity.ease,
-    hideNotes: entity.hideNotes,
 })
 
 const flippedFlickDirections: Record<FlickDirection, FlickDirection> = {
     none: 'none',
+    left: 'left',
+    right: 'right',
     up: 'up',
-    upLeft: 'upRight',
-    upRight: 'upLeft',
     down: 'down',
-    downLeft: 'downRight',
-    downRight: 'downLeft',
 }
 
 const toMovedNoteObject = (
@@ -214,9 +209,9 @@ const toMovedNoteObject = (
     ...entity,
     group: view.group ?? entity.group,
     beat,
-    left: flip
-        ? -(entity.left + entity.size) + align(startLane) + align(lane)
-        : entity.left - align(startLane) + align(lane),
+    lane: flip
+        ? -entity.lane + align(startLane) + align(lane)
+        : entity.lane - align(startLane) + align(lane),
     flickDirection: flip ? flippedFlickDirections[entity.flickDirection] : entity.flickDirection,
 })
 

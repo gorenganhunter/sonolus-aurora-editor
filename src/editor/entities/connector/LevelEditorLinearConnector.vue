@@ -16,42 +16,41 @@ const props = defineProps<{
 const id = useId()
 
 const graphic = computed(() => {
-    const { attachHead, attachTail, head, tail, segmentHead, segmentTail } = props.entity
+    const { /*attachHead, attachTail,*/ head, tail/*, segmentHead, segmentTail*/ } = props.entity
 
-    const tAttachHead = beatToTime(bpms.value, attachHead.beat)
-    const tAttachTail = beatToTime(bpms.value, attachTail.beat)
-
+    // const tAttachHead = beatToTime(bpms.value, attachHead.beat)
+    // const tAttachTail = beatToTime(bpms.value, attachTail.beat)
+// console.log(1, head, tail)
     const tHead = beatToTime(bpms.value, head.beat)
     const tTail = beatToTime(bpms.value, tail.beat)
+// console.log(2, tHead, tTail)
+    // const lHead = remap(tAttachHead, tAttachTail, attachHead.left, attachTail.left, tHead)
+    // const lTail = remap(tAttachHead, tAttachTail, attachHead.left, attachTail.left, tTail)
+    //
+    // const sHead = remap(tAttachHead, tAttachTail, attachHead.size, attachTail.size, tHead)
+    // const sTail = remap(tAttachHead, tAttachTail, attachHead.size, attachTail.size, tTail)
 
-    const lHead = remap(tAttachHead, tAttachTail, attachHead.left, attachTail.left, tHead)
-    const lTail = remap(tAttachHead, tAttachTail, attachHead.left, attachTail.left, tTail)
-
-    const sHead = remap(tAttachHead, tAttachTail, attachHead.size, attachTail.size, tHead)
-    const sTail = remap(tAttachHead, tAttachTail, attachHead.size, attachTail.size, tTail)
-
-    const xHeadL = lHead
-    const xHeadR = lHead + sHead
+    const xHead = head.lane
     const yHead = tHead * ups.value
 
-    const xTailL = lTail
-    const xTailR = lTail + sTail
+    const xTail = tail.lane
     const yTail = tTail * ups.value
 
-    const { fill, gradient } = getColor(id, segmentHead, segmentTail, tHead, tTail)
+    // const { fill, gradient } = getColor(id, segmentHead, segmentTail, tHead, tTail)
+    const fill = "#ffffff55"
 
     return {
         polygon: {
-            points: `${xHeadL},${yHead} ${xTailL},${yTail} ${xTailR},${yTail} ${xHeadR},${yHead}`,
-            ...fill,
+            points: `${xHead - 0.5},${yHead} ${xTail - 0.5},${yTail} ${xTail + 0.5},${yTail} ${xHead + 0.5},${yHead}`,
+            fill,
         },
-        gradient,
+        // gradient,
     }
 })
 </script>
 
 <template>
-    <ConnectorGradient v-if="graphic.gradient" v-bind="graphic.gradient" />
+    <!--ConnectorGradient v-if="graphic.gradient" v-bind="graphic.gradient" /-->
     <polygon v-bind="graphic.polygon" />
-    <ConnectorFakeMarker :entity />
+    <!--ConnectorFakeMarker :entity /-->
 </template>

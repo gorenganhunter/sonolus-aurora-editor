@@ -11,10 +11,10 @@ defineProps<{
 </script>
 
 <template>
-    <component :is="bodyComponents.none" :size="entity.size" :is-highlighted="isHighlighted" />
-    <component
+    <component :is="bodyComponents.tick" :is-highlighted="isHighlighted" />
+    <!--component
         :is="diamondComponents[entity.isCritical ? 'yellow' : 'green']"
         :size="entity.size"
     />
-    <component :is="fakeMarkerComponent" v-if="entity.isFake" :size="entity.size" />
+    <component :is="fakeMarkerComponent" v-if="entity.isFake" :size="entity.size" /-->
 </template>

@@ -10,6 +10,6 @@ defineProps<{
 
 <template>
     <g v-if="entity.tail.beat > entity.head.beat">
-        <component :is="connectorComponents[entity.attachHead.connectorEase]" :entity />
+        <component :is="connectorComponents['linear']" :entity />
     </g>
 </template>
