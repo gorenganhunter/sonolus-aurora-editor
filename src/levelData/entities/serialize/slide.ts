@@ -146,8 +146,8 @@ export const serializeSlidesToLevelDataEntities = (
             // const tick = Math.round(info.note.beat * beatToTicks)
 
             if (
-                //                info.note.noteType === 'default' &&
-                (isFirst && info.note.noteType === 'default') || isFlick || (isFirst && isLast)
+                info.note.noteType === 'default' &&
+                (isFirst || isFlick)
             ) {
                 const notes = allowSimLines.get(info.note.beat)
                 if (notes) {

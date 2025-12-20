@@ -1,3 +1,3 @@
-# Sonolus Next SEKAI Editor
+# Sonolus Aurora Editor
 
-https://next-sekai-editor.sonolus.com
+https://aurora-editor.gorenganhunter.my.id
