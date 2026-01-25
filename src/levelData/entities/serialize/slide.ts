@@ -134,7 +134,7 @@ export const serializeSlidesToLevelDataEntities = (
                 //     entity.archetype += isFlick ? 'TailFlick' : 'TailRelease'
             } else if (!isFirst && !isFlick) {
                 entity.archetype += 'HoldTick'
-            } else if (isFirst && !isLast) {
+            } else if (isFirst && !isLast && !isFlick) {
                 entity.archetype += 'HoldStart'
             } else {
                 entity.archetype += isFlick ? 'Flick' : 'Tap'
