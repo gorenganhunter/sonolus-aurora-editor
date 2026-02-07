@@ -12,6 +12,13 @@
                 "generating": "Generating waveform..."
             }
         },
+        "hp": {
+            "title": "Health Point",
+            "changed": "Changed Health Point",
+            "modal": {
+                "title": "Change Health Point"
+            }
+        },
         "brush": {
             "title": "Switch to Brush tool",
             "switched": "Switched to Brush tool",

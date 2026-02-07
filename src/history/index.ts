@@ -7,6 +7,7 @@ import { createState, type State } from '../state'
 import { cleanupWaveform } from '../waveform'
 
 const defaultChart: Chart = {
+    hp: 1,
     bpms: [
         {
             beat: 0,

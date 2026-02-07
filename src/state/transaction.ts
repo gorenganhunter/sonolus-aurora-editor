@@ -50,6 +50,7 @@ export const createTransaction = (state: State) => {
 
             return {
                 bgm: state.bgm,
+                hp: state.hp,
                 store: {
                     grid: {
                         ...state.store.grid,

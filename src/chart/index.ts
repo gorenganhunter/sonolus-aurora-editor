@@ -1,4 +1,5 @@
 export type Chart = {
+    hp: number
     bpms: BpmObject[]
     groupCount: number
     timeScales: TimeScaleObject[]

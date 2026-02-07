@@ -1,4 +1,4 @@
-import { type Static, type TSchema } from '@sinclair/typebox'
+import { Type, type Static, type TSchema } from '@sinclair/typebox'
 import { Value } from '@sinclair/typebox/value'
 import { type LevelDataEntity } from '@sonolus/core'
 import type { Chart } from '../..'
@@ -16,6 +16,7 @@ export type ParseToChart = (
 
 export const parseLevelDataChart = (entities: LevelDataEntity[]): Chart => {
     const chart: Chart = {
+        hp: entities[0] ? getValue(entities[0], "life", Type.Number()) : 1,
         bpms: [],
         groupCount: 2,
         timeScales: [],

@@ -33,6 +33,7 @@ export const save: Command = {
                     bgm.value.offset,
                     store.value,
                     state.value.groupCount,
+                    state.value.hp
                 )
 
                 const file = gzip(JSON.stringify(levelData), {

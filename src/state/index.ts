@@ -10,6 +10,7 @@ export type State = {
     filename?: string
 
     bgm: Bgm
+    hp: number
     store: Store
     bpms: BpmIntegral[]
     timeScales: TimeScaleIntegral[]
@@ -24,6 +25,7 @@ export const createState = (chart: Chart, offset: number, filename?: string): St
         filename,
 
         bgm: { offset },
+        hp: chart.hp,
         store: createStore(chart),
         bpms,
         timeScales: createTimeScales(chart, bpms),

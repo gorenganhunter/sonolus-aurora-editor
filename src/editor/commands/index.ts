@@ -43,6 +43,7 @@ import { zoomXIn } from './zooms/zoomXIn'
 import { zoomXOut } from './zooms/zoomXOut'
 import { zoomYIn } from './zooms/zoomYIn'
 import { zoomYOut } from './zooms/zoomYOut'
+import { hp } from './hp'
 
 export type Command = {
     title: () => string
@@ -94,6 +95,8 @@ export const commands = {
 
     bpm,
     timeScale,
+
+    hp,
 
     groupPrev,
     groupNext,
