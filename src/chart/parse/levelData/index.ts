@@ -5,6 +5,7 @@ import type { Chart } from '../..'
 import { parseBpmsToChart } from './bpm'
 import { parseSlidesToChart } from './slide'
 import { parseTimeScalesToChart } from './timeScale'
+import { parseInitializationToChart } from './initialization'
 
 export type TimeScaleNames = (string | undefined)[]
 
@@ -16,12 +17,14 @@ export type ParseToChart = (
 
 export const parseLevelDataChart = (entities: LevelDataEntity[]): Chart => {
     const chart: Chart = {
-        hp: entities[0] ? getValue(entities[0], "life", Type.Number()) : 1,
+        hp: 1,
         bpms: [],
         groupCount: 2,
         timeScales: [],
         slides: [],
     }
+
+    parseInitializationToChart(chart, entities)
 
     const timeScaleNames: TimeScaleNames = []
 
