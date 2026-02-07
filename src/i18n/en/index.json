@@ -16,7 +16,8 @@
             "title": "Health Point",
             "changed": "Changed Health Point",
             "modal": {
-                "title": "Change Health Point"
+                "title": "Change Health Point",
+                "auto": "Auto"
             }
         },
         "brush": {
