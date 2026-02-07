@@ -11,11 +11,11 @@ let speed = 1
 
 let state:
     | {
-          speed: number
-          startTime: number
-          startBgmTime: number
-          returnTime: number
-      }
+        speed: number
+        startTime: number
+        startBgmTime: number
+        returnTime: number
+    }
     | undefined
 
 watch(time, ({ now }) => {
@@ -52,12 +52,12 @@ export const startOrStopPlayer = () => {
             settings.playStartPosition === 'cursor'
                 ? view.cursorTime
                 : Math.max(
-                      0,
-                      view.time +
-                          (((settings.playFollow ? settings.playFollowPosition : 0) / 100 - 0.5) *
-                              view.h) /
-                              settings.pps,
-                  )
+                    0,
+                    view.time +
+                    (((settings.playFollow ? settings.playFollowPosition : 0) / 100 - 0.5) *
+                        view.h) /
+                    settings.pps,
+                )
 
         state = {
             speed,

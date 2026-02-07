@@ -44,6 +44,7 @@ import { zoomXOut } from './zooms/zoomXOut'
 import { zoomYIn } from './zooms/zoomYIn'
 import { zoomYOut } from './zooms/zoomYOut'
 import { hp } from './hp'
+import { stats } from './stats'
 
 export type Command = {
     title: () => string
@@ -129,6 +130,7 @@ export const commands = {
 
     help,
     settings,
+    stats,
     fullscreen,
 }
 
