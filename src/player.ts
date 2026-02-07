@@ -1,14 +1,18 @@
 import { watch } from 'vue'
-import normalTickUrl from './assets/se_live_connect.mp3?url'
-import criticalTickUrl from './assets/se_live_connect_critical.mp3?url'
-import criticalTapUrl from './assets/se_live_critical.mp3?url'
-import normalFlickUrl from './assets/se_live_flick.mp3?url'
-import criticalFlickUrl from './assets/se_live_flick_critical.mp3?url'
-import normalActiveUrl from './assets/se_live_long.mp3?url'
-import criticalActiveUrl from './assets/se_live_long_critical.mp3?url'
-import normalTapUrl from './assets/se_live_perfect.mp3?url'
-import normalTraceUrl from './assets/se_live_trace.mp3?url'
-import criticalTraceUrl from './assets/se_live_trace_critical.mp3?url'
+import tapUrl from './assets/se_live_tap.mp3'
+import tickUrl from './assets/se_live_tick.mp3'
+import flickUrl from './assets/se_live_flick.mp3'
+import connectorUrl from './assets/se_live_connector.mp3'
+// import normalTickUrl from './assets/se_live_connect.mp3?url'
+// import criticalTickUrl from './assets/se_live_connect_critical.mp3?url'
+// import criticalTapUrl from './assets/se_live_critical.mp3?url'
+// import normalFlickUrl from './assets/se_live_flick.mp3?url'
+// import criticalFlickUrl from './assets/se_live_flick_critical.mp3?url'
+// import normalActiveUrl from './assets/se_live_long.mp3?url'
+// import criticalActiveUrl from './assets/se_live_long_critical.mp3?url'
+// import normalTapUrl from './assets/se_live_perfect.mp3?url'
+// import normalTraceUrl from './assets/se_live_trace.mp3?url'
+// import criticalTraceUrl from './assets/se_live_trace_critical.mp3?url'
 import { view } from './editor/view'
 import { bgm } from './history/bgm'
 import { bpms } from './history/bpms'
@@ -26,16 +30,20 @@ const delay = 0.2
 const context = new AudioContext()
 
 const sfxBuffers = {
-    normalTap: optional<AudioBuffer>(),
-    criticalTap: optional<AudioBuffer>(),
-    normalFlick: optional<AudioBuffer>(),
-    criticalFlick: optional<AudioBuffer>(),
-    normalTrace: optional<AudioBuffer>(),
-    criticalTrace: optional<AudioBuffer>(),
-    normalTick: optional<AudioBuffer>(),
-    criticalTick: optional<AudioBuffer>(),
-    normalActive: optional<AudioBuffer>(),
-    criticalActive: optional<AudioBuffer>(),
+    tap: optional<AudioBuffer>(),
+    tick: optional<AudioBuffer>(),
+    flick: optional<AudioBuffer>(),
+    connector: optional<AudioBuffer>()
+    // normalTap: optional<AudioBuffer>(),
+    // criticalTap: optional<AudioBuffer>(),
+    // normalFlick: optional<AudioBuffer>(),
+    // criticalFlick: optional<AudioBuffer>(),
+    // normalTrace: optional<AudioBuffer>(),
+    // criticalTrace: optional<AudioBuffer>(),
+    // normalTick: optional<AudioBuffer>(),
+    // criticalTick: optional<AudioBuffer>(),
+    // normalActive: optional<AudioBuffer>(),
+    // criticalActive: optional<AudioBuffer>(),
 }
 
 type ActiveAudio = {
@@ -54,8 +62,7 @@ let state:
         lastTime: number
         nodes: Set<AudioNode>
         actives: {
-            normalActive: Set<ActiveAudio>
-            criticalActive: Set<ActiveAudio>
+            connector: Set<ActiveAudio>
         }
     }
     | undefined
@@ -76,14 +83,17 @@ watch(time, ({ now }) => {
     }
 
     const targets = {
-        normalTap: new Set<number>(),
-        criticalTap: new Set<number>(),
-        normalFlick: new Set<number>(),
-        criticalFlick: new Set<number>(),
-        normalTrace: new Set<number>(),
-        criticalTrace: new Set<number>(),
-        normalTick: new Set<number>(),
-        criticalTick: new Set<number>(),
+        tap: new Set<number>(),
+        tick: new Set<number>(),
+        flick: new Set<number>(),
+        // normalTap: new Set<number>(),
+        // criticalTap: new Set<number>(),
+        // normalFlick: new Set<number>(),
+        // criticalFlick: new Set<number>(),
+        // normalTrace: new Set<number>(),
+        // criticalTrace: new Set<number>(),
+        // normalTick: new Set<number>(),
+        // criticalTick: new Set<number>(),
     }
 
     for (const entity of cullEntities('note', keys.min, keys.max)) {
@@ -99,7 +109,7 @@ watch(time, ({ now }) => {
         //     continue
         // }
         //
-        // if (entity.noteType === 'anchor') continue
+        if (entity.noteType === 'anchor') continue
         //
         // if (entity.noteType === 'damage') continue
 
@@ -109,10 +119,18 @@ watch(time, ({ now }) => {
         const info = infos.find((info) => info.note === entity)
         if (!info) throw new Error('Unexpected missing info')
 
-        const isInActive = info.activeHead !== info.activeTail
-        const isActiveHead = info.activeHead === info.note
-        const isActiveTail = info.activeTail === info.note
+        //        const isInActive = info.activeHead !== info.activeTail
+        const isHead = info.segmentHead === info.note
+        const isTail = info.segmentTail === info.note
         const isFlick = info.note.flickDirection !== 'none'
+
+        if (isFlick) {
+            targets.flick.add(entity.beat)
+        } else if (isHead) {
+            targets.tap.add(entity.beat)
+        } else {
+            targets.tick.add(entity.beat)
+        }
 
         // targets.normalTap.add(entity.beat)
         // if (entity.noteType === 'trace') {
@@ -267,14 +285,14 @@ watch(time, ({ now }) => {
     }
 
     const activeTargets = {
-        normalActive: Array<ConnectorEntity>(),
-        criticalActive: Array<ConnectorEntity>(),
+        connector: Array<ConnectorEntity>(),
+        //        criticalActive: Array<ConnectorEntity>(),
     }
 
     for (const entity of cullEntities('connector', keys.min, keys.max)) {
         if (entity.head.beat < beats.min || entity.head.beat >= beats.max) continue
 
-        // activeTargets.normalActive.push(entity)
+        activeTargets.connector.push(entity)
         // if (entity.segmentHead.connectorType !== 'active') continue
         //
         // if (entity.segmentHead.connectorActiveIsCritical) {
@@ -322,8 +340,7 @@ export const startPlayer = (bgmTime: number, speed: number) => {
         lastTime: time,
         nodes: new Set(),
         actives: {
-            normalActive: new Set(),
-            criticalActive: new Set(),
+            connector: new Set(),
         },
     }
 
@@ -477,16 +494,20 @@ const loadSfx = () => {
         sfxBuffers[type] = await context.decodeAudioData(data)
     }
 
-    void load('normalTap', normalTapUrl)
-    void load('criticalTap', criticalTapUrl)
-    void load('normalFlick', normalFlickUrl)
-    void load('criticalFlick', criticalFlickUrl)
-    void load('normalTrace', normalTraceUrl)
-    void load('criticalTrace', criticalTraceUrl)
-    void load('normalTick', normalTickUrl)
-    void load('criticalTick', criticalTickUrl)
-    void load('normalActive', normalActiveUrl)
-    void load('criticalActive', criticalActiveUrl)
+    void load('tap', tapUrl)
+    void load('tick', tickUrl)
+    void load('flick', flickUrl)
+    void load('connector', connectorUrl)
+    // void load('normalTap', normalTapUrl)
+    // void load('criticalTap', criticalTapUrl)
+    // void load('normalFlick', normalFlickUrl)
+    // void load('criticalFlick', criticalFlickUrl)
+    // void load('normalTrace', normalTraceUrl)
+    // void load('criticalTrace', criticalTraceUrl)
+    // void load('normalTick', normalTickUrl)
+    // void load('criticalTick', criticalTickUrl)
+    // void load('normalActive', normalActiveUrl)
+    // void load('criticalActive', criticalActiveUrl)
 }
 
 loadSfx()
