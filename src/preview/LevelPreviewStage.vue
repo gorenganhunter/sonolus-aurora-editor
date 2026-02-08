@@ -15,7 +15,7 @@ const stages2 = computed(() =>
 		//       const v = new Vec(-1, 0).rotate(angle)
 		//       const layout = new Vec(0, 0).add(v.x, v.y)
         lane -= 4
-        const v = new Vec(0, 1).rotate(-lane * Math.PI / 8)
+        const v = new Vec(0, 1).rotate(-lane * Math.PI / 12)
         const layout = new Vec(0, 0).add(v.x, v.y)
 		      return {
 		          cx: layout.x,
@@ -45,9 +45,11 @@ const stages2 = computed(() =>
 
 <template>
     <template v-for="({ cx, cy }, index) in stages2" :key="index">
-        <circle :cx :cy :r="0.1" stroke="#fff" stroke-width="0.02"/>
+        <circle :cx :cy :r="0.05" fill="#fff" />
         <!--polygon :points stroke="white" :stroke-opacity="opacity" /-->
     </template>
+    <path :d="`M ${stages2[0]!.cx} ${stages2[0]!.cy} A 1 1 0 0 0 ${stages2[8]!.cx} ${stages2[8]!.cy}`" stroke="#fff" stroke-width="0.025" fill="none" />
+    <circle :cx="0" :cy="0" :r="0.03" stroke="#ffffff44" stroke-width="0.01" />
     <!--template v-for="({ points, centers }, index) in lanes" :key="index">
         <polygon :points stroke="white" />
         <template v-for="({ x, y }, i) in centers" :key="i">

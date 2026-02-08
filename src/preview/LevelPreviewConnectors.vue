@@ -62,14 +62,14 @@ const connectors = computed(() =>
             //     tail: clamp(unlerp(targetTime.tail - noteDuration.value, targetTime.tail, scaledTimes(tail.group).value.min)),
             // }
 
-            const v = new Vec(0, 1).rotate(-head.lane * Math.PI / 8)
+            const v = new Vec(0, 1).rotate(-head.lane * Math.PI / 12)
 
             const pos = {
                 head: new Vec(0, 0).add(v.x, v.y).mul(s.head),
                 tail: new Vec(0, 0).add(v.x, v.y).mul(s.tail)
             }
             
-            const a = -head.lane * (Math.PI / 8)
+            const a = -head.lane * (Math.PI / 12)
 
             const points = new Quad(
                 pos.head.add(-0.08 * s.head * Math.cos(a), -0.08 * s.head * Math.sin(a)),
@@ -113,8 +113,8 @@ const connectors = computed(() =>
                 }
 
                 const v = {
-                    min: new Vec(0, 1).rotate(-lane.min * Math.PI / 8),
-                    max: new Vec(0, 1).rotate(-lane.max * Math.PI / 8),
+                    min: new Vec(0, 1).rotate(-lane.min * Math.PI / 12),
+                    max: new Vec(0, 1).rotate(-lane.max * Math.PI / 12),
                 }
 
                 const pos = {
@@ -123,8 +123,8 @@ const connectors = computed(() =>
                 }
                 
                 const a = {
-                    min: -lane.min * (Math.PI / 8),
-                    max: -lane.max * (Math.PI / 8)
+                    min: -lane.min * (Math.PI / 12),
+                    max: -lane.max * (Math.PI / 12)
                 }
 
                 const points = new Quad(

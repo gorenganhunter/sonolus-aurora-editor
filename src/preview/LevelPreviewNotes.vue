@@ -50,7 +50,7 @@ const notes = computed(() =>
         //
         // const points = layout.mul(size2 / 2 * s).rotate(rotate2).translate(cx, cy).toPoints()
 
-        const v = new Vec(0, 1).rotate(-lane * Math.PI / 8)
+        const v = new Vec(0, 1).rotate(-lane * Math.PI / 12)
         const layout = new Vec(0, 0).add(v.x, v.y).mul(s)
 
         const slideNotes = state.value.store.slides.note.get(slideId)
