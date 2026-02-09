@@ -13,7 +13,7 @@ export type TimeScaleEntity = BaseEntity & {
 export const toTimeScaleEntity = (object: TimeScaleObject): TimeScaleEntity => ({
     type: 'timeScale',
     hitbox: {
-        lane: -6.5,
+        lane: -5,
         beat: object.beat,
         w: 0.5,
         h: 0.4,
