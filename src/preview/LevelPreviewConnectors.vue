@@ -11,7 +11,7 @@ import { lerp, unlerp, clamp } from '../utils/math'
 import { state } from "../history"
 // import { rotate, resize, moveX, moveY } from './events'
 import { getLane } from './lane'
-import { noteDuration, tapNoteLayout, approach } from './note'
+import { noteDuration, approachSize, approachPos } from './note'
 import { Vec } from "./Vec"
 import { Quad } from "./Quad"
 
@@ -47,6 +47,11 @@ const connectors = computed(() =>
                 head: clamp(unlerp(targetTime.head - noteDuration.value, targetTime.head, scaledTimes(head.group).value.min)),
                 tail: clamp(unlerp(targetTime.tail - noteDuration.value, targetTime.tail, scaledTimes(tail.group).value.min)),
             }
+
+        const size = {
+            head: approachSize(s.head - 1),
+            tail: approachSize(s.tail - 1)
+        }
         // // console.log(s, angle, size2, posX, posY)
         //
         // const rotate2 = angle + (Math.PI / 2 * Math.floor(lane))
@@ -65,24 +70,24 @@ const connectors = computed(() =>
             const v = new Vec(0, 1).rotate(-head.lane * Math.PI / 12)
 
             const pos = {
-                head: new Vec(0, 0).add(v.x, v.y).mul(s.head),
-                tail: new Vec(0, 0).add(v.x, v.y).mul(s.tail)
+                head: new Vec(0, 0).add(v.x, v.y).mul(approachPos(s.head - 1)),
+                tail: new Vec(0, 0).add(v.x, v.y).mul(approachPos(s.tail - 1))
             }
             
             const a = -head.lane * (Math.PI / 12)
 
             const points = new Quad(
-                pos.head.add(-0.08 * s.head * Math.cos(a), -0.08 * s.head * Math.sin(a)),
-                pos.tail.add(-0.08 * s.tail * Math.cos(a), -0.08 * s.tail * Math.sin(a)),
-                pos.tail.add(0.08 * s.tail * Math.cos(a), 0.08 * s.tail * Math.sin(a)),
-                pos.head.add(0.08 * s.head * Math.cos(a), 0.08 * s.head * Math.sin(a)),
+                pos.head.add(-0.08 * size.head * Math.cos(a), -0.08 * size.head * Math.sin(a)),
+                pos.tail.add(-0.08 * size.tail * Math.cos(a), -0.08 * size.tail * Math.sin(a)),
+                pos.tail.add(0.08 * size.tail * Math.cos(a), 0.08 * size.tail * Math.sin(a)),
+                pos.head.add(0.08 * size.head * Math.cos(a), 0.08 * size.head * Math.sin(a)),
             ).toPoints()
             // console.log(layout)
 
             return [{
                 points,
                 fill: "#ffffff",
-                opacity: 0.5
+                opacity: "0.5"
             }]
         } else {
             const t = scaledTimes(head.group).value
@@ -107,6 +112,11 @@ const connectors = computed(() =>
                     max: unlerp(scaledTime.max - noteDuration.value, scaledTime.max, t.min),
                 }
 
+                const size = {
+                    min: approachSize(s.min - 1),
+                    max: approachSize(s.max - 1)
+                }
+
                 const lane = {
                     min: lerp(head.lane, tail.lane, clamp(unlerp(targetTime.head, targetTime.tail, scaledTime.min))),
                     max: lerp(head.lane, tail.lane, clamp(unlerp(targetTime.head, targetTime.tail, scaledTime.max))),
@@ -118,8 +128,8 @@ const connectors = computed(() =>
                 }
 
                 const pos = {
-                    min: new Vec(0, 0).add(v.min.x, v.min.y).mul(s.min),
-                    max: new Vec(0, 0).add(v.max.x, v.max.y).mul(s.max)
+                    min: new Vec(0, 0).add(v.min.x, v.min.y).mul(approachPos(s.min - 1)),
+                    max: new Vec(0, 0).add(v.max.x, v.max.y).mul(approachPos(s.max - 1))
                 }
                 
                 const a = {
@@ -128,16 +138,16 @@ const connectors = computed(() =>
                 }
 
                 const points = new Quad(
-                    pos.min.add(-0.08 * s.min * Math.cos(a.min), -0.08 * s.min * Math.sin(a.min)),
-                    pos.max.add(-0.08 * s.max * Math.cos(a.max), -0.08 * s.max * Math.sin(a.max)),
-                    pos.max.add(0.08 * s.max * Math.cos(a.max), 0.08 * s.max * Math.sin(a.max)),
-                    pos.min.add(0.08 * s.min * Math.cos(a.min), 0.08 * s.min * Math.sin(a.min)),
+                    pos.min.add(-0.08 * size.min * Math.cos(a.min), -0.08 * size.min * Math.sin(a.min)),
+                    pos.max.add(-0.08 * size.max * Math.cos(a.max), -0.08 * size.max * Math.sin(a.max)),
+                    pos.max.add(0.08 * size.max * Math.cos(a.max), 0.08 * size.max * Math.sin(a.max)),
+                    pos.min.add(0.08 * size.min * Math.cos(a.min), 0.08 * size.min * Math.sin(a.min)),
                 ).toPoints()
 
                 segs.push({
                     points,
                     fill: "#ffffff",
-                    opacity: 0.5
+                    opacity: "0.5"
                 })
                 //console.log(scaledTime, s, lane, v, pos, a, points)
             }

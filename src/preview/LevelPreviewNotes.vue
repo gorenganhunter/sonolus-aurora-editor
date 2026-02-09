@@ -11,7 +11,7 @@ import { lerp, unlerp } from '../utils/math'
 import { state } from "../history"
 // import { rotate, resize, moveX, moveY } from './events'
 import { getLane } from './lane'
-import { noteDuration, tapNoteLayout, approach } from './note'
+import { noteDuration, approachPos, approachSize } from './note'
 import { Vec } from "./Vec"
 
 const notes = computed(() =>
@@ -34,6 +34,8 @@ const notes = computed(() =>
         //     //const z = unlerp(targetTime - noteDuration.value, targetTime, scaledTimes.value.min)
         //
         const s = unlerp(targetTime - noteDuration.value, targetTime, scaledTimes(group).value.min)
+
+        const size = approachSize(s - 1)
         //
         // const angle = (rotate(group).value % 360) / 180 * Math.PI
         // const size2 = resize(group).value
@@ -51,7 +53,7 @@ const notes = computed(() =>
         // const points = layout.mul(size2 / 2 * s).rotate(rotate2).translate(cx, cy).toPoints()
 
         const v = new Vec(0, 1).rotate(-lane * Math.PI / 12)
-        const layout = new Vec(0, 0).add(v.x, v.y).mul(s)
+        const layout = new Vec(0, 0).add(v.x, v.y).mul(approachPos(s - 1))
 
         const slideNotes = state.value.store.slides.note.get(slideId)
 
@@ -68,7 +70,7 @@ const notes = computed(() =>
         return {
             cx: layout.x,
             cy: layout.y,
-            s: isTick ? s * 0.8 : s,
+            s: isTick ? size * 0.8 : size,
             stroke: color,
             color: isTick ? "#00000000" : color,
             text: flickDirection === 'left' ? "<" : flickDirection === 'right' ? ">" : flickDirection === 'up' ? "٨" : flickDirection === 'down' ? "v" : ""

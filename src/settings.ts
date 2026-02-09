@@ -96,7 +96,7 @@ const settingsProperties = {
 
     showPreview: Type.Boolean({ default: true }),
 
-    previewNoteSpeed: number(8, 1, 15),
+    previewNoteSpeed: number(9, 1, 20),
 
     previewWidth: Type.Number(),
 
