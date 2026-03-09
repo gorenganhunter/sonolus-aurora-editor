@@ -1,11 +1,12 @@
 import type {
     ConnectorEase,
-    ConnectorGuideColor,
-    ConnectorLayer,
-    ConnectorType,
+    // ConnectorGuideColor,
+    // ConnectorLayer,
+    // ConnectorType,
     FlickDirection,
-    NoteSfx,
+    // NoteSfx,
     NoteType,
+    ShortenEarlyWindow,
 } from '../../chart'
 import { selectedEntities } from '../../history/selectedEntities'
 import type { DefaultNoteSlideProperties } from '../../settings'
@@ -52,64 +53,68 @@ export const quickEdit = (properties: DefaultNoteSlideProperties) => {
             editSelectedEditableEntities({
                 noteType: rotate(value as NoteType, [
                     'default',
-                    'trace',
                     'anchor',
-                    'damage',
-                    'forceTick',
-                    'forceNonTick',
                 ]),
             })
             break
         case 'isAttached':
             editSelectedEditableEntities({ isAttached: !value })
             break
-        case 'size':
-            editSelectedEditableEntities({ size: value as never })
-            break
-        case 'isCritical':
-            editSelectedEditableEntities({ isCritical: !value })
-            break
+        // case 'size':
+        //     editSelectedEditableEntities({ size: value as never })
+        //     break
+        // case 'isCritical':
+        //     editSelectedEditableEntities({ isCritical: !value })
+        //     break
         case 'flickDirection':
             editSelectedEditableEntities({
                 flickDirection: rotate(value as FlickDirection, [
                     'none',
+                    'left',
+                    'right',
                     'up',
-                    'upLeft',
-                    'upRight',
                     'down',
-                    'downLeft',
-                    'downRight',
                 ]),
             })
             break
-        case 'isFake':
-            editSelectedEditableEntities({ isFake: !value })
-            break
-        case 'sfx':
+        case 'shortenEarlyWindow':
             editSelectedEditableEntities({
-                sfx: rotate(value as NoteSfx, [
-                    'default',
+                shortenEarlyWindow: rotate(value as ShortenEarlyWindow, [
                     'none',
-                    'normalTap',
-                    'criticalTap',
-                    'normalFlick',
-                    'criticalFlick',
-                    'normalTrace',
-                    'criticalTrace',
-                    'normalTick',
-                    'criticalTick',
-                    'damage',
+                    'perfect',
+                    'great',
+                    'good',
                 ]),
             })
             break
-        case 'isConnectorSeparator':
-            editSelectedEditableEntities({ isConnectorSeparator: !value })
-            break
-        case 'connectorType':
-            editSelectedEditableEntities({
-                connectorType: rotate(value as ConnectorType, ['active', 'guide']),
-            })
-            break
+        // case 'isFake':
+        //     editSelectedEditableEntities({ isFake: !value })
+        //     break
+        // case 'sfx':
+        //     editSelectedEditableEntities({
+        //         sfx: rotate(value as NoteSfx, [
+        //             'default',
+        //             'none',
+        //             'normalTap',
+        //             'criticalTap',
+        //             'normalFlick',
+        //             'criticalFlick',
+        //             'normalTrace',
+        //             'criticalTrace',
+        //             'normalTick',
+        //             'criticalTick',
+        //             'damage',
+        //         ]),
+        //     })
+        //     break
+        // case 'isConnectorSeparator':
+        //     editSelectedEditableEntities({ isConnectorSeparator: !value })
+        //     break
+        // case 'connectorType':
+        //     editSelectedEditableEntities({
+        //         connectorType: rotate(value as ConnectorType, ['active', 'guide']),
+        //     })
+        //     break
         case 'connectorEase':
             editSelectedEditableEntities({
                 connectorEase: rotate(value as ConnectorEase, [
@@ -122,34 +127,34 @@ export const quickEdit = (properties: DefaultNoteSlideProperties) => {
                 ]),
             })
             break
-        case 'connectorActiveIsCritical':
-            editSelectedEditableEntities({ connectorActiveIsCritical: !value })
-            break
-        case 'connectorActiveIsFake':
-            editSelectedEditableEntities({ connectorActiveIsFake: !value })
-            break
-        case 'connectorGuideColor':
-            editSelectedEditableEntities({
-                connectorGuideColor: rotate(value as ConnectorGuideColor, [
-                    'neutral',
-                    'red',
-                    'green',
-                    'blue',
-                    'yellow',
-                    'purple',
-                    'cyan',
-                    'black',
-                ]),
-            })
-            break
-        case 'connectorGuideAlpha':
-            editSelectedEditableEntities({ connectorGuideAlpha: value as never })
-            break
-        case 'connectorLayer':
-            editSelectedEditableEntities({
-                connectorLayer: rotate(value as ConnectorLayer, ['top', 'bottom']),
-            })
-            break
+        // case 'connectorActiveIsCritical':
+        //     editSelectedEditableEntities({ connectorActiveIsCritical: !value })
+        //     break
+        // case 'connectorActiveIsFake':
+        //     editSelectedEditableEntities({ connectorActiveIsFake: !value })
+        //     break
+        // case 'connectorGuideColor':
+        //     editSelectedEditableEntities({
+        //         connectorGuideColor: rotate(value as ConnectorGuideColor, [
+        //             'neutral',
+        //             'red',
+        //             'green',
+        //             'blue',
+        //             'yellow',
+        //             'purple',
+        //             'cyan',
+        //             'black',
+        //         ]),
+        //     })
+        //     break
+        // case 'connectorGuideAlpha':
+        //     editSelectedEditableEntities({ connectorGuideAlpha: value as never })
+        //     break
+        // case 'connectorLayer':
+        //     editSelectedEditableEntities({
+        //         connectorLayer: rotate(value as ConnectorLayer, ['top', 'bottom']),
+        //     })
+        //     break
     }
 }
 

@@ -22,7 +22,7 @@ const defaultNoteSlidePropertiesSchema = Type.Partial(
             // Type.Literal('forceTick'),
             // Type.Literal('forceNonTick'),
         ]),
-        // isAttached: Type.Boolean(),
+        isAttached: Type.Boolean(),
         // size: Type.Number(),
         // isCritical: Type.Boolean(),
         flickDirection: Type.Union([
@@ -60,14 +60,14 @@ const defaultNoteSlidePropertiesSchema = Type.Partial(
         // ]),
         // isConnectorSeparator: Type.Boolean(),
         // connectorType: Type.Union([Type.Literal('active'), Type.Literal('guide')]),
-        // connectorEase: Type.Union([
-        //     Type.Literal('linear'),
-        //     Type.Literal('in'),
-        //     Type.Literal('out'),
-        //     Type.Literal('inOut'),
-        //     Type.Literal('outIn'),
-        //     Type.Literal('none'),
-        // ]),
+        connectorEase: Type.Union([
+            Type.Literal('linear'),
+            Type.Literal('in'),
+            Type.Literal('out'),
+            Type.Literal('inOut'),
+            Type.Literal('outIn'),
+            Type.Literal('none'),
+        ]),
         // connectorActiveIsCritical: Type.Boolean(),
         // connectorActiveIsFake: Type.Boolean(),
         // connectorGuideColor: Type.Union([

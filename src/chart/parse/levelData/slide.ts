@@ -275,23 +275,23 @@ const directions = {
 //     },
 // } as const
 //
-// const connectorEaseSchema = Type.Union([
-//     Type.Literal(0),
-//     Type.Literal(1),
-//     Type.Literal(2),
-//     Type.Literal(3),
-//     Type.Literal(4),
-//     Type.Literal(5),
-// ])
-//
-// const connectorEases = {
-//     0: 'none',
-//     1: 'linear',
-//     2: 'in',
-//     3: 'out',
-//     4: 'inOut',
-//     5: 'outIn',
-// } as const
+const connectorEaseSchema = Type.Union([
+    Type.Literal(0),
+    Type.Literal(1),
+    Type.Literal(2),
+    Type.Literal(3),
+    Type.Literal(4),
+    Type.Literal(5),
+])
+
+const connectorEases = {
+    0: 'linear',
+    1: 'none',
+    2: 'in',
+    3: 'out',
+    4: 'inOut',
+    5: 'outIn',
+} as const
 //
 // const segmentAlphaSchema = Type.Number({ minimum: 0, maximum: 1 })
 //
@@ -336,14 +336,17 @@ const toNoteObject = (
     const lane = getValue(entity, 'lane', laneSchema)
     const direction = getOptionalValue(entity, 'direction', directionSchema)
     const earlyCut = getOptionalValue(entity, 'shortenEarlyWindow', shortenEarlyWindowSchema)
+    const connectorEase = getOptionalValue(entity, "connectorEase", connectorEaseSchema)
 
     const object: NoteObject = {
         group: getGroup(chart, timeScaleNames, entity),
         beat: getValue(entity, EngineArchetypeDataName.Beat, beatSchema),
         noteType: 'default',
+        isAttached: !!getValue(entity, "isAttached", isAttachedSchema),
         lane,
         flickDirection: direction === undefined ? "none" : directions[direction],
-        shortenEarlyWindow: earlyCut === undefined ? 'none' : earlyWindows[earlyCut]
+        shortenEarlyWindow: earlyCut === undefined ? 'none' : earlyWindows[earlyCut],
+        connectorEase: connectorEase === undefined ? 'linear' : connectorEases[connectorEase]
     }
 
     // const [isFake, archetype1] = startsWith(entity.archetype, 'Fake')

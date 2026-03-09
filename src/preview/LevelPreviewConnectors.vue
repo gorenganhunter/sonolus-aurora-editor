@@ -14,6 +14,7 @@ import { getLane } from './lane'
 import { noteDuration, approachSize, approachPos } from './note'
 import { Vec } from "./Vec"
 import { Quad } from "./Quad"
+import { ease } from "../ease"
 
 const connectors = computed(() =>
     [...cullEntities('connector', keys.value.min, keys.value.max)]
@@ -118,8 +119,8 @@ const connectors = computed(() =>
                 }
 
                 const lane = {
-                    min: lerp(head.lane, tail.lane, clamp(unlerp(targetTime.head, targetTime.tail, scaledTime.min))),
-                    max: lerp(head.lane, tail.lane, clamp(unlerp(targetTime.head, targetTime.tail, scaledTime.max))),
+                    min: lerp(head.lane, tail.lane, ease(head.connectorEase, clamp(unlerp(targetTime.head, targetTime.tail, scaledTime.min)))),
+                    max: lerp(head.lane, tail.lane, ease(head.connectorEase, clamp(unlerp(targetTime.head, targetTime.tail, scaledTime.max)))),
                 }
 
                 const v = {

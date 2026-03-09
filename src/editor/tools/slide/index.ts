@@ -350,7 +350,7 @@ const getPropertiesFromSelection = (beat: number) => {
 
     return {
         noteType: defaultSlideProperties.value.noteType ?? note?.noteType ?? 'default',
-        // isAttached: defaultSlideProperties.value.isAttached ?? note?.isAttached ?? false,
+        isAttached: defaultSlideProperties.value.isAttached ?? note?.isAttached ?? false,
         // size: defaultSlideProperties.value.size ?? note?.size ?? 3,
         // isCritical: defaultSlideProperties.value.isCritical ?? note?.isCritical ?? false,
         flickDirection:
@@ -362,7 +362,7 @@ const getPropertiesFromSelection = (beat: number) => {
         // isConnectorSeparator: defaultSlideProperties.value.isConnectorSeparator ?? false,
         // connectorType:
         //     defaultSlideProperties.value.connectorType ?? nearest?.connectorType ?? 'active',
-        // connectorEase: defaultSlideProperties.value.connectorEase ?? 'linear',
+        connectorEase: defaultSlideProperties.value.connectorEase ?? 'linear',
         // connectorActiveIsCritical:
         //     defaultSlideProperties.value.connectorActiveIsCritical ??
         //     defaultSlideProperties.value.isCritical ??

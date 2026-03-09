@@ -5,8 +5,8 @@ export type ConnectorEntity = BaseEntity & {
     type: 'connector'
     head: NoteEntity
     tail: NoteEntity
-    // attachHead: NoteEntity
-    // attachTail: NoteEntity
+    attachHead: NoteEntity
+    attachTail: NoteEntity
     // segmentHead: NoteEntity
     // segmentTail: NoteEntity
 }
@@ -14,8 +14,8 @@ export type ConnectorEntity = BaseEntity & {
 export const toConnectorEntity = (
     head: NoteEntity,
     tail: NoteEntity,
-    // attachHead: NoteEntity,
-    // attachTail: NoteEntity,
+    attachHead: NoteEntity,
+    attachTail: NoteEntity,
     // segmentHead: NoteEntity,
     // segmentTail: NoteEntity,
 ): ConnectorEntity => ({
@@ -23,9 +23,9 @@ export const toConnectorEntity = (
 
     beat: head.beat,
     head,
-    tail
-    // attachHead,
-    // attachTail,
+    tail,
+    attachHead,
+    attachTail,
     // segmentHead,
     // segmentTail,
 })

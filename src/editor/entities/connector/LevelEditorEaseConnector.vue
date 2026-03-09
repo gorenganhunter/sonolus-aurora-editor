@@ -15,35 +15,34 @@ const props = defineProps<{
 const id = useId()
 
 const graphic = computed(() => {
-    const { attachHead, attachTail, head, tail, segmentHead, segmentTail } = props.entity
+    const { attachHead, attachTail, head, tail } = props.entity
 
     const tHead = beatToTime(bpms.value, head.beat)
     const tTail = beatToTime(bpms.value, tail.beat)
 
-    const { fill, gradient } = getColor(id, segmentHead, segmentTail, tHead, tTail)
+    // const { fill, gradient } = getColor(id, segmentHead, segmentTail, tHead, tTail)
+    const fill = "#ffffff55"
 
     return {
         path: {
             d: getPathD(
                 beatToTime(bpms.value, attachHead.beat),
-                attachHead.left,
-                attachHead.size,
+                attachHead.lane,
                 beatToTime(bpms.value, attachTail.beat),
-                attachTail.left,
-                attachTail.size,
+                attachTail.lane,
                 tHead,
                 tTail,
                 attachHead.connectorEase === 'in' ? 'in' : 'out',
             ),
-            ...fill,
+            fill,
         },
-        gradient,
+        // gradient,
     }
 })
 </script>
 
 <template>
-    <ConnectorGradient v-if="graphic.gradient" v-bind="graphic.gradient" />
+    <!--ConnectorGradient v-if="graphic.gradient" v-bind="graphic.gradient" /-->
     <path v-bind="graphic.path" />
-    <ConnectorFakeMarker :entity />
+    <!--ConnectorFakeMarker :entity /-->
 </template>

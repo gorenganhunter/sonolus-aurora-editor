@@ -15,15 +15,13 @@ const props = defineProps<{
 const id = useId()
 
 const graphic = computed(() => {
-    const { attachHead, attachTail, head, tail, segmentHead, segmentTail } = props.entity
+    const { attachHead, attachTail, head, tail/*, segmentHead, segmentTail*/ } = props.entity
 
     const tAttachHead = beatToTime(bpms.value, attachHead.beat)
     const tAttachTail = beatToTime(bpms.value, attachTail.beat)
     const tMid = (tAttachHead + tAttachTail) / 2
 
-    const lMid = (attachHead.left + attachTail.left) / 2
-
-    const sMid = (attachHead.size + attachTail.size) / 2
+    const lMid = (attachHead.lane + attachTail.lane) / 2
 
     const tHead = beatToTime(bpms.value, head.beat)
     const tTail = beatToTime(bpms.value, tail.beat)
@@ -33,11 +31,9 @@ const graphic = computed(() => {
     if (tHead < tMid) {
         d += getPathD(
             tAttachHead,
-            attachHead.left,
-            attachHead.size,
+            attachHead.lane,
             tMid,
             lMid,
-            sMid,
             tHead,
             Math.min(tMid, tTail),
             attachHead.connectorEase === 'inOut' ? 'in' : 'out',
@@ -48,30 +44,29 @@ const graphic = computed(() => {
         d += getPathD(
             tMid,
             lMid,
-            sMid,
             tAttachTail,
-            attachTail.left,
-            attachTail.size,
+            attachTail.lane,
             Math.max(tHead, tMid),
             tTail,
             attachHead.connectorEase === 'inOut' ? 'out' : 'in',
         )
     }
 
-    const { fill, gradient } = getColor(id, segmentHead, segmentTail, tHead, tTail)
+    // const { fill, gradient } = getColor(id, segmentHead, segmentTail, tHead, tTail)
+    const fill = "#ffffff55"
 
     return {
         path: {
             d,
-            ...fill,
+            fill,
         },
-        gradient,
+        // gradient,
     }
 })
 </script>
 
 <template>
-    <ConnectorGradient v-if="graphic.gradient" v-bind="graphic.gradient" />
+    <!--ConnectorGradient v-if="graphic.gradient" v-bind="graphic.gradient" /-->
     <path v-bind="graphic.path" />
-    <ConnectorFakeMarker :entity />
+    <!--ConnectorFakeMarker :entity /-->
 </template>

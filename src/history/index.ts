@@ -52,7 +52,6 @@ export const replaceState = (state: State) => {
         name: current.value.name,
         state,
     }
-    console.log(state)
 }
 
 export const pushState = (name: () => string, state: State) => {
@@ -60,7 +59,6 @@ export const pushState = (name: () => string, state: State) => {
         name,
         state,
     })
-    console.log(state)
     index.value++
 }
 

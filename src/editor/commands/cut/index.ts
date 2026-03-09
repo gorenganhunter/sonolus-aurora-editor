@@ -100,6 +100,7 @@ const canRemoves: {
     [T in Entity as T['type']]?: (entity: T) => boolean
 } = {
     bpm: (entity) => entity.beat > 0,
+    timeScale: (entity) => entity.beat > 0
 }
 
 const removes: {

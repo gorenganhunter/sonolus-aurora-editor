@@ -4,11 +4,9 @@ import { ups } from '../../view'
 
 export const getPathD = (
     tAttachHead: number,
-    attachHeadLeft: number,
-    attachHeadSize: number,
+    attachHeadLane: number,
     tAttachTail: number,
-    attachTailLeft: number,
-    attachTailSize: number,
+    attachTailLane: number,
     tHead: number,
     tTail: number,
     connectorEase: 'in' | 'out',
@@ -21,25 +19,18 @@ export const getPathD = (
     const qTail = ease(connectorEase, pTail)
     const qMid = connectorEase === 'in' ? pHead * pTail : 1 - (1 - pHead) * (1 - pTail)
 
-    const lHead = lerp(attachHeadLeft, attachTailLeft, qHead)
-    const lTail = lerp(attachHeadLeft, attachTailLeft, qTail)
-    const lMid = lerp(attachHeadLeft, attachTailLeft, qMid)
+    const lHead = lerp(attachHeadLane, attachTailLane, qHead)
+    const lTail = lerp(attachHeadLane, attachTailLane, qTail)
+    const lMid = lerp(attachHeadLane, attachTailLane, qMid)
 
-    const sHead = lerp(attachHeadSize, attachTailSize, qHead)
-    const sTail = lerp(attachHeadSize, attachTailSize, qTail)
-    const sMid = lerp(attachHeadSize, attachTailSize, qMid)
-
-    const xHeadL = lHead
-    const xHeadR = lHead + sHead
+    const xHead = lHead
     const yHead = tHead * ups.value
 
-    const xTailL = lTail
-    const xTailR = lTail + sTail
+    const xTail = lTail
     const yTail = tTail * ups.value
 
-    const xMidL = lMid
-    const xMidR = lMid + sMid
+    const xMid = lMid
     const yMid = lerp(tAttachHead, tAttachTail, pMid) * ups.value
 
-    return `M ${xHeadL} ${yHead} Q ${xMidL} ${yMid} ${xTailL} ${yTail} L ${xTailR} ${yTail} Q ${xMidR} ${yMid} ${xHeadR} ${yHead} `
+    return `M ${xHead - 0.5} ${yHead} Q ${xMid - 0.5} ${yMid} ${xTail - 0.5} ${yTail} L ${xTail + 0.5} ${yTail} Q ${xMid + 0.5} ${yMid} ${xHead + 0.5} ${yHead} `
 }

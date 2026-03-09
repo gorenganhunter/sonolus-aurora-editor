@@ -46,18 +46,18 @@ export const serializeSlidesToLevelDataEntities = (
                     //     name: 'direction',
                     //     value: flickDirections[note.flickDirection],
                     // },
-                    // {
-                    //     name: 'isAttached',
-                    //     value: +(i !== 0 && i !== infos.length - 1 && note.isAttached),
-                    // },
+                    {
+                        name: 'isAttached',
+                        value: +(i !== 0 && i !== infos.length - 1 && note.isAttached),
+                    },
                     // {
                     //     name: 'isSeparator',
                     //     value: +note.isConnectorSeparator,
                     // },
-                    // {
-                    //     name: 'connectorEase',
-                    //     value: connectorEases[note.connectorEase],
-                    // },
+                    {
+                        name: 'connectorEase',
+                        value: connectorEases[note.connectorEase],
+                    },
                     // {
                     //     name: 'segmentKind',
                     //     value:
@@ -106,9 +106,9 @@ export const serializeSlidesToLevelDataEntities = (
 
             const isFirst = i === 0
             const isLast = i === infos.length - 1
-            const isInActive = info.activeHead !== info.activeTail
-            const isActiveHead = info.activeHead === info.note
-            const isActiveTail = info.activeTail === info.note
+            // const isInActive = info.activeHead !== info.activeTail
+            // const isActiveHead = info.activeHead === info.note
+            // const isActiveTail = info.activeTail === info.note
             const isFlick = info.note.flickDirection !== "none"
 
             // entity.archetype = info.note.isFake ? 'Fake' : ''
@@ -167,18 +167,18 @@ export const serializeSlidesToLevelDataEntities = (
                 value: earlyWindows[info.note.shortenEarlyWindow]
             })
 
-            // if (!isFirst && !isLast && info.note.isAttached) {
-            //     entity.data.push(
-            //         {
-            //             name: 'attachHead',
-            //             ref: (getEntity(info.attachHead).name ??= getName()),
-            //         },
-            //         {
-            //             name: 'attachTail',
-            //             ref: (getEntity(info.attachTail).name ??= getName()),
-            //         },
-            //     )
-            // }
+            if (!isFirst && !isLast && info.note.isAttached) {
+                entity.data.push(
+                    {
+                        name: 'attachHead',
+                        ref: (getEntity(info.attachHead).name ??= getName()),
+                    },
+                    {
+                        name: 'attachTail',
+                        ref: (getEntity(info.attachTail).name ??= getName()),
+                    },
+                )
+            }
             //
             // if (isInActive && isActiveHead) {
             //     disallowHiddenTicks.add(tick)
@@ -350,14 +350,14 @@ const earlyWindows = {
 //     damage: 10,
 // }
 //
-// const connectorEases = {
-//     linear: 1,
-//     in: 2,
-//     out: 3,
-//     inOut: 4,
-//     outIn: 5,
-//     none: 0,
-// }
+const connectorEases = {
+    linear: 0,
+    in: 2,
+    out: 3,
+    inOut: 4,
+    outIn: 5,
+    none: 1,
+}
 //
 // const guideSegmentKinds = {
 //     neutral: 101,

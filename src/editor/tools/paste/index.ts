@@ -76,7 +76,6 @@ export const paste: Tool = {
         if (!clipboardEntry) return
 
         const data = getData(clipboardEntry.text)
-        console.log(data)
         if (!data?.entities.length) return
 
         const transaction = createTransaction(state.value)

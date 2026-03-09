@@ -1,13 +1,14 @@
 import type { Tool } from '..'
 import type {
     ConnectorEase,
-    ConnectorGuideColor,
-    ConnectorLayer,
-    ConnectorType,
+    // ConnectorGuideColor,
+    // ConnectorLayer,
+    // ConnectorType,
     FlickDirection,
-    NoteSfx,
+    // NoteSfx,
     NoteType,
-    TimeScaleEase,
+    ShortenEarlyWindow,
+    // TimeScaleEase,
 } from '../../../chart'
 import { pushState, replaceState, state } from '../../../history'
 import { selectedEntities } from '../../../history/selectedEntities'
@@ -31,23 +32,24 @@ export type BrushProperties = {
     group?: number
     noteType?: NoteType
     isAttached?: boolean
-    size?: number
-    isCritical?: boolean
+    // size?: number
+    // isCritical?: boolean
     flickDirection?: FlickDirection
-    isFake?: boolean
-    sfx?: NoteSfx
-    isConnectorSeparator?: boolean
-    connectorType?: ConnectorType
+    shortenEarlyWindow?: ShortenEarlyWindow
+    // isFake?: boolean
+    // sfx?: NoteSfx
+    // isConnectorSeparator?: boolean
+    // connectorType?: ConnectorType
     connectorEase?: ConnectorEase
-    connectorActiveIsCritical?: boolean
-    connectorActiveIsFake?: boolean
-    connectorGuideColor?: ConnectorGuideColor
-    connectorGuideAlpha?: number
-    connectorLayer?: ConnectorLayer
+    // connectorActiveIsCritical?: boolean
+    // connectorActiveIsFake?: boolean
+    // connectorGuideColor?: ConnectorGuideColor
+    // connectorGuideAlpha?: number
+    // connectorLayer?: ConnectorLayer
     timeScale?: number
-    skip?: number
-    ease?: TimeScaleEase
-    hideNotes?: boolean
+    // skip?: number
+    // ease?: TimeScaleEase
+    // hideNotes?: boolean
 }
 
 export let brushProperties: BrushProperties = {}
@@ -58,10 +60,10 @@ export const setBrushProperties = (properties: BrushProperties) => {
 
 let active:
     | {
-          lane: number
-          time: number
-          count: number
-      }
+        lane: number
+        time: number
+        count: number
+    }
     | undefined
 
 export const brush: Tool = {

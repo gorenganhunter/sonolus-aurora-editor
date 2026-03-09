@@ -3,7 +3,7 @@ import { i18n } from '../../../i18n'
 import MultiBeatField from '../../../modals/form/MultiBeatField.vue'
 // import MultiConnectorActiveIsCriticalField from '../../../modals/form/MultiConnectorActiveIsCriticalField.vue'
 // import MultiConnectorActiveIsFakeField from '../../../modals/form/MultiConnectorActiveIsFakeField.vue'
-// import MultiConnectorEaseField from '../../../modals/form/MultiConnectorEaseField.vue'
+import MultiConnectorEaseField from '../../../modals/form/MultiConnectorEaseField.vue'
 // import MultiConnectorGuideAlphaField from '../../../modals/form/MultiConnectorGuideAlphaField.vue'
 // import MultiConnectorGuideColorField from '../../../modals/form/MultiConnectorGuideColorField.vue'
 // import MultiConnectorLayerField from '../../../modals/form/MultiConnectorLayerField.vue'
@@ -11,7 +11,7 @@ import MultiBeatField from '../../../modals/form/MultiBeatField.vue'
 import MultiFlickDirectionField from '../../../modals/form/MultiFlickDirectionField.vue'
 import MultiShortenEarlyWindowField from '../../../modals/form/MultiShortenEarlyWindowField.vue'
 import MultiGroupField from '../../../modals/form/MultiGroupField.vue'
-// import MultiIsAttachedField from '../../../modals/form/MultiIsAttachedField.vue'
+import MultiIsAttachedField from '../../../modals/form/MultiIsAttachedField.vue'
 // import MultiIsConnectorSeparatorField from '../../../modals/form/MultiIsConnectorSeparatorField.vue'
 // import MultiIsCriticalField from '../../../modals/form/MultiIsCriticalField.vue'
 // import MultiIsFakeField from '../../../modals/form/MultiIsFakeField.vue'
@@ -29,7 +29,7 @@ const { noteFields, createModel } = useSelectedEntitiesProperties(
 const noteType = createModel('noteType')
 const group = createModel('group')
 const beat = createModel('beat')
-// const isAttached = createModel('isAttached')
+const isAttached = createModel('isAttached')
 const lane = createModel('lane')
 // const size = createModel('size')
 // const isCritical = createModel('isCritical')
@@ -39,7 +39,7 @@ const shortenEarlyWindow = createModel('shortenEarlyWindow')
 // const sfx = createModel('sfx')
 // const isConnectorSeparator = createModel('isConnectorSeparator')
 // const connectorType = createModel('connectorType')
-// const connectorEase = createModel('connectorEase')
+const connectorEase = createModel('connectorEase')
 // const connectorActiveIsCritical = createModel('connectorActiveIsCritical')
 // const connectorActiveIsFake = createModel('connectorActiveIsFake')
 // const connectorGuideColor = createModel('connectorGuideColor')
@@ -52,7 +52,7 @@ const shortenEarlyWindow = createModel('shortenEarlyWindow')
         <MultiNoteTypeField v-model="noteType" />
         <MultiGroupField v-model="group" />
         <MultiBeatField v-model="beat" />
-        <!--MultiIsAttachedField v-if="noteFields.isAttached !== false" v-model="isAttached" /-->
+        <MultiIsAttachedField v-if="noteFields.isAttached !== false" v-model="isAttached" />
         <MultiLaneField v-if="noteFields.lane !== false" v-model="lane" />
         <!--MultiSizeField v-if="noteFields.size !== false" v-model="size" />
         <MultiIsCriticalField v-if="noteFields.isCritical !== false" v-model="isCritical" /-->
@@ -73,12 +73,12 @@ const shortenEarlyWindow = createModel('shortenEarlyWindow')
         <MultiConnectorTypeField
             v-if="noteFields.connectorType !== false"
             v-model="connectorType"
-        />
+        /-->
         <MultiConnectorEaseField
             v-if="noteFields.connectorEase !== false"
             v-model="connectorEase"
         />
-        <MultiConnectorActiveIsCriticalField
+        <!--MultiConnectorActiveIsCriticalField
             v-if="noteFields.connectorActiveIsCritical !== false"
             v-model="connectorActiveIsCritical"
         />

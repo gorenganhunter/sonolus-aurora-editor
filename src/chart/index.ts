@@ -52,7 +52,7 @@ export type FlickDirection =
 
 // export type ConnectorType = 'active' | 'guide'
 
-// export type ConnectorEase = 'linear' | 'in' | 'out' | 'inOut' | 'outIn' | 'none'
+export type ConnectorEase = 'linear' | 'in' | 'out' | 'inOut' | 'outIn' | 'none'
 
 // export type ConnectorGuideColor =
 //     | 'neutral'
@@ -72,7 +72,7 @@ export type NoteObject = {
     group: number
     beat: number
     noteType: NoteType
-    // isAttached: boolean
+    isAttached: boolean
     lane: number
     // spawnLane: number
     // left: number
@@ -84,7 +84,7 @@ export type NoteObject = {
     // sfx: NoteSfx
     // isConnectorSeparator: boolean
     // connectorType: ConnectorType
-    // connectorEase: ConnectorEase
+    connectorEase: ConnectorEase
     // connectorActiveIsCritical: boolean
     // connectorActiveIsFake: boolean
     // connectorGuideColor: ConnectorGuideColor

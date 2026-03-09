@@ -16,24 +16,24 @@ const props = defineProps<{
 const id = useId()
 
 const graphic = computed(() => {
-    const { /*attachHead, attachTail,*/ head, tail/*, segmentHead, segmentTail*/ } = props.entity
+    const { attachHead, attachTail, head, tail/*, segmentHead, segmentTail*/ } = props.entity
 
-    // const tAttachHead = beatToTime(bpms.value, attachHead.beat)
-    // const tAttachTail = beatToTime(bpms.value, attachTail.beat)
+    const tAttachHead = beatToTime(bpms.value, attachHead.beat)
+    const tAttachTail = beatToTime(bpms.value, attachTail.beat)
 // console.log(1, head, tail)
     const tHead = beatToTime(bpms.value, head.beat)
     const tTail = beatToTime(bpms.value, tail.beat)
 // console.log(2, tHead, tTail)
-    // const lHead = remap(tAttachHead, tAttachTail, attachHead.left, attachTail.left, tHead)
-    // const lTail = remap(tAttachHead, tAttachTail, attachHead.left, attachTail.left, tTail)
+    const lHead = remap(tAttachHead, tAttachTail, attachHead.lane, attachTail.lane, tHead)
+    const lTail = remap(tAttachHead, tAttachTail, attachHead.lane, attachTail.lane, tTail)
     //
     // const sHead = remap(tAttachHead, tAttachTail, attachHead.size, attachTail.size, tHead)
     // const sTail = remap(tAttachHead, tAttachTail, attachHead.size, attachTail.size, tTail)
 
-    const xHead = head.lane
+    const xHead = lHead
     const yHead = tHead * ups.value
 
-    const xTail = tail.lane
+    const xTail = lTail
     const yTail = tTail * ups.value
 
     // const { fill, gradient } = getColor(id, segmentHead, segmentTail, tHead, tTail)

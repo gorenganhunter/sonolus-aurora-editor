@@ -299,6 +299,7 @@ export const editNote = (entity: NoteEntity, object: Partial<NoteObject>) => {
         group: object.group ?? entity.group,
         beat: object.beat ?? entity.beat,
         noteType: object.noteType ?? entity.noteType,
+        isAttached: object.isAttached ?? entity.isAttached,
         lane: object.lane ?? entity.lane,
         // size: object.size ?? entity.size,
         // isCritical: object.isCritical ?? entity.isCritical,
@@ -308,7 +309,7 @@ export const editNote = (entity: NoteEntity, object: Partial<NoteObject>) => {
         // sfx: object.sfx ?? entity.sfx,
         // isConnectorSeparator: object.isConnectorSeparator ?? entity.isConnectorSeparator,
         // connectorType: object.connectorType ?? entity.connectorType,
-        // connectorEase: object.connectorEase ?? entity.connectorEase,
+        connectorEase: object.connectorEase ?? entity.connectorEase,
         // connectorActiveIsCritical:
         //     object.connectorActiveIsCritical ??
         //     object.isCritical ??
@@ -330,7 +331,7 @@ export const editSelectedNote = (
         group: object.group ?? entity.group,
         beat: object.beat ?? entity.beat,
         noteType: object.noteType ?? entity.noteType,
-        // isAttached: object.isAttached ?? entity.isAttached,
+        isAttached: object.isAttached ?? entity.isAttached,
         lane: object.lane ?? entity.lane,
         // size: object.size ?? entity.size,
         // isCritical: object.isCritical ?? entity.isCritical,
@@ -340,7 +341,7 @@ export const editSelectedNote = (
         // sfx: object.sfx ?? entity.sfx,
         // isConnectorSeparator: object.isConnectorSeparator ?? entity.isConnectorSeparator,
         // connectorType: object.connectorType ?? entity.connectorType,
-        // connectorEase: object.connectorEase ?? entity.connectorEase,
+        connectorEase: object.connectorEase ?? entity.connectorEase,
         // connectorActiveIsCritical:
         //     object.connectorActiveIsCritical ??
         //     object.isCritical ??
@@ -367,7 +368,7 @@ const getPropertiesFromSelection = () => {
 
     return {
         noteType: defaultNoteProperties.value.noteType ?? note?.noteType ?? 'default',
-        // isAttached: defaultNoteProperties.value.isAttached ?? note?.isAttached ?? false,
+        isAttached: defaultNoteProperties.value.isAttached ?? note?.isAttached ?? false,
         // size: defaultNoteProperties.value.size ?? note?.size ?? 3,
         // isCritical: defaultNoteProperties.value.isCritical ?? note?.isCritical ?? false,
         flickDirection:
@@ -378,7 +379,7 @@ const getPropertiesFromSelection = () => {
         // sfx: defaultNoteProperties.value.sfx ?? note?.sfx ?? 'default',
         // isConnectorSeparator: defaultNoteProperties.value.isConnectorSeparator ?? false,
         // connectorType: defaultNoteProperties.value.connectorType ?? 'active',
-        // connectorEase: defaultNoteProperties.value.connectorEase ?? 'linear',
+        connectorEase: defaultNoteProperties.value.connectorEase ?? 'linear',
         // connectorActiveIsCritical:
         //     defaultNoteProperties.value.connectorActiveIsCritical ??
         //     defaultNoteProperties.value.isCritical ??

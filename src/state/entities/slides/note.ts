@@ -1,7 +1,7 @@
 import type { SlideId } from '.'
 import type { BaseEntity } from '..'
 import type {
-    // ConnectorEase,
+    ConnectorEase,
     // ConnectorGuideColor,
     // ConnectorLayer,
     // ConnectorType,
@@ -21,14 +21,14 @@ export type NoteEntity = BaseEntity & {
     noteType: NoteType
     lane: number
     // spawnLane: number
-    // isAttached: boolean
+    isAttached: boolean
     flickDirection: FlickDirection
     shortenEarlyWindow: ShortenEarlyWindow
     // isFake: boolean
     // sfx: NoteSfx
     // isConnectorSeparator: boolean
     // connectorType: ConnectorType
-    // connectorEase: ConnectorEase
+    connectorEase: ConnectorEase
     // connectorLayer: ConnectorLayer
     // connectorActiveIsCritical: boolean
     // connectorActiveIsFake: boolean
@@ -55,11 +55,12 @@ export const toNoteEntity = (
     group: object.group,
     beat: object.beat,
     noteType: object.noteType,
-    // isAttached: object.isAttached,
+    isAttached: object.isAttached,
     lane: object.lane,
     // spawnLane: object.spawnLane,
     flickDirection: object.flickDirection,
     shortenEarlyWindow: object.shortenEarlyWindow,
+    connectorEase: object.connectorEase,
     // isFake: object.isFake,
 
     useInfoOf,

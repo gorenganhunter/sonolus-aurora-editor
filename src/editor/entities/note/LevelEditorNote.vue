@@ -31,12 +31,13 @@ const type = computed(() => {
     if (!infos.value) return 'single'
 
     const infoEntity = entity.useInfoOf ?? entity
-    const info = infos.value.find((info) => info.note === infoEntity)
-    if (info) {
+    const index = infos.value.findIndex((info) => info.note === infoEntity)
+    if (index !== -1) {
+        const info = infos.value[index]
         // console.log(entity, info)
-        if (info.segmentHead === info.segmentTail) return 'single'
+        if (infos.value.length === 1) return 'single'
 
-        if (info.segmentHead === infoEntity) return 'head'
+        if (index === 0) return 'head'
         //
         // if (info.segmentTail === infoEntity) return 'tail'
 
