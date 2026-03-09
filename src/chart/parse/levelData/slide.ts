@@ -342,7 +342,7 @@ const toNoteObject = (
         group: getGroup(chart, timeScaleNames, entity),
         beat: getValue(entity, EngineArchetypeDataName.Beat, beatSchema),
         noteType: 'default',
-        isAttached: !!getValue(entity, "isAttached", isAttachedSchema),
+        isAttached: !!getOptionalValue(entity, "isAttached", isAttachedSchema),
         lane,
         flickDirection: direction === undefined ? "none" : directions[direction],
         shortenEarlyWindow: earlyCut === undefined ? 'none' : earlyWindows[earlyCut],
