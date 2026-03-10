@@ -24,15 +24,24 @@
             "title": "Statistics",
             "modal": {
                 "title": "Statistics",
+                "global": "Global",
+                "waypoints": "Waypoints",
                 "chartInfo": "Chart Info",
                 "level": "Level Estimation",
                 "hp": "Health Point",
-                "noteCounts": "Note Counts",
+                "entities": "Entities",
                 "taps": "Taps",
                 "flicks": "Flicks",
                 "holdStarts": "Hold Starts",
                 "holdTicks": "Hold Ticks",
-                "totalCombo": "Total Combo"
+                "totalCombo": "Total Combo",
+                "bpms": "BPM Changes",
+                "timeScales": "TimeScale Changes",
+                "waypoints": "Waypoints",
+                "start": "Start",
+                "duration": "Duration",
+                "easiest": "Easiest Section",
+                "hardest": "Hardest Section"
             }
         },
         "brush": {
@@ -496,7 +505,8 @@
             "replaced": "Replaced {0} Waypoint objects",
             "selected": "Selected {0} Waypoint objects",
             "modal": {
-                "title": "Waypoint Properties"
+                "title": "Waypoint Properties",
+                "name": "Name"
             }
         }
     },
@@ -693,11 +703,16 @@
     },
     "waypoint": {
         "title": "Waypoint",
+        "tools": "Tools",
         "copy": {
-            "title": "Copy"
+            "title": "Copy",
+            "from": "From",
+            "to": "To",
+            "flip": "Flip"
         },
         "clear": {
-            "title": "Clear"
+            "title": "Clear",
+            "select": "Select Waypoint"
         }
     }
 }

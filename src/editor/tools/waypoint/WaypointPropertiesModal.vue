@@ -13,7 +13,7 @@ const name = createModel('name')
 
 <template>
     <PropertiesModal :title="i18n.tools.waypoint.modal.title">
-        <MultiWaypointNameField v-model="name" />
+        <MultiWaypointNameField v-model="name" :label="i18n.tools.waypoint.modal.name" />
         <MultiBeatField v-if="entities.length === 1" v-model="beat" />
     </PropertiesModal>
 </template>
