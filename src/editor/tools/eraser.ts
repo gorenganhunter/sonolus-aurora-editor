@@ -6,6 +6,7 @@ import type { Entity } from '../../state/entities'
 import { removeBpm } from '../../state/mutations/bpm'
 import { removeNote } from '../../state/mutations/slides/note'
 import { removeTimeScale } from '../../state/mutations/timeScale'
+import { removeWaypoint } from '../../state/mutations/waypoint'
 import { createTransaction, type Transaction } from '../../state/transaction'
 import { interpolate } from '../../utils/interpolate'
 import { notify } from '../notification'
@@ -122,6 +123,7 @@ const removes: {
     timeScale: removeTimeScale,
 
     note: removeNote,
+    waypoint: removeWaypoint
 }
 
 const canRemove = (entity: Entity) => canRemoves[entity.type]?.(entity as never) ?? true

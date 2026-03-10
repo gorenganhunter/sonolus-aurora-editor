@@ -9,6 +9,7 @@ import { computedRange } from '../utils/range'
 import { noteDuration } from './note'
 
 export const scaledTimes = (group: number) => computed(() => {
+    console.log(timeScales.value, group)
     const min = timeToScaledTime(timeScales.value.filter(t => t.group === group), view.cursorTime)
 
     return {

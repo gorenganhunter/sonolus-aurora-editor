@@ -42,7 +42,7 @@ export const createTransaction = (state: State) => {
         commit(selectedEntities: Entity[]): State {
             if (bpms) bpms = calculateBpms(bpms)
             if (bpms || timeScales)
-                timeScales = calculateTimeScales(bpms ?? state.bpms, timeScales ?? [...state.timeScales.filter(({ group }) => group === view.group)])
+                timeScales = calculateTimeScales(bpms ?? [...state.bpms], timeScales ?? [...state.timeScales])
 
             for (const slideId of dirtySlideIds) {
                 rebuildSlide(this.store, slideId, selectedEntities)

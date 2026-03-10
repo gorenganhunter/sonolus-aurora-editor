@@ -1,5 +1,6 @@
 export type Chart = {
     hp: number
+    waypoints: WaypointObject[]
     bpms: BpmObject[]
     groupCount: number
     timeScales: TimeScaleObject[]
@@ -90,4 +91,9 @@ export type NoteObject = {
     // connectorGuideColor: ConnectorGuideColor
     // connectorGuideAlpha: number
     // connectorLayer: ConnectorLayer
+}
+
+export type WaypointObject = {
+    name: string
+    beat: number
 }

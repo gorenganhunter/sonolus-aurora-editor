@@ -6,6 +6,7 @@ import { parseBpmsToChart } from './bpm'
 import { parseSlidesToChart } from './slide'
 import { parseTimeScalesToChart } from './timeScale'
 import { parseInitializationToChart } from './initialization'
+import { parseWaypointsToChart } from './waypoint'
 
 export type TimeScaleNames = (string | undefined)[]
 
@@ -18,6 +19,7 @@ export type ParseToChart = (
 export const parseLevelDataChart = (entities: LevelDataEntity[]): Chart => {
     const chart: Chart = {
         hp: 1,
+        waypoints: [],
         bpms: [],
         groupCount: 2,
         timeScales: [],
@@ -25,6 +27,8 @@ export const parseLevelDataChart = (entities: LevelDataEntity[]): Chart => {
     }
 
     parseInitializationToChart(chart, entities)
+
+    parseWaypointsToChart(chart, entities)
 
     const timeScaleNames: TimeScaleNames = []
 

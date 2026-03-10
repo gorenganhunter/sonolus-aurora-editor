@@ -1,7 +1,8 @@
 <script lang="ts">
 const layers = {
-    timeScale: 0,
-    bpm: 1,
+    waypoint: 0,
+    timeScale: 1,
+    bpm: 2,
 
     connector: 10,
     note: 11,
@@ -22,6 +23,7 @@ const isEntityVisible = (entity: Entity) => {
 
     switch (entity.type) {
         case 'bpm':
+        case 'waypoint':
             return true
         case 'timeScale':
         case 'note':
@@ -38,6 +40,7 @@ const visibleEntities = computed(() =>
         switch (entity.type) {
             case 'bpm':
             case 'timeScale':
+            case 'waypoint':
             case 'note':
                 return entity.beat >= beats.value.min && entity.beat <= beats.value.max
             case 'connector':

@@ -5,10 +5,13 @@ import {
     serializeTimeScaleChangesToLevelDataEntities,
     serializeTimeScaleGroupsToLevelDataEntities,
 } from './timeScale'
+import { serializeWaypointsToLevelDataEntities } from './waypoint'
 
 export const serializeToLevelDataEntities = (store: Store, groupCount: number) => {
     let id = 0
     const getName = () => (id++).toString(16)
+
+    const waypointEntities = serializeWaypointsToLevelDataEntities(store)
 
     const bpmEntities = serializeBpmsToLevelDataEntities(store)
 
@@ -21,7 +24,7 @@ export const serializeToLevelDataEntities = (store: Store, groupCount: number) =
 
     const slideEntities = serializeSlidesToLevelDataEntities(timeScaleGroupEntities, store, getName)
 
-    return [...bpmEntities, ...timeScaleGroupEntities, ...timeScaleChangeEntities, ...slideEntities]
+    return [...waypointEntities, ...bpmEntities, ...timeScaleGroupEntities, ...timeScaleChangeEntities, ...slideEntities]
 }
 
 export const getStoreEntities = <T>(map: Map<number, Set<T>>) => {

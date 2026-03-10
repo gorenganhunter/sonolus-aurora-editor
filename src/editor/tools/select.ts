@@ -1,5 +1,5 @@
 import { type Tool } from '.'
-import type { BpmObject, NoteObject, TimeScaleObject } from '../../chart'
+import type { BpmObject, NoteObject, TimeScaleObject, WaypointObject } from '../../chart'
 import { pushState, replaceState, state } from '../../history'
 import { selectedEntities } from '../../history/selectedEntities'
 import { i18n } from '../../i18n'
@@ -7,9 +7,11 @@ import type { Entity } from '../../state/entities'
 import { toBpmEntity, type BpmEntity } from '../../state/entities/bpm'
 import { toNoteEntity, type NoteEntity } from '../../state/entities/slides/note'
 import { toTimeScaleEntity, type TimeScaleEntity } from '../../state/entities/timeScale'
+import { toWaypointEntity, type WaypointEntity } from '../../state/entities/waypoint'
 import { addBpm, removeBpm } from '../../state/mutations/bpm'
 import { replaceNote } from '../../state/mutations/slides/note'
 import { addTimeScale, removeTimeScale } from '../../state/mutations/timeScale'
+import { addWaypoint, removeWaypoint } from '../../state/mutations/waypoint'
 import { getInStoreGrid } from '../../state/store/grid'
 import { createTransaction, type Transaction } from '../../state/transaction'
 import { interpolate } from '../../utils/interpolate'
@@ -318,6 +320,11 @@ const toMovedTimeScaleObject = (entity: TimeScaleEntity, beat: number): TimeScal
     // hideNotes: entity.hideNotes,
 })
 
+const toMovedWaypointObject = (entity: WaypointEntity, beat: number): WaypointObject => ({
+    beat,
+    name: entity.name,
+})
+
 const toMovedNoteObject = (
     entities: Entity[],
     entity: NoteEntity,
@@ -378,6 +385,8 @@ const creates: {
             toMovedNoteObject(entities, entity, startLane, lane, beat, focus),
             entity,
         ),
+
+    waypoint: (entities, entity, startLane, lane, beat) => toWaypointEntity(toMovedWaypointObject(entity, beat)),
 }
 
 type Move<T extends Entity> = (
@@ -423,4 +432,17 @@ const moves: {
 
         return replaceNote(transaction, entity, object)
     },
+
+    waypoint: (transaction, entities, entity, startLane, lane, beat) => {
+        const object = toMovedWaypointObject(entity, beat)
+
+        removeWaypoint(transaction, entity)
+
+        const overlap = getInStoreGrid(transaction.store.grid, 'waypoint', object.beat)?.find(
+            (entity) => entity.beat === object.beat,
+        )
+        if (overlap) removeWaypoint(transaction, overlap)
+
+        return addWaypoint(transaction, object)
+    }
 }

@@ -74,11 +74,11 @@ const timeNumbers = computed(() =>
     </g>
 
     <g fill="#fff" fill-opacity="0.5" font-size="0.4" dominant-baseline="middle">
-        <text v-for="{ y, time } in timeNumbers" :key="time" x="-6.1" :y text-anchor="end">
+        <text v-for="{ y, time } in timeNumbers" :key="time" x="-5.1" :y text-anchor="end">
             {{ time }}
         </text>
 
-        <text v-for="{ y, beat } in beatNumbers" :key="beat" x="6.1" :y text-anchor="start">
+        <text v-for="{ y, beat } in beatNumbers" :key="beat" x="5.1" :y text-anchor="start">
             {{ beat }}
         </text>
     </g>

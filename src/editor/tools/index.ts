@@ -9,6 +9,7 @@ import { paste } from './paste'
 import { select } from './select'
 import { slide } from './slide'
 import { timeScale } from './timeScale'
+import { waypoint } from './waypoint'
 
 export type Tool = {
     sidebar?: Component
@@ -33,6 +34,8 @@ export const tools = {
 
     bpm,
     timeScale,
+
+    waypoint
 }
 
 export type ToolName = keyof typeof tools

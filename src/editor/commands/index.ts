@@ -45,6 +45,7 @@ import { zoomYIn } from './zooms/zoomYIn'
 import { zoomYOut } from './zooms/zoomYOut'
 import { hp } from './hp'
 import { stats } from './stats'
+import { waypoint } from './waypoint'
 
 export type Command = {
     title: () => string
@@ -103,6 +104,7 @@ export const commands = {
     groupNext,
     groupAll,
 
+    waypoint,
     scrollLeft,
     scrollRight,
     scrollUp,

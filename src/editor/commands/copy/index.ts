@@ -32,6 +32,7 @@ export const copy: Command = {
             entities: serializeToLevelDataEntities(
                 createStore({
                     hp: 1,
+                    waypoints: [],
                     bpms: getEntities(entities, 'bpm'),
                     timeScales: getEntities(entities, 'timeScale'),
                     groupCount: state.value.groupCount,

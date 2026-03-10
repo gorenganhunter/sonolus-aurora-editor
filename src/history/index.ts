@@ -8,6 +8,7 @@ import { cleanupWaveform } from '../waveform'
 
 const defaultChart: Chart = {
     hp: 1,
+    waypoints: [],
     bpms: [
         {
             beat: 0,

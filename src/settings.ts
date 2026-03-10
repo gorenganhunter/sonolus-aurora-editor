@@ -158,6 +158,7 @@ const settingsProperties = {
                         'scrollDown',
                         'scrollPageDown',
                         'jumpDown',
+                        'waypoint',
                     ],
                     [
                         'snapping',

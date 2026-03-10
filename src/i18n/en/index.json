@@ -206,6 +206,10 @@
         "utilities": {
             "title": "Utilities"
         },
+        "waypoint": {
+            "title": "Waypoint",
+            "switched": "Switched to Waypoint tool"
+        },
         "zooms": {
             "zoomXIn": {
                 "title": "Zoom in X",
@@ -482,6 +486,18 @@
             "modal": {
                 "title": "Time Scale Properties"
             }
+        },
+        "waypoint": {
+            "adding": "Adding {0} Waypoint objects",
+            "added": "Added {0} Waypoint objects",
+            "edited": "Edited {0} Waypoint objects",
+            "moving": "Moving {0} Waypoint objects",
+            "moved": "Moved {0} Waypoint objects",
+            "replaced": "Replaced {0} Waypoint objects",
+            "selected": "Selected {0} Waypoint objects",
+            "modal": {
+                "title": "Waypoint Properties"
+            }
         }
     },
     "utilities": {
@@ -673,6 +689,15 @@
         },
         "loading": {
             "loading": "Loading ..."
+        }
+    },
+    "waypoint": {
+        "title": "Waypoint",
+        "copy": {
+            "title": "Copy"
+        },
+        "clear": {
+            "title": "Clear"
         }
     }
 }
