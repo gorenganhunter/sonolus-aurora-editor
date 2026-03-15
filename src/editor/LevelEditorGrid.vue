@@ -58,6 +58,16 @@ const timeNumbers = computed(() =>
                 :y2="1"
                 :stroke-opacity="i === 1 || i === 10 ? 0.5 : 0.25"
             />
+            <rect
+                v-for="i in 9"
+                :key="i"
+                :x="i"
+                :y="0"
+                :width="1"
+                :height="1"
+                fill="#fff"
+                :fill-opacity="i % 2 ? 0 : 0.05"
+            />
         </g>
 
         <template v-if="range.max - range.min <= 100">
