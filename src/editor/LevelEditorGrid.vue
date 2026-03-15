@@ -67,6 +67,7 @@ const timeNumbers = computed(() =>
                 :height="1"
                 fill="#fff"
                 :fill-opacity="i % 2 ? 0 : 0.05"
+                stroke="none"
             />
         </g>
 

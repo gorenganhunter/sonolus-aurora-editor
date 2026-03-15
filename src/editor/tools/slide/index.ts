@@ -172,8 +172,8 @@ export const slide: Tool = {
             }
             focusViewAtBeat(entity.beat)
 
-            const lane = xToValidLane(x)
-            if (lane === entity.lane) {
+            const lane = xToLane(x)
+            if (lane > entity.lane - 0.5 && lane < entity.lane + 0.5) {
                 notify(interpolate(() => i18n.value.tools.slide.moving, '1'))
 
                 active = {
@@ -210,7 +210,6 @@ export const slide: Tool = {
         setViewHover(y)
 
         const lane = xToValidLane(x)
-        console.log(active)
 
         switch (active.type) {
             case 'add': {
@@ -256,7 +255,6 @@ export const slide: Tool = {
             }
             case 'move': {
                 const beat = snapYToBeat(y, active.entity.beat)
-                console.log(y, active.entity.beat, beat)
                 view.entities = {
                     hovered: [],
                     creating: [

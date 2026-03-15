@@ -156,8 +156,8 @@ export const note: Tool = {
             }
             focusViewAtBeat(entity.beat)
 
-            const lane = xToValidLane(x)
-            if (lane === entity.lane) {
+            const lane = xToLane(x)
+            if (lane > entity.lane - 0.5 && lane < entity.lane + 0.5) {
                 notify(interpolate(() => i18n.value.tools.note.moving, '1'))
 
                 active = {
@@ -231,7 +231,6 @@ export const note: Tool = {
             }
             case 'move': {
                 const beat = snapYToBeat(y, active.entity.beat)
-                console.log(y, active.entity.beat, beat)
                 view.entities = {
                     hovered: [],
                     creating: [
