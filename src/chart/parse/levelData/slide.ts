@@ -131,7 +131,7 @@ const isNoteEntity = (entity: LevelDataEntity): entity is NoteEntity =>
 
 const isAttachedSchema = Type.Number()
 
-const laneSchema = Type.Number({ minimum: -4, maximum: 4 })
+const laneSchema = Type.Number()
 
 // const sizeSchema = Type.Number({ minimum: 0 })
 
