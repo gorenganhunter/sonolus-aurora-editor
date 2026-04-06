@@ -285,27 +285,42 @@ export const serializeSlidesToLevelDataEntities = (
     for (const notes of allowSimLines.values()) {
         if (notes.length < 2) continue
 
-        notes.sort((a, b) => a.lane - b.lane)
+        const groupNotes = new Map<number, NoteEntity[]>()
 
-        let prev: NoteEntity | undefined
         for (const note of notes) {
-            if (prev) {
-                entities.push({
-                    archetype: 'SimLine',
-                    data: [
-                        {
-                            name: 'l',
-                            ref: (getEntity(prev).name ??= getName()),
-                        },
-                        {
-                            name: 'r',
-                            ref: (getEntity(note).name ??= getName()),
-                        },
-                    ],
-                })
+            const notes = groupNotes.get(note.group)
+            if (notes) {
+                notes.push(note)
+            } else {
+                groupNotes.set(note.group, [note])
             }
+        }
 
-            prev = note
+        for (const notes of groupNotes.values()) {
+            if (notes.length < 2) continue
+
+            notes.sort((a, b) => a.lane - b.lane)
+
+            let prev: NoteEntity | undefined
+            for (const note of notes) {
+                if (prev) {
+                    entities.push({
+                        archetype: 'SimLine',
+                        data: [
+                            {
+                                name: 'l',
+                                ref: (getEntity(prev).name ??= getName()),
+                            },
+                            {
+                                name: 'r',
+                                ref: (getEntity(note).name ??= getName()),
+                            },
+                        ],
+                    })
+                }
+
+                prev = note
+            }
         }
     }
 
