@@ -23,6 +23,7 @@ const toP = (event: MouseEvent) => ({
 })
 
 let secondarySwitchBack: ToolName | undefined
+let tertiarySwitchBack: ToolName | undefined
 
 const mousedown = (event: MouseEvent) => {
     const p = toP(event)
@@ -34,6 +35,11 @@ const mousedown = (event: MouseEvent) => {
     if (!mouseGesture.pointerCount && event.buttons & 2 && !secondarySwitchBack) {
         secondarySwitchBack = toolName.value
         switchToolTo(settings.mouseSecondaryTool)
+    }
+
+    if (!mouseGesture.pointerCount && event.buttons & 4 && !tertiarySwitchBack) {
+        tertiarySwitchBack = toolName.value
+        switchToolTo("select")
     }
 
     mouseGesture.start([p])
@@ -64,6 +70,11 @@ const mouseup = (event: MouseEvent) => {
     if (!mouseGesture.pointerCount && secondarySwitchBack) {
         switchToolTo(secondarySwitchBack)
         secondarySwitchBack = undefined
+    }
+
+    if (!mouseGesture.pointerCount && tertiarySwitchBack) {
+        switchToolTo(tertiarySwitchBack)
+        tertiarySwitchBack = undefined
     }
 
     event.preventDefault()
