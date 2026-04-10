@@ -119,8 +119,8 @@ const connectors = computed(() =>
                 }
 
                 const lane = {
-                    min: lerp(head.lane, tail.lane, ease(head.connectorEase, clamp(unlerp(targetTime.head, targetTime.tail, scaledTime.min)))),
-                    max: lerp(head.lane, tail.lane, ease(head.connectorEase, clamp(unlerp(targetTime.head, targetTime.tail, scaledTime.max)))),
+                    min: lerp(head.lane, tail.lane, ease(/*head.connectorEase*/"linear", clamp(unlerp(targetTime.head, targetTime.tail, scaledTime.min)))),
+                    max: lerp(head.lane, tail.lane, ease(/*head.connectorEase*/"linear", clamp(unlerp(targetTime.head, targetTime.tail, scaledTime.max)))),
                 }
 
                 const v = {
