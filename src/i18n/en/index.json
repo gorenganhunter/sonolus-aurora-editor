@@ -140,6 +140,13 @@
         "play": {
             "title": "Play"
         },
+        "properties": {
+            "title": "Properties",
+            "changed": "Changed properties",
+            "modal": {
+                "life": "Life"
+            }
+        },
         "redo": {
             "title": "Redo",
             "noState": "Nothing to redo",
@@ -254,10 +261,12 @@
                 "tap": "One finger tap to tap.",
                 "drag": "One finger drag to drag.",
                 "quickScroll": "One finger drag in quick scroll zone to scroll.",
+                "deselect": "Two finger tap to deselect.",
                 "scrollY": "Two finger pan vertically to scroll.",
                 "scrollX": "Two finger pan horizontally to scroll.",
                 "zoomY": "Two finger pinch vertically to zoom Y.",
-                "zoomX": "Two finger pinch horizontally to zoom X."
+                "zoomX": "Two finger pinch horizontally to zoom X.",
+                "play": "Three finger tap to play."
             },
             "mouse": {
                 "title": "Mouse",
@@ -358,7 +367,8 @@
             },
             "lockScrollX": "Lock Scroll X",
             "dragToPanY": "Drag to Pan Y",
-            "dragToPanX": "Drag to Pan X"
+            "dragToPanX": "Drag to Pan X",
+            "showOtherGroups": "Show Other Groups"
         },
         "keyboardShortcuts": {
             "title": "Keyboard Shortcuts"

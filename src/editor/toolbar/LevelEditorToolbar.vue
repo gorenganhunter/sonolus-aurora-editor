@@ -56,12 +56,12 @@ const onOverBackdrop = (event: PointerEvent) => {
 <template>
     <div
         v-show="!isDragging"
-        class="pointer-events-none absolute flex size-full flex-wrap content-end justify-center p-4"
+        class="pointer-events-none absolute flex size-full flex-wrap content-end justify-center px-8 py-8 lg:px-32"
     >
         <div
             v-for="(activeName, i) in activeNames"
             :key="i"
-            class="pointer-events-auto relative"
+            class="pointer-events-auto lg:relative"
             :class="{ 'z-20': activeIndex === i }"
             :inert="activeIndex !== -1 && activeIndex !== i"
         >
@@ -71,11 +71,16 @@ const onOverBackdrop = (event: PointerEvent) => {
                 @click="onClickMain(i, activeName)"
             />
 
-            <div v-if="activeIndex === i" class="absolute top-0 -translate-y-full">
+            <div
+                v-if="activeIndex === i"
+                class="absolute left-1/2 w-max -translate-x-1/2 -translate-y-[calc(100%+2rem)] lg:left-auto lg:translate-x-0"
+            >
                 <LevelEditorToolbarTool
                     v-for="(name, j) in toolbar[i]"
                     :key="j"
+                    class="mb-1 w-full"
                     :name
+                    show-label
                     @click="onClickSub(i, name)"
                 />
             </div>

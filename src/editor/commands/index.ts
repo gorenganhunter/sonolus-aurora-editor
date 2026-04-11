@@ -20,6 +20,7 @@ import { createNote, note } from './note'
 import { open } from './open'
 import { paste } from './paste'
 import { play } from './play'
+// import { properties } from './properties'
 import { redo } from './redo'
 import { reset } from './reset'
 import { save } from './save'
@@ -61,6 +62,7 @@ export const commands = {
     open,
     save,
     reset,
+    // properties,
     utilities,
 
     play,

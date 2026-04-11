@@ -123,6 +123,8 @@ const settingsProperties = {
 
     dragToPanX: Type.Boolean(),
 
+    showOtherGroups: Type.Boolean({ default: true }),
+
     toolbar: Type.Transform(
         Type.Array(
             Type.Transform(Type.Array(Type.String()))
@@ -132,18 +134,8 @@ const settingsProperties = {
                 default: [
                     ['stats', 'utilities', 'reset', 'save', 'open'],
                     ['bgm', 'speedUp', 'speedDown', 'stop', 'play'],
-                    [
-                        'redo',
-                        'undo',
-                        'paste',
-                        'copy',
-                        'cut',
-                        'flip',
-                        'brush',
-                        'eraser',
-                        'deselect',
-                        'select',
-                    ],
+                    ['flip', 'paste', 'cut', 'copy', 'redo', 'undo'],
+                    ['brush', 'eraser', 'deselect', 'select'],
                     ['note4', 'note3', 'note2', 'note1', 'note0', 'note'],
                     ['slide5', 'slide4', 'slide3', 'slide2', 'slide1', 'slide0', 'slide'],
                     ['timeScale', 'bpm'],
