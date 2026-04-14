@@ -12,78 +12,83 @@ const number = (def: number, min: number, max: number) =>
         .Decode((value) => clamp(value, min, max))
         .Encode((value) => value)
 
-const defaultNoteSlidePropertiesSchema = Type.Partial(
+const defaultNoteSlidePropertiesSchema = Type.Intersect([
+    Type.Partial(
+        Type.Object({
+            noteType: Type.Union([
+                Type.Literal('default'),
+                // Type.Literal('trace'),
+                Type.Literal('anchor'),
+                // Type.Literal('damage'),
+                // Type.Literal('forceTick'),
+                // Type.Literal('forceNonTick'),
+            ]),
+            isAttached: Type.Boolean(),
+            // size: Type.Number(),
+            // isCritical: Type.Boolean(),
+            flickDirection: Type.Union([
+                Type.Literal('none'),
+                Type.Literal('left'),
+                Type.Literal('right'),
+                Type.Literal('up'),
+                Type.Literal('down')
+                // Type.Literal('up'),
+                // Type.Literal('upLeft'),
+                // Type.Literal('upRight'),
+                // Type.Literal('down'),
+                // Type.Literal('downLeft'),
+                // Type.Literal('downRight'),
+            ]),
+            shortenEarlyWindow: Type.Union([
+                Type.Literal('none'),
+                Type.Literal('perfect'),
+                Type.Literal('great'),
+                Type.Literal('good'),
+            ]),
+            // isFake: Type.Boolean(),
+            // sfx: Type.Union([
+            //     Type.Literal('default'),
+            //     Type.Literal('none'),
+            //     Type.Literal('normalTap'),
+            //     Type.Literal('criticalTap'),
+            //     Type.Literal('normalFlick'),
+            //     Type.Literal('criticalFlick'),
+            //     Type.Literal('normalTrace'),
+            //     Type.Literal('criticalTrace'),
+            //     Type.Literal('normalTick'),
+            //     Type.Literal('criticalTick'),
+            //     Type.Literal('damage'),
+            // ]),
+            // isConnectorSeparator: Type.Boolean(),
+            // connectorType: Type.Union([Type.Literal('active'), Type.Literal('guide')]),
+            connectorEase: Type.Union([
+                Type.Literal('linear'),
+                Type.Literal('in'),
+                Type.Literal('out'),
+                Type.Literal('inOut'),
+                Type.Literal('outIn'),
+                Type.Literal('none'),
+            ]),
+            // connectorActiveIsCritical: Type.Boolean(),
+            // connectorActiveIsFake: Type.Boolean(),
+            // connectorGuideColor: Type.Union([
+            //     Type.Literal('neutral'),
+            //     Type.Literal('red'),
+            //     Type.Literal('green'),
+            //     Type.Literal('blue'),
+            //     Type.Literal('yellow'),
+            //     Type.Literal('purple'),
+            //     Type.Literal('cyan'),
+            //     Type.Literal('black'),
+            // ]),
+            // connectorGuideAlpha: Type.Number(),
+            // connectorLayer: Type.Union([Type.Literal('top'), Type.Literal('bottom')]),
+        }),
+    ),
     Type.Object({
-        noteType: Type.Union([
-            Type.Literal('default'),
-            // Type.Literal('trace'),
-            Type.Literal('anchor'),
-            // Type.Literal('damage'),
-            // Type.Literal('forceTick'),
-            // Type.Literal('forceNonTick'),
-        ]),
-        isAttached: Type.Boolean(),
-        // size: Type.Number(),
-        // isCritical: Type.Boolean(),
-        flickDirection: Type.Union([
-            Type.Literal('none'),
-            Type.Literal('left'),
-            Type.Literal('right'),
-            Type.Literal('up'),
-            Type.Literal('down')
-            // Type.Literal('up'),
-            // Type.Literal('upLeft'),
-            // Type.Literal('upRight'),
-            // Type.Literal('down'),
-            // Type.Literal('downLeft'),
-            // Type.Literal('downRight'),
-        ]),
-        shortenEarlyWindow: Type.Union([
-            Type.Literal('none'),
-            Type.Literal('perfect'),
-            Type.Literal('great'),
-            Type.Literal('good'),
-        ]),
-        // isFake: Type.Boolean(),
-        // sfx: Type.Union([
-        //     Type.Literal('default'),
-        //     Type.Literal('none'),
-        //     Type.Literal('normalTap'),
-        //     Type.Literal('criticalTap'),
-        //     Type.Literal('normalFlick'),
-        //     Type.Literal('criticalFlick'),
-        //     Type.Literal('normalTrace'),
-        //     Type.Literal('criticalTrace'),
-        //     Type.Literal('normalTick'),
-        //     Type.Literal('criticalTick'),
-        //     Type.Literal('damage'),
-        // ]),
-        // isConnectorSeparator: Type.Boolean(),
-        // connectorType: Type.Union([Type.Literal('active'), Type.Literal('guide')]),
-        connectorEase: Type.Union([
-            Type.Literal('linear'),
-            Type.Literal('in'),
-            Type.Literal('out'),
-            Type.Literal('inOut'),
-            Type.Literal('outIn'),
-            Type.Literal('none'),
-        ]),
-        // connectorActiveIsCritical: Type.Boolean(),
-        // connectorActiveIsFake: Type.Boolean(),
-        // connectorGuideColor: Type.Union([
-        //     Type.Literal('neutral'),
-        //     Type.Literal('red'),
-        //     Type.Literal('green'),
-        //     Type.Literal('blue'),
-        //     Type.Literal('yellow'),
-        //     Type.Literal('purple'),
-        //     Type.Literal('cyan'),
-        //     Type.Literal('black'),
-        // ]),
-        // connectorGuideAlpha: Type.Number(),
-        // connectorLayer: Type.Union([Type.Literal('top'), Type.Literal('bottom')]),
+        copyProperties: Type.Boolean({ default: true }),
     }),
-)
+])
 
 export type DefaultNoteSlideProperties = Static<typeof defaultNoteSlidePropertiesSchema>
 
@@ -133,11 +138,11 @@ const settingsProperties = {
             {
                 default: [
                     ['stats', 'utilities', 'reset', 'save', 'open'],
-                    ['bgm', 'speedUp', 'speedDown', 'stop', 'play'],
+                    ['offset', 'bgm', 'speedUp', 'speedDown', 'stop', 'play'],
                     ['flip', 'paste', 'cut', 'copy', 'redo', 'undo'],
                     ['brush', 'eraser', 'deselect', 'select'],
                     ['note4', 'note3', 'note2', 'note1', 'note0', 'note'],
-                    ['slide5', 'slide4', 'slide3', 'slide2', 'slide1', 'slide0', 'slide'],
+                    ['slide4', 'slide3', 'slide2', 'slide1', 'slide0', 'slide'],
                     ['timeScale', 'bpm'],
                     ['groupPrev', 'groupNext', 'groupAll'],
                     ['hp'],
@@ -181,6 +186,8 @@ const settingsProperties = {
     playFollow: Type.Boolean({ default: true }),
 
     playFollowPosition: number(25, 0, 100),
+
+    playPreviewDuration: number(500, 0, 1000),
 
     mouseSecondaryTool: Type.Union([Type.Literal('eraser'), Type.Literal('select')]),
 
@@ -259,56 +266,50 @@ const settingsProperties = {
         maxItems: 5,
         default: [
             {
-                noteType: 'default',
-                flickDirection: 'none'
+                copyProperties: true,
             },
             {
-                noteType: 'default',
                 flickDirection: 'left',
+                copyProperties: true,
             },
             {
-                noteType: 'default',
                 flickDirection: 'right',
+                copyProperties: true,
             },
             {
-                noteType: 'default',
                 flickDirection: 'up',
+                copyProperties: true,
             },
             {
-                noteType: 'default',
                 flickDirection: 'down',
+                copyProperties: true,
             },
         ] satisfies DefaultNoteSlideProperties[],
     }),
 
     defaultSlidePropertiesPresets: Type.Array(defaultNoteSlidePropertiesSchema, {
-        minItems: 6,
-        maxItems: 6,
+        minItems: 5,
+        maxItems: 5,
         default: [
             {
-                noteType: 'default',
-                flickDirection: 'none'
+                copyProperties: true,
             },
             {
-                noteType: 'default',
+                isAttached: true,
+                copyProperties: true
+            },
+            {
                 flickDirection: 'left',
+                copyProperties: true,
             },
             {
-                noteType: 'default',
                 flickDirection: 'right',
+                copyProperties: true,
             },
             {
-                noteType: 'default',
-                flickDirection: 'up',
-            },
-            {
-                noteType: 'default',
-                flickDirection: 'down',
-            },
-            {
-                flickDirection: 'none',
-                noteType: 'anchor',
-            },
+                noteType: "anchor",
+                copyProperties: true
+            }
         ] satisfies DefaultNoteSlideProperties[],
     }),
 }

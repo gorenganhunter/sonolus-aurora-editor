@@ -2,6 +2,7 @@
 import { i18n } from '../../../i18n'
 // import OptionalConnectorActiveIsCriticalField from '../../../modals/form/OptionalConnectorActiveIsCriticalField.vue'
 // import OptionalConnectorActiveIsFakeField from '../../../modals/form/OptionalConnectorActiveIsFakeField.vue'
+import CopyPropertiesField from '../../../modals/form/CopyPropertiesField.vue'
 import OptionalConnectorEaseField from '../../../modals/form/OptionalConnectorEaseField.vue'
 // import OptionalConnectorGuideAlphaField from '../../../modals/form/OptionalConnectorGuideAlphaField.vue'
 // import OptionalConnectorGuideColorField from '../../../modals/form/OptionalConnectorGuideColorField.vue'
@@ -19,17 +20,10 @@ import OptionalNoteTypeField from '../../../modals/form/OptionalNoteTypeField.vu
 import PresetField from '../../../modals/form/PresetField.vue'
 import PropertiesModal from '../../../modals/form/PropertiesModal.vue'
 import { settings } from '../../../settings'
-import {
-    defaultSlideProperties,
-    defaultSlidePropertiesPresetIndex,
-    setDefaultSlidePropertiesPreset,
-} from '../../tools/slide'
+import { defaultSlideProperties, defaultSlidePropertiesPresetIndex } from '../../tools/slide'
 import { useProperties } from '../../utils/properties'
 
-const createModel = useProperties(
-    () => defaultSlideProperties.value,
-    setDefaultSlidePropertiesPreset,
-)
+const createModel = useProperties(defaultSlideProperties)
 
 const noteType = createModel('noteType')
 const isAttached = createModel('isAttached')
@@ -47,6 +41,7 @@ const connectorEase = createModel('connectorEase')
 // const connectorGuideColor = createModel('connectorGuideColor')
 // const connectorGuideAlpha = createModel('connectorGuideAlpha')
 // const connectorLayer = createModel('connectorLayer')
+const copyProperties = createModel('copyProperties')
 </script>
 
 <template>
@@ -71,5 +66,6 @@ const connectorEase = createModel('connectorEase')
         <OptionalConnectorGuideColorField v-model="connectorGuideColor" />
         <OptionalConnectorGuideAlphaField v-model="connectorGuideAlpha" />
         <OptionalConnectorLayerField v-model="connectorLayer" /-->
+        <CopyPropertiesField v-model="copyProperties" />
     </PropertiesModal>
 </template>

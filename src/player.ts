@@ -376,6 +376,9 @@ export const stopPlayer = () => {
 }
 
 export const previewPlayer = () => {
+    const duration = settings.playPreviewDuration / 1000
+    if (duration <= 0) return
+
     startContext()
 
     if (!bgm.value.buffer) return
@@ -396,8 +399,8 @@ export const previewPlayer = () => {
     source.connect(gain)
 
     const time = context.currentTime
-    gain.gain.linearRampToValueAtTime(0, time + 0.5)
-    source.start(time, offset, 0.5)
+    gain.gain.linearRampToValueAtTime(0, time + duration)
+    source.start(time, offset, duration)
 }
 
 const startContext = () => {

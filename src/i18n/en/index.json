@@ -127,6 +127,10 @@
                 "title": "Default Note Properties"
             }
         },
+        "offset": {
+            "title": "Switch to Offset tool",
+            "switched": "Switched to Offset tool"
+        },
         "open": {
             "title": "Open",
             "loading": "Loading file...",
@@ -392,7 +396,8 @@
                 "cursor": "Cursor"
             },
             "follow": "Follow",
-            "followPosition": "Follow Position"
+            "followPosition": "Follow Position",
+            "previewDuration": "Preview Duration (ms)"
         },
         "preview": {
             "title": "Preview",
@@ -465,6 +470,9 @@
             "sidebar": {
                 "title": "Default Note Properties"
             }
+        },
+        "offset": {
+            "changed": "Changed BGM offset"
         },
         "paste": {
             "pasted": "Pasted {0} objects",
@@ -610,6 +618,9 @@
                 "label": "Connector Type",
                 "active": "Slide",
                 "guide": "Guide"
+            },
+            "copyProperties": {
+                "label": "Copy Properties"
             },
             "file": {
                 "select": "Select File..."

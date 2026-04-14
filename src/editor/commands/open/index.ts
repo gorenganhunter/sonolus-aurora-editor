@@ -46,9 +46,10 @@ export const open: Command = {
                         const chart = parseLevelDataChart(levelData.entities)
                         validateChart(chart)
 
-                        resetState(chart, levelData.bgmOffset, getFilename(file), handle)
+                        resetState(false, chart, levelData.bgmOffset, getFilename(file), handle)
                         break
                     }
+                    // <<<<<<< HEAD
                     // case 'usc': {
                     //     const { usc } = parseUsc(data)
                     //
@@ -67,6 +68,26 @@ export const open: Command = {
                     //     resetState(chart, sus.offset, getFilename(file))
                     //     break
                     // }
+                    // =======
+                    //                     case 'usc': {
+                    //                         const { usc } = parseUsc(data)
+                    //
+                    //                         const chart = parseUscChart(usc.objects)
+                    //                         validateChart(chart)
+                    //
+                    //                         resetState(false, chart, usc.offset, getFilename(file))
+                    //                         break
+                    //                     }
+                    //                     case 'sus': {
+                    //                         const sus = parseSus(data)
+                    //
+                    //                         const chart = parseSusChart(sus)
+                    //                         validateChart(chart)
+                    //
+                    //                         resetState(false, chart, sus.offset, getFilename(file))
+                    //                         break
+                    //                     }
+                    // >>>>>>> c2f56a6b025afa21c96b1651db07b5f41a630a6a
                 }
 
                 notify(() => i18n.value.commands.open.opened)
