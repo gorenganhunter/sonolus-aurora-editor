@@ -28,6 +28,8 @@ const defaultChart: Chart = {
 
 const index = ref(0)
 
+export const canUndo = computed(() => index.value > 0)
+
 const states = shallowReactive([
     {
         isDirty: false,
@@ -39,7 +41,7 @@ const states = shallowReactive([
 export let levelDataHandle: FileSystemFileHandle | undefined
 
 addEventListener('beforeunload', (event) => {
-    if (isDirty.value) event.preventDefault()
+    if (canUndo.value) event.preventDefault()
 })
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -67,7 +69,7 @@ export const pushState = (name: () => string, state: State) => {
 }
 
 export const undoState = () => {
-    if (!isDirty.value) return
+    if (!canUndo.value) return
 
     const name = current.value.name
     index.value--

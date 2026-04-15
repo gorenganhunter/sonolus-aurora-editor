@@ -13,6 +13,7 @@ import { timeScale } from './timeScale'
 import { waypoint } from './waypoint'
 
 export type Tool = {
+    title: () => string
     sidebar?: Component
 
     hover?: (x: number, y: number, modifiers: Modifiers) => void | Promise<void>

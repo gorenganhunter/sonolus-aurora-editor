@@ -59,6 +59,10 @@ let active:
     | undefined
 
 export const note: Tool = {
+    title: interpolate(
+        () => i18n.value.tools.note.title,
+        () => `${defaultNotePropertiesPresetIndex.value + 1}`,
+    ),
     sidebar: NoteSidebar,
 
     hover(x, y, modifiers) {
