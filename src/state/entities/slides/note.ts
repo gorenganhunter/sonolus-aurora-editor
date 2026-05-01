@@ -18,7 +18,7 @@ export type NoteEntity = BaseEntity & {
     hitbox: object
 
     slideId: SlideId
-    group: GroupId
+    groupId: GroupId
     noteType: NoteType
     lane: number
     // spawnLane: number
@@ -53,7 +53,7 @@ export const toNoteEntity = (
     },
 
     slideId,
-    group: object.group,
+    groupId: object.groupId,
     beat: object.beat,
     noteType: object.noteType,
     isAttached: object.isAttached,

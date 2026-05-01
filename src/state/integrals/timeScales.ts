@@ -11,7 +11,7 @@ export type TimeScaleIntegral = Integral & {
 export const createTimeScales = (chart: Chart, bpms: BpmIntegral[]) => {
   let map: Map<GroupId, TimeScaleIntegral[]> = new Map();
   for (const id of chart.groups.keys()) {
-    map.set(id, calculateTimeScales(bpms, chart.timeScales.filter(t => t.group === id).map(toTimeScaleIntegral)))
+    map.set(id, calculateTimeScales(bpms, chart.timeScales.filter(t => t.groupId === id).map(toTimeScaleIntegral)))
   }
   return map
 }

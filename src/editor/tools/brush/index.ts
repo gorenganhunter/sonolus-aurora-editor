@@ -31,7 +31,7 @@ import {
 import BrushSidebar from './BrushSidebar.vue'
 
 export type BrushProperties = {
-    group?: GroupId
+    groupId?: GroupId
     noteType?: NoteType
     isAttached?: boolean
     // size?: number

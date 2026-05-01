@@ -33,8 +33,8 @@ const connectors = computed(() =>
         // )
         //
         const targetTime = {
-            head: timeToScaledTime(timeScales.value.get(head.group)!, beatToTime(bpms.value, head.beat)),
-            tail: timeToScaledTime(timeScales.value.get(tail.group)!, beatToTime(bpms.value, tail.beat))
+            head: timeToScaledTime(timeScales.value.get(head.groupId)!, beatToTime(bpms.value, head.beat)),
+            tail: timeToScaledTime(timeScales.value.get(tail.groupId)!, beatToTime(bpms.value, tail.beat))
         }
         //     //const z = unlerp(targetTime - noteDuration.value, targetTime, scaledTimes.value.min)
         //
@@ -44,12 +44,12 @@ const connectors = computed(() =>
         // const posX = moveX(group).value
         // const posY = moveY(group).value
         //
-        const nsh = state.value.groups.get(head.group)?.forceNoteSpeed
-        const nst = state.value.groups.get(tail.group)?.forceNoteSpeed
+        const nsh = state.value.groups.get(head.groupId)?.forceNoteSpeed
+        const nst = state.value.groups.get(tail.groupId)?.forceNoteSpeed
 
             const s = {
-                head: clamp(unlerp(targetTime.head - (nsh ? 5 / nsh : noteDuration.value), targetTime.head, scaledTimes(head.group).value.min)),
-                tail: clamp(unlerp(targetTime.tail - (nst ? 5 / nst : noteDuration.value), targetTime.tail, scaledTimes(tail.group).value.min)),
+                head: clamp(unlerp(targetTime.head - (nsh ? 5 / nsh : noteDuration.value), targetTime.head, scaledTimes(head.groupId).value.min)),
+                tail: clamp(unlerp(targetTime.tail - (nst ? 5 / nst : noteDuration.value), targetTime.tail, scaledTimes(tail.groupId).value.min)),
             }
 
         const size = {
@@ -94,7 +94,7 @@ const connectors = computed(() =>
                 opacity: "0.5"
             }]
         } else {
-            const t = scaledTimes(head.group).value
+            const t = scaledTimes(head.groupId).value
 
             const visibleTime = {
                 min: Math.max(targetTime.head, t.min),

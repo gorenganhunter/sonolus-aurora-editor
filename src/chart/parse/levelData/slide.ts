@@ -21,9 +21,8 @@ import type { NoteObject } from '../..'
 import type { GroupId } from '../../../state/groups'
 import { beatSchema } from './schemas'
 
-export const parseSlidesToChart: ParseToChart = (chart, entities, getGroup) => {
+export const parseSlidesToChart: ParseToChart = ({ chart, entities, getGroupId }) => {
     const refs = new Map<string, LevelDataEntity>()
-    // >>>>>>> e1dbf2de75e2c54dbe87d749c032c91282696087
     const slides = new Map<string, string[]>()
     const used: string[] = []
 
@@ -33,7 +32,7 @@ export const parseSlidesToChart: ParseToChart = (chart, entities, getGroup) => {
         if (!isNoteEntity(entity)) continue
 
         if (!entity.name) {
-            chart.slides.push([toNoteObject(getGroup, entity)])
+            chart.slides.push([toNoteObject(getGroupId(entity), entity)])
             continue
         }
 
@@ -85,7 +84,7 @@ export const parseSlidesToChart: ParseToChart = (chart, entities, getGroup) => {
         if (!entity.name) continue
         if (used.includes(entity.name)) continue
 
-        chart.slides.push([toNoteObject(getGroup, entity)])
+        chart.slides.push([toNoteObject(getGroupId(entity), entity)])
     }
 
     for (const slide of new Set(slides.values())) {
@@ -105,8 +104,8 @@ export const parseSlidesToChart: ParseToChart = (chart, entities, getGroup) => {
                 .sort(({ beat: a }, { beat: b }) => a - b)
                 .map(({ entity }, i) => {
                     const object = toNoteObject(
-                        getGroup,
-                        entity
+                        getGroupId(entity),
+                        entity,
                     )
 
                     // if (i === 0 || object.isConnectorSeparator) {
@@ -338,7 +337,7 @@ const startsWith = <T extends string, U extends string>(
     (name.startsWith(prefix) ? [true, name.slice(prefix.length)] : [false, name]) as never
 
 const toNoteObject = (
-    getGroup: (entity: LevelDataEntity) => GroupId,
+    groupId: GroupId,
     entity: NoteEntity,
 ) => {
     const lane = getValue(entity, 'lane', laneSchema)
@@ -347,7 +346,7 @@ const toNoteObject = (
     const connectorEase = getOptionalValue(entity, "connectorEase", connectorEaseSchema)
 
     const object: NoteObject = {
-        group: getGroup(entity),
+        groupId,
         beat: getValue(entity, EngineArchetypeDataName.Beat, beatSchema),
         noteType: 'default',
         isAttached: !!getOptionalValue(entity, "isAttached", isAttachedSchema),

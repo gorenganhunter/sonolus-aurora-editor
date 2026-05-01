@@ -27,7 +27,7 @@ const { noteFields, createModel } = useSelectedEntitiesProperties(
 )
 
 const noteType = createModel('noteType')
-const group = createModel('group')
+const groupId = createModel('groupId')
 const beat = createModel('beat')
 const isAttached = createModel('isAttached')
 const lane = createModel('lane')
@@ -50,7 +50,7 @@ const connectorEase = createModel('connectorEase')
 <template>
     <PropertiesModal :title="i18n.tools.note.modal.title">
         <MultiNoteTypeField v-model="noteType" />
-        <MultiGroupField v-model="group" />
+        <MultiGroupField v-model="groupId" />
         <MultiBeatField v-model="beat" />
         <MultiIsAttachedField v-if="noteFields.isAttached !== false" v-model="isAttached" />
         <MultiLaneField v-if="noteFields.lane !== false" v-model="lane" />

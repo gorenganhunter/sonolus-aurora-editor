@@ -16,9 +16,9 @@ import { Vec } from "./Vec"
 
 const notes = computed(() =>
     [...cullEntities('note', keys.value.min, keys.value.max)]
-        .filter(({ beat, group, noteType }) => beat >= beats(group).value.min && beat < beats(group).value.max && noteType !== 'anchor')
+        .filter(({ beat, groupId, noteType }) => beat >= beats(groupId).value.min && beat < beats(groupId).value.max && noteType !== 'anchor')
         .sort((a, b) => b.beat - a.beat)
-        .map(({ beat, lane, group, noteType, flickDirection, slideId }) => {
+        .map(({ beat, lane, groupId, noteType, flickDirection, slideId }) => {
         // let layout = new Quad(
         //     {x: -size * (1 + 0.08 * Math.abs((lane % 1) - 0.5 - size / 2)),
         //     y: -0.02},
@@ -30,19 +30,19 @@ const notes = computed(() =>
         //         y: -0.02}
         // )
         //
-            const targetTime = timeToScaledTime(timeScales.value.get(group)!, beatToTime(bpms.value, beat))
+            const targetTime = timeToScaledTime(timeScales.value.get(groupId)!, beatToTime(bpms.value, beat))
         //     //const z = unlerp(targetTime - noteDuration.value, targetTime, scaledTimes.value.min)
         //
-        const ns = state.value.groups.get(group)?.forceNoteSpeed
+        const ns = state.value.groups.get(groupId)?.forceNoteSpeed
 
-        const s = unlerp(targetTime - (ns ? 5 / ns : noteDuration.value), targetTime, scaledTimes(group).value.min)
+        const s = unlerp(targetTime - (ns ? 5 / ns : noteDuration.value), targetTime, scaledTimes(groupId).value.min)
 
         const size = approachSize(s - 1)
         //
-        // const angle = (rotate(group).value % 360) / 180 * Math.PI
-        // const size2 = resize(group).value
-        // const posX = moveX(group).value
-        // const posY = moveY(group).value
+        // const angle = (rotate(groupId).value % 360) / 180 * Math.PI
+        // const size2 = resize(groupId).value
+        // const posX = moveX(groupId).value
+        // const posY = moveY(groupId).value
         //
         // // console.log(s, angle, size2, posX, posY)
         //
@@ -63,7 +63,7 @@ const notes = computed(() =>
 
         if (slideNotes.length > 1 && flickDirection === 'none') color = "#0f0"
 
-        const isTick = !(slideNotes[0].lane === lane && slideNotes[0].beat === beat && slideNotes[0].group === group) && flickDirection === "none"
+        const isTick = !(slideNotes[0].lane === lane && slideNotes[0].beat === beat && slideNotes[0].groupId === groupId) && flickDirection === "none"
         
         // const a = -lane * (Math.PI / 8) * (180 / Math.PI)
 

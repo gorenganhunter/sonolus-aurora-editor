@@ -3,23 +3,26 @@ import { Value } from '@sinclair/typebox/value'
 import { type LevelDataEntity } from '@sonolus/core'
 import type { Chart } from '../..'
 import { settings } from '../../../settings'
-import { addToGroups, type GroupId } from '../../../state/groups'
+import { addToGroups, type GroupId, type GroupProperties } from '../../../state/groups'
 import { parseBpmsToChart } from './bpm'
 import { parseSlidesToChart } from './slide'
 import { parseTimeScalesToChart } from './timeScale'
 import { parseInitializationToChart } from './initialization'
 import { parseWaypointsToChart } from './waypoint'
 
-export type ParseToChart = (
-    chart: Chart,
-    entities: LevelDataEntity[],
-    getGroup: (entity: LevelDataEntity) => GroupId,
+export type ParseToChart = (ctx: ParseCtx) => void
+
+type ParseCtx = {
+    chart: Chart
+    entities: LevelDataEntity[]
+
+    getGroupId: (entity: LevelDataEntity) => GroupId
     addGroup: (
         name: string | undefined,
         editorName: string | undefined,
-        forceNoteSpeed: number | undefined,
-    ) => void,
-) => void
+        properties: Omit<GroupProperties, 'name'>,
+    ) => void
+}
 
 export const parseLevelDataChart = (entities: LevelDataEntity[]): Chart => {
     const chart: Chart = {
@@ -35,32 +38,32 @@ export const parseLevelDataChart = (entities: LevelDataEntity[]): Chart => {
 
     const groupIds: Record<string, GroupId> = {}
 
-    const getGroup = (entity: LevelDataEntity) => {
-        const group = getRef(entity, 'group')
-        const id = groupIds[group]
-        if (!id) throw new Error(`Invalid level: ref "${group}" not found`)
+    const ctx: ParseCtx = {
+        chart,
+        entities,
 
-        return id
+        getGroupId(entity) {
+            const ref = getRef(entity, 'group')
+            const id = groupIds[ref]
+            if (!id) throw new Error(`Invalid level: ref "${ref}" not found`)
+
+            return id
+        },
+        addGroup(name, editorName, properties) {
+            const [id] = addToGroups(chart.groups, editorName, properties)
+
+            if (name) {
+                groupIds[name] = id
+            }
+        },
     }
 
-    const addGroup = (
-        name: string | undefined,
-        editorName: string | undefined,
-        forceNoteSpeed: number | undefined,
-    ) => {
-        const [id] = addToGroups(chart.groups, editorName, forceNoteSpeed)
+    parseInitializationToChart(ctx)
 
-        if (name) {
-            groupIds[name] = id
-        }
-    }
+    parseBpmsToChart(ctx)
+    parseTimeScalesToChart(ctx)
 
-    parseInitializationToChart(chart, entities, getGroup, addGroup)
-
-    parseBpmsToChart(chart, entities, getGroup, addGroup)
-    parseTimeScalesToChart(chart, entities, getGroup, addGroup)
-
-    parseSlidesToChart(chart, entities, getGroup, addGroup)
+    parseSlidesToChart(ctx)
 
     while (chart.groups.size < (settings.autoAddGroup ? 2 : 1)) {
         addToGroups(chart.groups)

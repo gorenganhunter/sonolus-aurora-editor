@@ -33,11 +33,11 @@ export const createTransaction = (state: State) => {
             },
         },
 
-        addToGroup: (group: GroupId) => {
+        addToGroup: (groupId: GroupId) => {
             if (!settings.autoAddGroup) return
 
             lastGroup ??= [...state.groups.keys()].at(-1)
-            if (group !== lastGroup) return
+            if (groupId !== lastGroup) return
 
             groups = new Map(state.groups)
             addToGroups(groups)
@@ -60,7 +60,7 @@ export const createTransaction = (state: State) => {
                 timeScales ??= structuredClone(state.timeScales)
                 for (const id of (groups ?? state.groups).keys()) {
                     if (!timeScales.get(id)) {
-                        const entity = toTimeScaleEntity({ beat: 0, timeScale: 1, group: id })
+                        const entity = toTimeScaleEntity({ beat: 0, timeScale: 1, groupId: id })
                         addToStoreGrid(this.store.grid, entity, entity.beat)
                     }
                     timeScales.set(id, calculateTimeScales(bpms ?? state.bpms, timeScales.get(id) ?? [{ beat: 0, x: 0, y: 0, s: 1 }]))

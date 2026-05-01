@@ -15,7 +15,7 @@ const createDefaultChart = (): Chart => {
         {
             beat: 0,
             timeScale: 1,
-            group: id
+            groupId: id
         }
     ]
     if (settings.autoAddGroup) {
@@ -23,7 +23,7 @@ const createDefaultChart = (): Chart => {
         timeScales.push({
             beat: 0,
             timeScale: 1,
-            group: id
+            groupId: id
         })
     }
 

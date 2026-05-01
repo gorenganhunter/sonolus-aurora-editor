@@ -17,7 +17,7 @@ export type BpmObject = {
 // export type TimeScaleEase = 'none' | 'linear'
 
 export type TimeScaleObject = {
-    group: GroupId
+    groupId: GroupId
     beat: number
     timeScale: number
     // skip: number
@@ -72,7 +72,7 @@ export type ConnectorEase = 'linear' | 'in' | 'out' | 'inOut' | 'outIn' | 'none'
 export type ShortenEarlyWindow = 'none' | 'perfect' | 'great' | 'good'
 
 export type NoteObject = {
-    group: GroupId
+    groupId: GroupId
     beat: number
     noteType: NoteType
     isAttached: boolean

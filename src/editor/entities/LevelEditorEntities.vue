@@ -5,7 +5,20 @@ const layers = {
     bpm: 2,
 
     connector: 10,
-    note: 11,
+
+    note: 20,
+}
+
+const getLayer = (entity: Entity) => {
+    switch (entity.type) {
+        case 'bpm':
+        case 'timeScale':
+        case 'waypoint':
+        case 'note':
+            return layers[entity.type]
+        case 'connector':
+            return layers.connector
+    }
 }
 </script>
 
@@ -20,7 +33,7 @@ import type { Entity } from '../../state/entities'
 import { hoveredEntities, view } from '../view'
 
 const isEntityVisible = (entity: Entity) => {
-    if (view.group === undefined) return true
+    if (view.groupId === undefined) return true
 
     switch (entity.type) {
         case 'bpm':
@@ -28,9 +41,9 @@ const isEntityVisible = (entity: Entity) => {
             return true
         case 'timeScale':
         case 'note':
-            return entity.group === view.group
+            return entity.groupId === view.groupId
         case 'connector':
-            return entity.head.group === view.group || entity.tail.group === view.group
+            return entity.head.groupId === view.groupId || entity.tail.groupId === view.groupId
     }
 }
 
@@ -45,7 +58,7 @@ const visibleEntities = computed(() =>
             case 'note':
                 return entity.beat >= beats.value.min && entity.beat <= beats.value.max
             case 'connector':
-                return entity.head.beat <= beats.value.max && entity.tail.beat >= beats.value.min
+                return entity.attachHead.beat <= beats.value.max && entity.attachTail.beat >= beats.value.min
         }
     }),
 )
@@ -56,6 +69,7 @@ const visibleEntityInfos = computed(() => {
         isSelected: selectedEntities.value.includes(entity),
         isHovered: hoveredEntities.value.includes(entity),
         isVisible: isEntityVisible(entity),
+        layer: getLayer(entity),
     }))
 
     if (!settings.showOtherGroups) {
@@ -64,9 +78,7 @@ const visibleEntityInfos = computed(() => {
 
     return entities.sort(
         (a, b) =>
-            +a.isSelected - +b.isSelected ||
-            layers[a.entity.type] - layers[b.entity.type] ||
-            b.entity.beat - a.entity.beat,
+            +a.isSelected - +b.isSelected || a.layer - b.layer || b.entity.beat - a.entity.beat,
     )
 })
 </script>

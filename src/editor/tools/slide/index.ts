@@ -2,7 +2,7 @@ import { computed, ref } from 'vue'
 import type { Tool } from '..'
 import type { NoteObject } from '../../../chart'
 import { pushState, replaceState, state } from '../../../history'
-import { defaultGroup } from '../../../history/groups'
+import { defaultGroupId } from '../../../history/groups'
 import { selectedEntities } from '../../../history/selectedEntities'
 import { store } from '../../../history/store'
 import { i18n } from '../../../i18n'
@@ -28,7 +28,7 @@ import {
     xToValidLane,
     yToValidBeat,
 } from '../../view'
-import { hitEntitiesAtPoint, modifyEntities } from '../utils'
+import { hitEntitiesAtPoint, modifyEntities, offset, resize } from '../utils'
 import SlidePropertiesModal from './SlidePropertiesModal.vue'
 import SlideSidebar from './SlideSidebar.vue'
 
@@ -80,7 +80,7 @@ export const slide: Tool = {
                 hovered: [],
                 creating: [
                     toNoteEntity(getSelectedSlideId() ?? createSlideId(), {
-                        group: view.group ?? defaultGroup.value,
+                        groupId: view.groupId ?? defaultGroupId.value,
                         beat,
                         lane: lane,
                         ...getPropertiesFromSelection(beat),
@@ -140,7 +140,7 @@ export const slide: Tool = {
             }
         } else {
             add(getSelectedSlideId() ?? createSlideId(), {
-                group: view.group ?? defaultGroup.value,
+                groupId: view.groupId ?? defaultGroupId.value,
                 beat,
                 lane: lane,
                 ...getPropertiesFromSelection(beat),
@@ -169,7 +169,7 @@ export const slide: Tool = {
                 active = {
                     type: 'move',
                     entity,
-                    lane: xToValidLane(x),
+                    lane,
                 }
             } else {
                 notify(interpolate(() => i18n.value.tools.slide.editing, '1'))
@@ -199,17 +199,18 @@ export const slide: Tool = {
 
         setViewHover(y)
 
-        const lane = xToValidLane(x)
+        const lane = xToLane(x)
 
         switch (active.type) {
             case 'add': {
                 const beat = yToValidBeat(y)
+                const [left, size] = resize(active.lane, lane, 1)
 
                 view.entities = {
                     hovered: [],
                     creating: [
                         toNoteEntity(getSelectedSlideId() ?? createSlideId(), {
-                            group: view.group ?? defaultGroup.value,
+                            groupId: view.groupId ?? defaultGroupId.value,
                             beat,
                             ...getPropertiesFromSelection(beat),
                             lane: lane,
@@ -220,6 +221,8 @@ export const slide: Tool = {
                 break
             }
             case 'edit': {
+                const [left, size] = resize(active.lane, lane, 1)
+
                 view.entities = {
                     hovered: [],
                     creating: [
@@ -260,14 +263,15 @@ export const slide: Tool = {
     dragEnd(x, y) {
         if (!active) return
 
-        const lane = xToValidLane(x)
+        const lane = xToLane(x)
 
         switch (active.type) {
             case 'add': {
                 const beat = yToValidBeat(y)
+                const [left, size] = resize(active.lane, lane, 1)
 
                 add(getSelectedSlideId() ?? createSlideId(), {
-                    group: view.group ?? defaultGroup.value,
+                    groupId: view.groupId ?? defaultGroupId.value,
                     beat,
                     ...getPropertiesFromSelection(beat),
                     lane: lane,
@@ -276,6 +280,8 @@ export const slide: Tool = {
                 break
             }
             case 'edit': {
+                const [left, size] = resize(active.lane, lane, 1)
+
                 edit(active.entity, {
                     ...active.entity,
                     lane,
@@ -360,7 +366,7 @@ const getPropertiesFromSelection = (beat: number) => {
 
 const tryFind = (x: number, y: number): [NoteEntity] | [undefined, number, number] => {
     const [hit] = hitEntitiesAtPoint('note', x, y)
-        .filter((entity) => view.group === undefined || entity.group === view.group)
+        .filter((entity) => view.groupId === undefined || entity.groupId === view.groupId)
         .sort((a, b) => +selectedEntities.value.includes(b) - +selectedEntities.value.includes(a))
 
     return hit ? [hit] : [undefined, yToValidBeat(y), xToValidLane(x)]

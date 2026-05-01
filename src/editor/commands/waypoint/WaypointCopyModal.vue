@@ -60,7 +60,7 @@ const toMovedBpmObject = (entity: BpmEntity, beat: number): BpmObject => ({
 })
 
 const toMovedTimeScaleObject = (entity: TimeScaleEntity, beat: number): TimeScaleObject => ({
-    group: entity.group,
+    groupId: entity.groupId,
     beat,
     timeScale: entity.timeScale,
 })
@@ -110,7 +110,7 @@ const pastes: {
         const object = toMovedTimeScaleObject(entity, beat)
 
         const overlap = getInStoreGrid(transaction.store.grid, 'timeScale', object.beat)?.find(
-            (entity) => entity.beat === object.beat && entity.group === object.group,
+            (entity) => entity.beat === object.beat && entity.groupId === object.groupId,
         )
         if (overlap) removeTimeScale(transaction, overlap)
 

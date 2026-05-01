@@ -1,7 +1,7 @@
 import type { Tool } from '..'
 import type { TimeScaleObject } from '../../../chart'
 import { pushState, replaceState, state } from '../../../history'
-import { defaultGroup } from '../../../history/groups'
+import { defaultGroupId } from '../../../history/groups'
 import { selectedEntities } from '../../../history/selectedEntities'
 import { store } from '../../../history/store'
 import { i18n } from '../../../i18n'
@@ -44,7 +44,7 @@ export const timeScale: Tool = {
                 hovered: [],
                 creating: [
                     toTimeScaleEntity({
-                        group: view.group ?? defaultGroup.value,
+                        groupId: view.groupId ?? defaultGroupId.value,
                         beat,
                         timeScale: 1,
                     }),
@@ -80,7 +80,28 @@ export const timeScale: Tool = {
                 if (selectedEntities.value.includes(entity)) {
                     focusViewAtBeat(entity.beat)
 
-                    if (!isSidebarVisible.value) {
+                    if (isSidebarVisible.value) {
+                        editMoveOrReplace(entity, {
+                            groupId: entity.groupId,
+                            beat: entity.beat,
+                            timeScale: entity.timeScale,
+                            skip: entity.skip,
+                            ...(entity.ease === 'none' && !entity.hideNotes
+                                ? {
+                                      ease: 'linear',
+                                      hideNotes: false,
+                                  }
+                                : entity.ease === 'linear' && !entity.hideNotes
+                                  ? {
+                                        ease: 'none',
+                                        hideNotes: true,
+                                    }
+                                  : {
+                                        ease: 'none',
+                                        hideNotes: false,
+                                    }),
+                        })
+                    } else {
                         void showModal(TimeScalePropertiesModal, {})
                     }
                 } else {
@@ -99,12 +120,12 @@ export const timeScale: Tool = {
             }
         } else {
             const object: TimeScaleObject = {
-                group: view.group ?? defaultGroup.value,
+                groupId: view.groupId ?? defaultGroupId.value,
                 beat,
                 timeScale: 1,
             }
 
-            const overlap = find(view.group, object.beat)
+            const overlap = find(view.groupId, object.beat)
             if (overlap) {
                 edit(overlap, object)
             } else {
@@ -167,7 +188,7 @@ export const timeScale: Tool = {
                         hovered: [],
                         creating: [
                             toTimeScaleEntity({
-                                group: view.group ?? defaultGroup.value,
+                                groupId: view.groupId ?? defaultGroupId.value,
                                 beat,
                                 timeScale: 1,
                             }),
@@ -184,7 +205,7 @@ export const timeScale: Tool = {
                     hovered: [],
                     creating: [
                         toTimeScaleEntity({
-                            group: active.entity.group,
+                            groupId: active.entity.groupId,
                             beat,
                             timeScale: active.entity.timeScale,
                         }),
@@ -216,12 +237,12 @@ export const timeScale: Tool = {
                     void showModal(TimeScalePropertiesModal, {})
                 } else {
                     const object: TimeScaleObject = {
-                        group: view.group ?? defaultGroup.value,
+                        groupId: view.groupId ?? defaultGroupId.value,
                         beat,
                         timeScale: 1,
                     }
 
-                    const overlap = find(view.group, object.beat)
+                    const overlap = find(view.groupId, object.beat)
                     if (overlap) {
                         edit(overlap, object)
                     } else {
@@ -237,7 +258,7 @@ export const timeScale: Tool = {
                 const beat = snapYToBeat(y, active.entity.beat)
 
                 editMoveOrReplace(active.entity, {
-                    group: active.entity.group,
+                    groupId: active.entity.groupId,
                     beat,
                     timeScale: active.entity.timeScale,
                 })
@@ -252,7 +273,7 @@ export const timeScale: Tool = {
 
 export const editTimeScale = (entity: TimeScaleEntity, object: Partial<TimeScaleObject>) => {
     editMoveOrReplace(entity, {
-        group: object.group ?? entity.group,
+        groupId: object.groupId ?? entity.groupId,
         beat: object.beat ?? entity.beat,
         timeScale: object.timeScale ?? entity.timeScale,
     })
@@ -265,15 +286,15 @@ export const editSelectedTimeScale = (
 ) => {
     removeTimeScale(transaction, entity)
     return addTimeScale(transaction, {
-        group: object.group ?? entity.group,
+        groupId: object.groupId ?? entity.groupId,
         beat: object.beat ?? entity.beat,
         timeScale: object.timeScale ?? entity.timeScale,
     })
 }
 
-const find = (group: GroupId | undefined, beat: number) =>
+const find = (groupId: GroupId | undefined, beat: number) =>
     getInStoreGrid(store.value.grid, 'timeScale', beat)?.find(
-        (entity) => entity.beat === beat && (group === undefined || entity.group === group),
+        (entity) => entity.beat === beat && (groupId === undefined || entity.groupId === groupId),
     )
 
 const tryFind = (x: number, y: number): [TimeScaleEntity] | [undefined, number] => {
@@ -283,7 +304,7 @@ const tryFind = (x: number, y: number): [TimeScaleEntity] | [undefined, number] 
     if (hit) return [hit]
 
     const beat = yToValidBeat(y)
-    const nearest = find(view.group, beat)
+    const nearest = find(view.groupId, beat)
     if (nearest) return [nearest]
 
     return [undefined, beat]
@@ -295,7 +316,7 @@ const editMoveOrReplace = (entity: TimeScaleEntity, object: TimeScaleObject) => 
         return
     }
 
-    const overlap = find(object.group, object.beat)
+    const overlap = find(object.groupId, object.beat)
     if (overlap) {
         replace(overlap, object, entity)
     } else {
@@ -344,7 +365,7 @@ const move = (object: TimeScaleObject, old: TimeScaleEntity) => {
     update(
         () => i18n.value.tools.timeScale.moved,
         (transaction) => {
-            if (old.beat) removeTimeScale(transaction, old)
+            removeTimeScale(transaction, old)
             return addTimeScale(transaction, object)
         },
     )
@@ -354,7 +375,7 @@ const replace = (entity: TimeScaleEntity, object: TimeScaleObject, old: TimeScal
     update(
         () => i18n.value.tools.timeScale.replaced,
         (transaction) => {
-            if (old.beat) removeTimeScale(transaction, old)
+            removeTimeScale(transaction, old)
             removeTimeScale(transaction, entity)
             return addTimeScale(transaction, object)
         },

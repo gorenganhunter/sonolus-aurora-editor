@@ -22,6 +22,7 @@ import LevelEditorSelection from './LevelEditorSelection.vue'
 import LevelEditorWaveform from './LevelEditorWaveform.vue'
 import LevelEditorToolbar from './toolbar/LevelEditorToolbar.vue'
 import { tool } from './tools'
+import { brushProperties } from './tools/brush'
 import { view, viewBox } from './view'
 
 useFocusControl()
@@ -42,18 +43,25 @@ watch(time, () => {
 })
 
 watch([groups, view], () => {
-    if (!view.group) return
-    if (groups.value.has(view.group)) return
+    if (!view.groupId) return
+    if (groups.value.has(view.groupId)) return
 
-    view.group = undefined
+    view.groupId = undefined
+})
+
+watch([groups, brushProperties], () => {
+    if (!brushProperties.value.groupId) return
+    if (groups.value.has(brushProperties.value.groupId)) return
+
+    brushProperties.value.groupId = undefined
 })
 
 const group = computed(() =>
-    view.group === undefined
+    view.groupId === undefined
         ? () => i18n.value.statusBar.group.all
         : interpolate(
               () => i18n.value.statusBar.group.one,
-              groups.value.get(view.group)?.name ?? '',
+              groups.value.get(view.groupId)?.name ?? '',
           ),
 )
 </script>

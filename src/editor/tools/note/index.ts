@@ -2,7 +2,7 @@ import { computed, ref } from 'vue'
 import type { Tool } from '..'
 import type { NoteObject } from '../../../chart'
 import { pushState, replaceState, state } from '../../../history'
-import { defaultGroup } from '../../../history/groups'
+import { defaultGroupId } from '../../../history/groups'
 import { selectedEntities } from '../../../history/selectedEntities'
 import { i18n } from '../../../i18n'
 import { showModal } from '../../../modals'
@@ -26,7 +26,7 @@ import {
     xToValidLane,
     yToValidBeat,
 } from '../../view'
-import { hitEntitiesAtPoint, modifyEntities } from '../utils'
+import { hitEntitiesAtPoint, modifyEntities, offset, resize } from '../utils'
 import NotePropertiesModal from './NotePropertiesModal.vue'
 import NoteSidebar from './NoteSidebar.vue'
 
@@ -78,7 +78,7 @@ export const note: Tool = {
                 hovered: [],
                 creating: [
                     toNoteEntity(createSlideId(), {
-                        group: view.group ?? defaultGroup.value,
+                        groupId: view.groupId ?? defaultGroupId.value,
                         beat,
                         lane,
                         ...getPropertiesFromSelection(),
@@ -138,7 +138,7 @@ export const note: Tool = {
             }
         } else {
             add({
-                group: view.group ?? defaultGroup.value,
+                groupId: view.groupId ?? defaultGroupId.value,
                 beat,
                 lane,
                 ...getPropertiesFromSelection(),
@@ -167,7 +167,7 @@ export const note: Tool = {
                 active = {
                     type: 'move',
                     entity,
-                    lane: xToValidLane(x),
+                    lane,
                 }
             } else {
                 notify(interpolate(() => i18n.value.tools.note.editing, '1'))
@@ -197,17 +197,18 @@ export const note: Tool = {
 
         setViewHover(y)
 
-        const lane = xToValidLane(x)
+        const lane = xToLane(x)
 
         switch (active.type) {
             case 'add': {
                 const beat = yToValidBeat(y)
+                const [left, size] = resize(active.lane, lane, 1)
 
                 view.entities = {
                     hovered: [],
                     creating: [
                         toNoteEntity(createSlideId(), {
-                            group: view.group ?? defaultGroup.value,
+                            groupId: view.groupId ?? defaultGroupId.value,
                             beat,
                             ...getPropertiesFromSelection(),
                             lane,
@@ -218,6 +219,8 @@ export const note: Tool = {
                 break
             }
             case 'edit': {
+                const [left, size] = resize(active.lane, lane, 1)
+
                 view.entities = {
                     hovered: [],
                     creating: [
@@ -258,14 +261,15 @@ export const note: Tool = {
     dragEnd(x, y) {
         if (!active) return
 
-        const lane = xToValidLane(x)
+        const lane = xToLane(x)
 
         switch (active.type) {
             case 'add': {
                 const beat = yToValidBeat(y)
+                const [left, size] = resize(active.lane, lane, 1)
 
                 add({
-                    group: view.group ?? defaultGroup.value,
+                    groupId: view.groupId ?? defaultGroupId.value,
                     beat,
                     ...getPropertiesFromSelection(),
                     lane: lane,
@@ -274,6 +278,8 @@ export const note: Tool = {
                 break
             }
             case 'edit': {
+                const [left, size] = resize(active.lane, lane, 1)
+
                 edit(active.entity, {
                     ...active.entity,
                     lane: lane,
@@ -299,7 +305,7 @@ export const note: Tool = {
 
 export const editNote = (entity: NoteEntity, object: Partial<NoteObject>) => {
     edit(entity, {
-        group: object.group ?? entity.group,
+        groupId: object.groupId ?? entity.groupId,
         beat: object.beat ?? entity.beat,
         noteType: object.noteType ?? entity.noteType,
         isAttached: object.isAttached ?? entity.isAttached,
@@ -331,7 +337,7 @@ export const editSelectedNote = (
     object: Partial<NoteObject>,
 ) => {
     return replaceNote(transaction, entity, {
-        group: object.group ?? entity.group,
+        groupId: object.groupId ?? entity.groupId,
         beat: object.beat ?? entity.beat,
         noteType: object.noteType ?? entity.noteType,
         isAttached: object.isAttached ?? entity.isAttached,
@@ -401,7 +407,7 @@ const getPropertiesFromSelection = () => {
 
 const tryFind = (x: number, y: number): [NoteEntity] | [undefined, number, number] => {
     const [hit] = hitEntitiesAtPoint('note', x, y)
-        .filter((entity) => view.group === undefined || entity.group === view.group)
+        .filter((entity) => view.groupId === undefined || entity.groupId === view.groupId)
         .sort((a, b) => +selectedEntities.value.includes(b) - +selectedEntities.value.includes(a))
 
     return hit ? [hit] : [undefined, yToValidBeat(y), xToValidLane(x)]

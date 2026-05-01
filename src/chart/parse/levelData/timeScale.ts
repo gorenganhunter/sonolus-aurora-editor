@@ -3,22 +3,20 @@ import { EngineArchetypeDataName, EngineArchetypeName } from '@sonolus/core'
 import { getOptionalRef, getOptionalValue, getValue, type ParseToChart } from '.'
 import { beatSchema } from './schemas'
 
-export const parseTimeScalesToChart: ParseToChart = (chart, entities, getGroup, addGroup) => {
+export const parseTimeScalesToChart: ParseToChart = ({ chart, entities, getGroupId, addGroup }) => {
     for (const entity of entities) {
         if (entity.archetype !== 'TimeScaleGroup') continue
 
-        addGroup(
-            entity.name,
-            entity.name?.startsWith("g") ? entity.name.slice(1) : entity.name,
-            getOptionalValue(entity, 'noteSpeed', forceNoteSpeedSchema),
-        )
+        addGroup(entity.name, getOptionalRef(entity, 'editorName') ?? (entity.name?.startsWith("g") ? entity.name.slice(1) : entity.name), {
+            forceNoteSpeed: getOptionalValue(entity, 'noteSpeed', forceNoteSpeedSchema),
+        })
     }
 
     for (const entity of entities) {
         if (entity.archetype !== 'TimeScaleChange') continue
 
         chart.timeScales.push({
-            group: getGroup(entity),
+            groupId: getGroupId(entity),
             beat: getValue(entity, EngineArchetypeDataName.Beat, beatSchema),
             timeScale: getValue(entity, EngineArchetypeDataName.TimeScale, valueSchema),
             // skip: getValue(entity, '#TIMESCALE_SKIP', skipSchema),
