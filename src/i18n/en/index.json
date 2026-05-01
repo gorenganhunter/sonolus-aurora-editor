@@ -1,5 +1,8 @@
 {
     "title": "English (English)",
+    "group": {
+        "default": "Default"
+    },
     "commands": {
         "bgm": {
             "title": "BGM",
@@ -102,8 +105,7 @@
             },
             "switched": {
                 "all": "Switched to all groups",
-                "default": "Switched to Default group",
-                "other": "Switched to {0} group"
+                "one": "Switched to {0} group"
             }
         },
         "help": {
@@ -115,6 +117,32 @@
             },
             "jumpUp": {
                 "title": "Jump Up"
+            }
+        },
+        "manageGroups": {
+            "title": "Manage groups",
+            "modal": {
+                "title": "Manage Groups",
+                "switch": "Switch to group",
+                "switched": {
+                    "all": "Switched to all groups",
+                    "one": "Switched to {0} group"
+                },
+                "moveUp": "Move group up",
+                "moveDown": "Move group down",
+                "moved": "Moved {0} group",
+                "properties": {
+                    "title": "Edit group properties",
+                    "modal": {
+                        "title": "Group Properties",
+                        "forceNoteSpeed": "Force Note Speed",
+                        "edited": "Edited {0} group properties"
+                    }
+                },
+                "delete": "Delete group",
+                "deleted": "Deleted {0} group",
+                "add": "Add",
+                "added": "Added {0} group"
             }
         },
         "note": {
@@ -372,6 +400,8 @@
             "lockScrollX": "Lock Scroll X",
             "dragToPanY": "Drag to Pan Y",
             "dragToPanX": "Drag to Pan X",
+            "autoAddGroup": "Auto Add Group",
+            "showGroupName": "Show Group Name",
             "showOtherGroups": "Show Other Groups"
         },
         "keyboardShortcuts": {
@@ -433,8 +463,7 @@
     "statusBar": {
         "group": {
             "all": "all groups",
-            "default": "Default group",
-            "other": "{0} group"
+            "one": "{0} group"
         }
     },
     "tools": {
@@ -531,6 +560,7 @@
             }
         },
         "waypoint": {
+            "title": "Waypoint",
             "adding": "Adding {0} Waypoint objects",
             "added": "Added {0} Waypoint objects",
             "edited": "Edited {0} Waypoint objects",
@@ -657,8 +687,7 @@
                 "good": "Good"
             },
             "group": {
-                "label": "Group",
-                "default": "Default"
+                "label": "Group"
             },
             "hideNotes": {
                 "label": "Hide Notes"
@@ -681,6 +710,9 @@
             "key": {
                 "input": "Input Key",
                 "press": "Press a key..."
+            },
+            "name": {
+                "label": "Name"
             },
             "noteType": {
                 "label": "Note Type",

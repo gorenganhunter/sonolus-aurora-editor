@@ -2,7 +2,9 @@
 import { computed } from 'vue'
 import { noteComponents } from '.'
 import { bpms } from '../../../history/bpms'
+import { defaultGroup, groups } from '../../../history/groups'
 import { store } from '../../../history/store'
+import { settings } from '../../../settings'
 import type { NoteEntity } from '../../../state/entities/slides/note'
 import { beatToTime } from '../../../state/integrals/bpms'
 import { isViewRecentlyActive, ups } from '../../view'
@@ -85,7 +87,11 @@ const type = computed(() => {
     <g :transform="`translate(${entity.lane}, ${time * ups})`">
         <component :is="noteComponents[type]" :entity :is-highlighted="isHighlighted" />
         <text
-            v-if="entity.group && (isHighlighted || isViewRecentlyActive)"
+            v-if="
+                settings.showGroupName &&
+                entity.group !== defaultGroup &&
+                (isHighlighted || isViewRecentlyActive)
+            "
             :x="1"
             y="0.4"
             font-size="0.4"
@@ -93,7 +99,7 @@ const type = computed(() => {
             dominant-baseline="middle"
             fill="#0aa"
         >
-            #{{ entity.group }}
+            {{ groups.get(entity.group)?.name }}
         </text>
         <text
             v-if="entity.shortenEarlyWindow !== 'none'"

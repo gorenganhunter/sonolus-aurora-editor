@@ -2,6 +2,7 @@ import { computed, ref } from 'vue'
 import type { Tool } from '..'
 import type { NoteObject } from '../../../chart'
 import { pushState, replaceState, state } from '../../../history'
+import { defaultGroup } from '../../../history/groups'
 import { selectedEntities } from '../../../history/selectedEntities'
 import { i18n } from '../../../i18n'
 import { showModal } from '../../../modals'
@@ -77,7 +78,7 @@ export const note: Tool = {
                 hovered: [],
                 creating: [
                     toNoteEntity(createSlideId(), {
-                        group: view.group ?? 0,
+                        group: view.group ?? defaultGroup.value,
                         beat,
                         lane,
                         ...getPropertiesFromSelection(),
@@ -137,7 +138,7 @@ export const note: Tool = {
             }
         } else {
             add({
-                group: view.group ?? 0,
+                group: view.group ?? defaultGroup.value,
                 beat,
                 lane,
                 ...getPropertiesFromSelection(),
@@ -206,7 +207,7 @@ export const note: Tool = {
                     hovered: [],
                     creating: [
                         toNoteEntity(createSlideId(), {
-                            group: view.group ?? 0,
+                            group: view.group ?? defaultGroup.value,
                             beat,
                             ...getPropertiesFromSelection(),
                             lane,
@@ -264,7 +265,7 @@ export const note: Tool = {
                 const beat = yToValidBeat(y)
 
                 add({
-                    group: view.group ?? 0,
+                    group: view.group ?? defaultGroup.value,
                     beat,
                     ...getPropertiesFromSelection(),
                     lane: lane,

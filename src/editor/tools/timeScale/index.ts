@@ -1,12 +1,14 @@
 import type { Tool } from '..'
 import type { TimeScaleObject } from '../../../chart'
 import { pushState, replaceState, state } from '../../../history'
+import { defaultGroup } from '../../../history/groups'
 import { selectedEntities } from '../../../history/selectedEntities'
 import { store } from '../../../history/store'
 import { i18n } from '../../../i18n'
 import { showModal } from '../../../modals'
 import type { Entity } from '../../../state/entities'
 import { toTimeScaleEntity, type TimeScaleEntity } from '../../../state/entities/timeScale'
+import type { GroupId } from '../../../state/groups'
 import { addTimeScale, removeTimeScale } from '../../../state/mutations/timeScale'
 import { getInStoreGrid } from '../../../state/store/grid'
 import { createTransaction, type Transaction } from '../../../state/transaction'
@@ -42,7 +44,7 @@ export const timeScale: Tool = {
                 hovered: [],
                 creating: [
                     toTimeScaleEntity({
-                        group: view.group ?? 0,
+                        group: view.group ?? defaultGroup.value,
                         beat,
                         timeScale: 1,
                     }),
@@ -97,7 +99,7 @@ export const timeScale: Tool = {
             }
         } else {
             const object: TimeScaleObject = {
-                group: view.group ?? 0,
+                group: view.group ?? defaultGroup.value,
                 beat,
                 timeScale: 1,
             }
@@ -165,7 +167,7 @@ export const timeScale: Tool = {
                         hovered: [],
                         creating: [
                             toTimeScaleEntity({
-                                group: view.group ?? 0,
+                                group: view.group ?? defaultGroup.value,
                                 beat,
                                 timeScale: 1,
                             }),
@@ -214,7 +216,7 @@ export const timeScale: Tool = {
                     void showModal(TimeScalePropertiesModal, {})
                 } else {
                     const object: TimeScaleObject = {
-                        group: view.group ?? 0,
+                        group: view.group ?? defaultGroup.value,
                         beat,
                         timeScale: 1,
                     }
@@ -269,7 +271,7 @@ export const editSelectedTimeScale = (
     })
 }
 
-const find = (group: number | undefined, beat: number) =>
+const find = (group: GroupId | undefined, beat: number) =>
     getInStoreGrid(store.value.grid, 'timeScale', beat)?.find(
         (entity) => entity.beat === beat && (group === undefined || entity.group === group),
     )

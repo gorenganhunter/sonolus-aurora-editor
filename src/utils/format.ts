@@ -1,4 +1,4 @@
-import type { TimeScaleEase } from '../chart'
+// import type { TimeScaleEase } from '../chart'
 
 export const formatIntegerTime = (time: number) =>
     `${`${Math.floor(time / 60)}`.padStart(2, '0')}:${`${time % 60}`.padStart(2, '0')}`
@@ -12,17 +12,17 @@ export const formatBeat = (beat: number) => beat.toFixed(3)
 
 export const formatBpm = (value: number) => `${value}`
 
-export const formatTimeScale = (value: number, skip: number, ease: TimeScaleEase) => {
+export const formatTimeScale = (value: number/*, skip: number, ease: TimeScaleEase*/) => {
     let text = `${value}x`
-
-    if (skip) {
-        if (skip > 0) text += '+'
-        text += `${skip}`
-    }
-
-    if (ease === 'linear') {
-        text += '^'
-    }
+    //
+    // if (skip) {
+    //     if (skip > 0) text += '+'
+    //     text += `${skip}`
+    // }
+    //
+    // if (ease === 'linear') {
+    //     text += '^'
+    // }
 
     return text
 }

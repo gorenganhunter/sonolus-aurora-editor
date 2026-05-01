@@ -15,6 +15,7 @@ import { pushState, replaceState, state } from '../../../history'
 import { selectedEntities } from '../../../history/selectedEntities'
 import { i18n } from '../../../i18n'
 import type { Entity } from '../../../state/entities'
+import type { GroupId } from '../../../state/groups'
 import { createTransaction, type Transaction } from '../../../state/transaction'
 import { interpolate } from '../../../utils/interpolate'
 import { notify } from '../../notification'
@@ -30,7 +31,7 @@ import {
 import BrushSidebar from './BrushSidebar.vue'
 
 export type BrushProperties = {
-    group?: number
+    group?: GroupId
     noteType?: NoteType
     isAttached?: boolean
     // size?: number

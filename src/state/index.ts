@@ -1,6 +1,7 @@
 import type { Chart } from '../chart'
 import type { Bgm } from './bgm'
 import type { Entity } from './entities'
+import type { GroupId, Groups } from './groups'
 import { createBpms, type BpmIntegral } from './integrals/bpms'
 import { createTimeScales, type TimeScaleIntegral } from './integrals/timeScales'
 import type { Store } from './store'
@@ -13,8 +14,8 @@ export type State = {
     hp: number
     store: Store
     bpms: BpmIntegral[]
-    timeScales: TimeScaleIntegral[]
-    groupCount: number
+    timeScales: Map<GroupId, TimeScaleIntegral[]>
+    groups: Groups
 
     selectedEntities: Entity[]
 }
@@ -29,7 +30,7 @@ export const createState = (chart: Chart, offset: number, filename?: string): St
         store: createStore(chart),
         bpms,
         timeScales: createTimeScales(chart, bpms),
-        groupCount: chart.groupCount,
+        groups: chart.groups,
 
         selectedEntities: [],
     }

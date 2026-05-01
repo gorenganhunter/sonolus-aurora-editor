@@ -7,7 +7,7 @@ import type { Transaction } from '../transaction'
 
 export const addTimeScale = ({ store, timeScales, addToGroup }: Transaction, object: TimeScaleObject) => {
     const entity = toTimeScaleEntity(object)
-    addToOrdered(timeScales, 'beat', toTimeScaleIntegral(object))
+    addToOrdered(timeScales.get(object.group)!, 'beat', toTimeScaleIntegral(object))
     addToStoreGrid(store.grid, entity, entity.beat)
     addToGroup(object.group)
 
@@ -15,7 +15,7 @@ export const addTimeScale = ({ store, timeScales, addToGroup }: Transaction, obj
 }
 
 export const removeTimeScale = ({ store, timeScales }: Transaction, entity: TimeScaleEntity) => {
-    removeFromOrdered(timeScales, 'beat', entity.beat)
+    removeFromOrdered(timeScales.get(entity.group)!, 'beat', entity.beat)
 
     removeFromStoreGrid(store.grid, entity, entity.beat)
 }

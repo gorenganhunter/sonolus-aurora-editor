@@ -1,5 +1,6 @@
 import type { Command } from '..'
 import { pushState, state } from '../../../history'
+import { groups } from '../../../history/groups'
 import { i18n } from '../../../i18n'
 import { addTimeScale } from '../../../state/mutations/timeScale'
 import { createTransaction } from '../../../state/transaction'
@@ -15,15 +16,18 @@ export const groupPrev: Command = {
     },
 
     execute() {
-        if (view.group === undefined) {
-            view.group = state.value.groupCount - 1
-        } else if (view.group === 0) {
+        const ids = [...groups.value.keys()]
+        const index = view.group ? ids.indexOf(view.group) : -1
+
+        if (index < 0) {
+            view.group = ids.at(-1)
+        } else if (index === 0) {
             view.group = undefined
         } else {
-            view.group--
+            view.group = ids[index - 1]
         }
 
-        if (view.group !== undefined && !state.value.timeScales.filter(({ group }) => group === view.group).length) {
+        if (view.group !== undefined && !state.value.timeScales.get(view.group)?.find(({ beat }) => beat === 0)) {
             const transaction = createTransaction(state.value)
             const selectedEntities = addTimeScale(transaction, { beat: 0, timeScale: 1, group: view.group })
             pushState(interpolate(() => i18n.value.tools.timeScale.added, `${selectedEntities.length}`, 'Timescale'), transaction.commit(selectedEntities))
@@ -34,9 +38,10 @@ export const groupPrev: Command = {
         notify(
             view.group === undefined
                 ? () => i18n.value.commands.groups.switched.all
-                : view.group
-                    ? interpolate(() => i18n.value.commands.groups.switched.other, `#${view.group}`)
-                    : () => i18n.value.commands.groups.switched.default,
+                : interpolate(
+                    () => i18n.value.commands.groups.switched.one,
+                    groups.value.get(view.group)?.name ?? '',
+                ),
         )
     },
 }

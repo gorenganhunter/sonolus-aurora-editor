@@ -28,6 +28,8 @@ let active:
     | undefined
 
 export const waypoint: Tool = {
+    title: () => i18n.value.tools.waypoint.title,
+
     hover(x, y) {
         const [entity, beat] = tryFind(x, y)
         if (entity) {

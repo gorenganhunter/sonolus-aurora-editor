@@ -1,8 +1,10 @@
+import type { GroupId, Groups } from '../state/groups'
+
 export type Chart = {
     hp: number
     waypoints: WaypointObject[]
     bpms: BpmObject[]
-    groupCount: number
+    groups: Groups
     timeScales: TimeScaleObject[]
     slides: NoteObject[][]
 }
@@ -15,7 +17,7 @@ export type BpmObject = {
 // export type TimeScaleEase = 'none' | 'linear'
 
 export type TimeScaleObject = {
-    group: number
+    group: GroupId
     beat: number
     timeScale: number
     // skip: number
@@ -70,7 +72,7 @@ export type ConnectorEase = 'linear' | 'in' | 'out' | 'inOut' | 'outIn' | 'none'
 export type ShortenEarlyWindow = 'none' | 'perfect' | 'great' | 'good'
 
 export type NoteObject = {
-    group: number
+    group: GroupId
     beat: number
     noteType: NoteType
     isAttached: boolean

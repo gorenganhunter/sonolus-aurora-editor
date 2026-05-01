@@ -1,19 +1,29 @@
 import { Type } from '@sinclair/typebox'
 import { EngineArchetypeDataName, type LevelDataEntity } from '@sonolus/core'
-import {
-    getGroup,
-    getOptionalRef,
-    getOptionalValue,
-    getRef,
-    getValue,
-    type ParseToChart,
-    type TimeScaleNames,
-} from '.'
-import type { Chart, NoteObject } from '../..'
+// <<<<<<< HEAD
+// import {
+//     getGroup,
+//     getOptionalRef,
+//     getOptionalValue,
+//     getRef,
+//     getValue,
+//     type ParseToChart,
+//     type TimeScaleNames,
+// } from '.'
+// import type { Chart, NoteObject } from '../..'
+// import { beatSchema } from './schemas'
+//
+// export const parseSlidesToChart: ParseToChart = (chart, timeScaleNames, entities) => {
+//     const refs = new Map<string, LevelDataEntity>()
+// =======
+import { getOptionalRef, getOptionalValue, getRef, getValue, type ParseToChart } from '.'
+import type { NoteObject } from '../..'
+import type { GroupId } from '../../../state/groups'
 import { beatSchema } from './schemas'
 
-export const parseSlidesToChart: ParseToChart = (chart, timeScaleNames, entities) => {
+export const parseSlidesToChart: ParseToChart = (chart, entities, getGroup) => {
     const refs = new Map<string, LevelDataEntity>()
+    // >>>>>>> e1dbf2de75e2c54dbe87d749c032c91282696087
     const slides = new Map<string, string[]>()
     const used: string[] = []
 
@@ -23,7 +33,7 @@ export const parseSlidesToChart: ParseToChart = (chart, timeScaleNames, entities
         if (!isNoteEntity(entity)) continue
 
         if (!entity.name) {
-            chart.slides.push([toNoteObject(chart, timeScaleNames, entity)])
+            chart.slides.push([toNoteObject(getGroup, entity)])
             continue
         }
 
@@ -75,7 +85,7 @@ export const parseSlidesToChart: ParseToChart = (chart, timeScaleNames, entities
         if (!entity.name) continue
         if (used.includes(entity.name)) continue
 
-        chart.slides.push([toNoteObject(chart, timeScaleNames, entity)])
+        chart.slides.push([toNoteObject(getGroup, entity)])
     }
 
     for (const slide of new Set(slides.values())) {
@@ -95,8 +105,7 @@ export const parseSlidesToChart: ParseToChart = (chart, timeScaleNames, entities
                 .sort(({ beat: a }, { beat: b }) => a - b)
                 .map(({ entity }, i) => {
                     const object = toNoteObject(
-                        chart,
-                        timeScaleNames,
+                        getGroup,
                         entity
                     )
 
@@ -329,8 +338,7 @@ const startsWith = <T extends string, U extends string>(
     (name.startsWith(prefix) ? [true, name.slice(prefix.length)] : [false, name]) as never
 
 const toNoteObject = (
-    chart: Chart,
-    timeScaleNames: TimeScaleNames,
+    getGroup: (entity: LevelDataEntity) => GroupId,
     entity: NoteEntity,
 ) => {
     const lane = getValue(entity, 'lane', laneSchema)
@@ -339,7 +347,7 @@ const toNoteObject = (
     const connectorEase = getOptionalValue(entity, "connectorEase", connectorEaseSchema)
 
     const object: NoteObject = {
-        group: getGroup(chart, timeScaleNames, entity),
+        group: getGroup(entity),
         beat: getValue(entity, EngineArchetypeDataName.Beat, beatSchema),
         noteType: 'default',
         isAttached: !!getOptionalValue(entity, "isAttached", isAttachedSchema),

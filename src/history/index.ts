@@ -3,27 +3,43 @@ import type { Chart } from '../chart'
 import { i18n } from '../i18n'
 import { showModal } from '../modals'
 import ConfirmModal from '../modals/ConfirmModal.vue'
+import { settings } from '../settings'
 import { createState, type State } from '../state'
+import { addToGroups, type Groups } from '../state/groups'
 import { cleanupWaveform } from '../waveform'
 
-const defaultChart: Chart = {
-    hp: 1,
-    waypoints: [],
-    bpms: [
-        {
-            beat: 0,
-            bpm: 60,
-        },
-    ],
-    groupCount: 2,
-    timeScales: [
+const createDefaultChart = (): Chart => {
+    const groups: Groups = new Map()
+    const [id] = addToGroups(groups)
+    const timeScales = [
         {
             beat: 0,
             timeScale: 1,
-            group: 0
+            group: id
         }
-    ],
-    slides: [],
+    ]
+    if (settings.autoAddGroup) {
+        const [id] = addToGroups(groups)
+        timeScales.push({
+            beat: 0,
+            timeScale: 1,
+            group: id
+        })
+    }
+
+    return {
+        hp: 1,
+        waypoints: [],
+        bpms: [
+            {
+                beat: 0,
+                bpm: 60,
+            },
+        ],
+        groups,
+        timeScales,
+        slides: [],
+    }
 }
 
 const index = ref(0)
@@ -34,7 +50,7 @@ const states = shallowReactive([
     {
         isDirty: false,
         name: () => i18n.value.history.initialize,
-        state: createState(defaultChart, 0),
+        state: createState(createDefaultChart(), 0),
     },
 ])
 
@@ -103,7 +119,7 @@ export const resetState = (
     states.splice(0, states.length, {
         isDirty,
         name: () => i18n.value.history.initialize,
-        state: createState(chart ?? defaultChart, offset ?? 0, filename),
+        state: createState(chart ?? createDefaultChart(), offset ?? 0, filename),
     })
     setLevelDataHandle(handle)
 

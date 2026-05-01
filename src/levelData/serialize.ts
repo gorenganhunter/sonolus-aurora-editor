@@ -1,4 +1,5 @@
 import type { LevelData } from '@sonolus/core'
+import type { Groups } from '../state/groups'
 import type { Store } from '../state/store'
 import { serializeToLevelDataEntities } from './entities/serialize'
 import { beatToTime } from '../state/integrals/bpms'
@@ -7,7 +8,7 @@ import { bpms } from '../history/bpms'
 export const serializeToLevelData = (
     bgmOffset: number,
     store: Store,
-    groupCount: number,
+    groups: Groups,
     hp: number
 ): LevelData => {
     if (!hp) {
@@ -41,7 +42,7 @@ export const serializeToLevelData = (
                 archetype: 'Stage',
                 data: []
             },
-            ...serializeToLevelDataEntities(store, groupCount),
+            ...serializeToLevelDataEntities(store, groups),
         ],
     }
     // console.log(store, data)

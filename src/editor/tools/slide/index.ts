@@ -2,6 +2,7 @@ import { computed, ref } from 'vue'
 import type { Tool } from '..'
 import type { NoteObject } from '../../../chart'
 import { pushState, replaceState, state } from '../../../history'
+import { defaultGroup } from '../../../history/groups'
 import { selectedEntities } from '../../../history/selectedEntities'
 import { store } from '../../../history/store'
 import { i18n } from '../../../i18n'
@@ -75,18 +76,11 @@ export const slide: Tool = {
                 creating: [],
             }
         } else {
-            let id = getSelectedSlideId()
-            // if (id) {
-            //     const sl = store.value.slides.info.get(id)
-            //     if (sl) {
-            //         if (sl.length === 1 && sl[0]!.note.flickDirection !== "none") id = undefined
-            //     }
-            // }
             view.entities = {
                 hovered: [],
                 creating: [
-                    toNoteEntity(id ?? createSlideId(), {
-                        group: view.group ?? 0,
+                    toNoteEntity(getSelectedSlideId() ?? createSlideId(), {
+                        group: view.group ?? defaultGroup.value,
                         beat,
                         lane: lane,
                         ...getPropertiesFromSelection(beat),
@@ -145,15 +139,8 @@ export const slide: Tool = {
                 }
             }
         } else {
-            let id = getSelectedSlideId()
-            // if (id) {
-            //     const sl = store.value.slides.info.get(id)
-            //     if (sl) {
-            //         if (sl.length === 1 && sl[0]!.note.flickDirection !== "none") id = undefined
-            //     }
-            // }
-            add(id ?? createSlideId(), {
-                group: view.group ?? 0,
+            add(getSelectedSlideId() ?? createSlideId(), {
+                group: view.group ?? defaultGroup.value,
                 beat,
                 lane: lane,
                 ...getPropertiesFromSelection(beat),
@@ -218,19 +205,11 @@ export const slide: Tool = {
             case 'add': {
                 const beat = yToValidBeat(y)
 
-                let id = getSelectedSlideId()
-                // if (id) {
-                //     const sl = store.value.slides.info.get(id)
-                //     if (sl) {
-                //         if (sl.length === 1 && sl[0]!.note.flickDirection !== "none") id = undefined
-                //     }
-                // }
-
                 view.entities = {
                     hovered: [],
                     creating: [
-                        toNoteEntity(id ?? createSlideId(), {
-                            group: view.group ?? 0,
+                        toNoteEntity(getSelectedSlideId() ?? createSlideId(), {
+                            group: view.group ?? defaultGroup.value,
                             beat,
                             ...getPropertiesFromSelection(beat),
                             lane: lane,
@@ -287,16 +266,8 @@ export const slide: Tool = {
             case 'add': {
                 const beat = yToValidBeat(y)
 
-                let id = getSelectedSlideId()
-                // if (id) {
-                //     const sl = store.value.slides.info.get(id)
-                //     if (sl) {
-                //         if (sl.length === 1 && sl[0]!.note.flickDirection !== "none") id = undefined
-                //     }
-                // }
-
-                add(id ?? createSlideId(), {
-                    group: view.group ?? 0,
+                add(getSelectedSlideId() ?? createSlideId(), {
+                    group: view.group ?? defaultGroup.value,
                     beat,
                     ...getPropertiesFromSelection(beat),
                     lane: lane,

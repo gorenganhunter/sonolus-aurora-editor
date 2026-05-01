@@ -1,17 +1,18 @@
 import { findIntegral, integrate, type Integral } from '.'
 import type { Chart, TimeScaleObject } from '../../chart'
+import { state } from '../../history'
+import type { GroupId } from '../groups'
 import { beatToTime, type BpmIntegral } from './bpms'
 
 export type TimeScaleIntegral = Integral & {
   beat: number
-  group: number
 }
 
 export const createTimeScales = (chart: Chart, bpms: BpmIntegral[]) => {
-  let map: TimeScaleIntegral[] = [];
-  [...new Set(chart.timeScales.map(t => t.group))].forEach(st => {
-    map.push(...calculateTimeScales(bpms, chart.timeScales.filter(t => t.group === st).map(toTimeScaleIntegral)))
-  })
+  let map: Map<GroupId, TimeScaleIntegral[]> = new Map();
+  for (const id of chart.groups.keys()) {
+    map.set(id, calculateTimeScales(bpms, chart.timeScales.filter(t => t.group === id).map(toTimeScaleIntegral)))
+  }
   return map
 }
 
@@ -32,7 +33,6 @@ export const toTimeScaleIntegral = (object: TimeScaleObject): TimeScaleIntegral 
   x: 0,
   y: 0,
   s: object.timeScale,
-  group: object.group
 })
 
 export const timeToScaledTime = (timeScales: TimeScaleIntegral[], time: number) => {

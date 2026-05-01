@@ -11,13 +11,14 @@ import type {
     NoteType,
     ShortenEarlyWindow,
 } from '../../../chart'
+import type { GroupId } from '../../groups'
 
 export type NoteEntity = BaseEntity & {
     type: 'note'
     hitbox: object
 
     slideId: SlideId
-    group: number
+    group: GroupId
     noteType: NoteType
     lane: number
     // spawnLane: number

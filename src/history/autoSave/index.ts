@@ -32,7 +32,7 @@ export const useAutoSave = () => {
                 storageSet(
                     'autoSave.levelData',
                     serializeAutoSave(
-                        serializeToLevelData(state.bgm.offset, state.store, state.groupCount, state.hp),
+                        serializeToLevelData(state.bgm.offset, state.store, state.groups, state.hp),
                         filename.value,
                     ),
                 )

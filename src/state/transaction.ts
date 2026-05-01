@@ -1,10 +1,14 @@
 import type { State } from '.'
 import { view } from '../editor/view'
+import { settings } from '../settings'
 import type { Entity } from './entities'
 import type { SlideId } from './entities/slides'
+import { toTimeScaleEntity } from './entities/timeScale'
+import { addToGroups, type GroupId, type Groups } from './groups'
 import { calculateBpms, type BpmIntegral } from './integrals/bpms'
 import { calculateTimeScales, type TimeScaleIntegral } from './integrals/timeScales'
 import { rebuildSlide } from './mutations/slides'
+import { addToStoreGrid } from './store/grid'
 
 export type Transaction = ReturnType<typeof createTransaction>
 
@@ -12,11 +16,12 @@ export const createTransaction = (state: State) => {
     const grid = createMapObjectTransaction(state.store.grid)
     const slides = createMapObjectTransaction(state.store.slides)
     const dirtySlideIds = new Set<SlideId>()
-    // state.store.slides.note.get(0)[0]?.
-    let groupCount = state.groupCount
+
+    let lastGroup: GroupId | undefined
+    let groups: Groups | undefined
 
     let bpms: BpmIntegral[] | undefined
-    let timeScales: TimeScaleIntegral[] | undefined
+    let timeScales: Map<GroupId, TimeScaleIntegral[]> | undefined
 
     return {
         store: {
@@ -28,21 +33,39 @@ export const createTransaction = (state: State) => {
             },
         },
 
-        addToGroup: (group: number) => {
-            groupCount = Math.max(groupCount, group + 2)
+        addToGroup: (group: GroupId) => {
+            if (!settings.autoAddGroup) return
+
+            lastGroup ??= [...state.groups.keys()].at(-1)
+            if (group !== lastGroup) return
+
+            groups = new Map(state.groups)
+            addToGroups(groups)
+        },
+
+        get groups() {
+            return (groups ??= structuredClone(state.groups))
         },
 
         get bpms() {
             return (bpms ??= [...state.bpms])
         },
         get timeScales() {
-            return (timeScales ??= [...state.timeScales])
+            return (timeScales ??= structuredClone(state.timeScales))
         },
 
         commit(selectedEntities: Entity[]): State {
             if (bpms) bpms = calculateBpms(bpms)
-            if (bpms || timeScales)
-                timeScales = calculateTimeScales(bpms ?? [...state.bpms], timeScales ?? [...state.timeScales])
+            if (bpms || timeScales || groups) {
+                timeScales ??= structuredClone(state.timeScales)
+                for (const id of (groups ?? state.groups).keys()) {
+                    if (!timeScales.get(id)) {
+                        const entity = toTimeScaleEntity({ beat: 0, timeScale: 1, group: id })
+                        addToStoreGrid(this.store.grid, entity, entity.beat)
+                    }
+                    timeScales.set(id, calculateTimeScales(bpms ?? state.bpms, timeScales.get(id) ?? [{ beat: 0, x: 0, y: 0, s: 1 }]))
+                }
+            }
 
             for (const slideId of dirtySlideIds) {
                 rebuildSlide(this.store, slideId, selectedEntities)
@@ -63,7 +86,7 @@ export const createTransaction = (state: State) => {
                 },
                 bpms: bpms ?? state.bpms,
                 timeScales: timeScales ?? state.timeScales,
-                groupCount,
+                groups: groups ?? state.groups,
 
                 selectedEntities,
             }

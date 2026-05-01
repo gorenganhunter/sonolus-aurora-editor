@@ -128,6 +128,10 @@ const settingsProperties = {
 
     dragToPanX: Type.Boolean(),
 
+    autoAddGroup: Type.Boolean({ default: true }),
+
+    showGroupName: Type.Boolean({ default: true }),
+
     showOtherGroups: Type.Boolean({ default: true }),
 
     toolbar: Type.Transform(
@@ -144,7 +148,7 @@ const settingsProperties = {
                     ['note4', 'note3', 'note2', 'note1', 'note0', 'note'],
                     ['slide4', 'slide3', 'slide2', 'slide1', 'slide0', 'slide'],
                     ['timeScale', 'bpm'],
-                    ['groupPrev', 'groupNext', 'groupAll'],
+                    ['groupPrev', 'groupNext', 'groupAll', 'manageGroups'],
                     ['hp'],
                     [
                         'scrollLeft',
@@ -225,7 +229,7 @@ const settingsProperties = {
                 timeScale: 'w',
                 groupPrev: 'e',
                 groupNext: 'r',
-                groupAll: 't',
+                manageGroups: 't',
                 scrollLeft: 'ArrowLeft',
                 scrollRight: 'ArrowRight',
                 scrollUp: 'ArrowUp',

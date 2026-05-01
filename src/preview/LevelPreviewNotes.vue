@@ -30,10 +30,12 @@ const notes = computed(() =>
         //         y: -0.02}
         // )
         //
-            const targetTime = timeToScaledTime(timeScales.value.filter(t => t.group === group), beatToTime(bpms.value, beat))
+            const targetTime = timeToScaledTime(timeScales.value.get(group)!, beatToTime(bpms.value, beat))
         //     //const z = unlerp(targetTime - noteDuration.value, targetTime, scaledTimes.value.min)
         //
-        const s = unlerp(targetTime - noteDuration.value, targetTime, scaledTimes(group).value.min)
+        const ns = state.value.groups.get(group)?.forceNoteSpeed
+
+        const s = unlerp(targetTime - (ns ? 5 / ns : noteDuration.value), targetTime, scaledTimes(group).value.min)
 
         const size = approachSize(s - 1)
         //

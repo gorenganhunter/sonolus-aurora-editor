@@ -33,8 +33,8 @@ const connectors = computed(() =>
         // )
         //
         const targetTime = {
-            head: timeToScaledTime(timeScales.value.filter(t => t.group === head.group), beatToTime(bpms.value, head.beat)),
-            tail: timeToScaledTime(timeScales.value.filter(t => t.group === tail.group), beatToTime(bpms.value, tail.beat))
+            head: timeToScaledTime(timeScales.value.get(head.group)!, beatToTime(bpms.value, head.beat)),
+            tail: timeToScaledTime(timeScales.value.get(tail.group)!, beatToTime(bpms.value, tail.beat))
         }
         //     //const z = unlerp(targetTime - noteDuration.value, targetTime, scaledTimes.value.min)
         //
@@ -44,9 +44,12 @@ const connectors = computed(() =>
         // const posX = moveX(group).value
         // const posY = moveY(group).value
         //
+        const nsh = state.value.groups.get(head.group)?.forceNoteSpeed
+        const nst = state.value.groups.get(tail.group)?.forceNoteSpeed
+
             const s = {
-                head: clamp(unlerp(targetTime.head - noteDuration.value, targetTime.head, scaledTimes(head.group).value.min)),
-                tail: clamp(unlerp(targetTime.tail - noteDuration.value, targetTime.tail, scaledTimes(tail.group).value.min)),
+                head: clamp(unlerp(targetTime.head - (nsh ? 5 / nsh : noteDuration.value), targetTime.head, scaledTimes(head.group).value.min)),
+                tail: clamp(unlerp(targetTime.tail - (nst ? 5 / nst : noteDuration.value), targetTime.tail, scaledTimes(tail.group).value.min)),
             }
 
         const size = {
@@ -109,8 +112,8 @@ const connectors = computed(() =>
                 }
 
                 const s = {
-                    min: unlerp(scaledTime.min - noteDuration.value, scaledTime.min, t.min),
-                    max: unlerp(scaledTime.max - noteDuration.value, scaledTime.max, t.min),
+                    min: unlerp(scaledTime.min - (nsh ? 5 / nsh : noteDuration.value), scaledTime.min, t.min),
+                    max: unlerp(scaledTime.max - (nst ? 5 / nst : noteDuration.value), scaledTime.max, t.min),
                 }
 
                 const size = {

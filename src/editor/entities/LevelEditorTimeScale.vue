@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { bpms } from '../../history/bpms'
+import { defaultGroup, groups } from '../../history/groups'
+import { settings } from '../../settings'
 import type { TimeScaleEntity } from '../../state/entities/timeScale'
 import { beatToTime } from '../../state/integrals/bpms'
 import { formatTimeScale } from '../../utils/format'
@@ -25,15 +27,18 @@ const y = computed(() => time.value * ups.value)
             :y2="y"
             stroke="#ff0"
             stroke-opacity="0.5"
-            :stroke-dasharray="entity.hideNotes ? '2 2' : ''"
             stroke-dashoffset="0"
         />
 
         <text :x="-4.6" :y text-anchor="end" dominant-baseline="middle" fill="#ff0">
-            {{ formatTimeScale(entity.timeScale, entity.skip, entity.ease) }}
+            {{ formatTimeScale(entity.timeScale) }}
         </text>
         <text
-            v-if="entity.group && (isHighlighted || isViewRecentlyActive)"
+            v-if="
+                settings.showGroupName &&
+                entity.group !== defaultGroup &&
+                (isHighlighted || isViewRecentlyActive)
+            "
             :x="-4.6"
             :y
             font-size="0.4"
@@ -41,7 +46,7 @@ const y = computed(() => time.value * ups.value)
             dominant-baseline="middle"
             fill="#0aa"
         >
-            #{{ entity.group }}
+            {{ groups.get(entity.group)?.name }}
         </text>
     </g>
 </template>
