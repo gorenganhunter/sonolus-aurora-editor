@@ -67,5 +67,10 @@ watch(
             v-model="settings.showOtherGroups"
             :label="i18n.settings.editor.showOtherGroups"
         />
+        
+        <ToggleField
+            v-model="settings.hitboxAsSelectionBox"
+            :label="i18n.settings.editor.hitboxAsSelectionBox"
+        />
     </SettingsSection>
 </template>

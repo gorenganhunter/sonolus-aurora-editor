@@ -134,6 +134,8 @@ const settingsProperties = {
 
     showOtherGroups: Type.Boolean({ default: true }),
 
+    hitboxAsSelectionBox: Type.Boolean({ default: false }),
+
     toolbar: Type.Transform(
         Type.Array(
             Type.Transform(Type.Array(Type.String()))

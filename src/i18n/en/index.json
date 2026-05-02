@@ -402,7 +402,8 @@
             "dragToPanX": "Drag to Pan X",
             "autoAddGroup": "Auto Add Group",
             "showGroupName": "Show Group Name",
-            "showOtherGroups": "Show Other Groups"
+            "showOtherGroups": "Show Other Groups",
+            "hitboxAsSelectionBox": "Note Hitbox as Selection Box"
         },
         "keyboardShortcuts": {
             "title": "Keyboard Shortcuts"
