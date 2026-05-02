@@ -16,6 +16,7 @@ import { isSidebarVisible } from '../../sidebars'
 import { focusViewAtBeat, setViewHover, snapYToBeat, view, yToValidBeat } from '../../view'
 import { hitEntitiesAtPoint } from '../utils'
 import WaypointPropertiesModal from './WaypointPropertiesModal.vue'
+import WaypointSidebar from './WaypointSidebar.vue'
 
 let active:
     | {
@@ -29,6 +30,7 @@ let active:
 
 export const waypoint: Tool = {
     title: () => i18n.value.tools.waypoint.title,
+    sidebar: WaypointSidebar,
 
     hover(x, y) {
         const [entity, beat] = tryFind(x, y)
