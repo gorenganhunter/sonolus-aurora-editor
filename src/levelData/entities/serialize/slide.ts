@@ -85,14 +85,15 @@ export const serializeSlidesToLevelDataEntities = (
                     //     value: sfxs[note.sfx],
                     // },
                 ],
+                name: getName()
             }
             entities.push(entity)
             noteEntities.set(note, entity)
 
-            if (prev) {
-                if (!prev.name) prev.name = getName()
-                entity.name = getName()
-            }
+            // if (prev) {
+            //     if (!prev.name) prev.name = getName()
+            // entity.name = getName()
+            // }
             // prev?.data.push({
             //     name: 'next',
             //     ref: (entity.name ??= getName()),
@@ -250,6 +251,7 @@ export const serializeSlidesToLevelDataEntities = (
                         //     ref: (getEntity(info.segmentTail).name ??= getName()),
                         // },
                     ],
+                    name: getName()
                 }
 
                 if (prevConnector) {
@@ -289,11 +291,11 @@ export const serializeSlidesToLevelDataEntities = (
         const groupNotes = new Map<number, NoteEntity[]>()
 
         for (const note of notes) {
-            const notes = groupNotes.get(note.group)
+            const notes = groupNotes.get(note.groupId)
             if (notes) {
                 notes.push(note)
             } else {
-                groupNotes.set(note.group, [note])
+                groupNotes.set(note.groupId, [note])
             }
         }
 

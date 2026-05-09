@@ -10,7 +10,7 @@ import { serializeWaypointsToLevelDataEntities } from './waypoint'
 
 export const serializeToLevelDataEntities = (store: Store, groups: Groups) => {
     let id = 0
-    const getName = () => (id++).toString(16)
+    const getName = () => (id++).toString(10)
 
     const waypointEntities = serializeWaypointsToLevelDataEntities(store)
 
