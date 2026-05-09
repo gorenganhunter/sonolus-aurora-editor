@@ -7,12 +7,8 @@ export const serializeWaypointsToLevelDataEntities = (store: Store) =>
     [...getStoreEntities(store.grid.waypoint)].map(
         (wp): WaypointLevelDataEntity => ({
             archetype: "Waypoint",
-            data: [
-                {
-                    name: EngineArchetypeDataName.Beat,
-                    value: wp.beat,
-                }
-            ],
-            wp_name: wp.name
+            data: [],
+            tick: wp.beat * 480,
+            waypoint_name: wp.name
         }),
     )
