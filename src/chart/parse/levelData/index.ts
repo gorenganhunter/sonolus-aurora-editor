@@ -69,15 +69,6 @@ export const parseLevelDataChart = (entities: LevelDataEntity[]): Chart => {
         addToGroups(chart.groups)
     }
 
-    for (const [gid] of chart.groups.entries()) {
-        if (!chart.timeScales.find(ts => (ts.groupId === gid && ts.beat === 0)))
-            chart.timeScales.push({
-                groupId: gid,
-                beat: 0,
-                timeScale: 1
-            })
-    }
-
     return chart
 }
 
