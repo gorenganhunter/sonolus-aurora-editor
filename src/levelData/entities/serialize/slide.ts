@@ -171,7 +171,7 @@ export const serializeSlidesToLevelDataEntities = (
                 value: flickDirections[info.note.flickDirection]
             })
 
-            if (info.note.shortenEarlyWindow !== 'none') entity.data.push({
+            entity.data.push({
                 name: "shortenEarlyWindow",
                 value: earlyWindows[info.note.shortenEarlyWindow]
             })
