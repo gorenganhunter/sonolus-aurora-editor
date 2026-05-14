@@ -3,6 +3,10 @@ import type { NoteEntity } from '../../../state/entities/slides/note'
 import type { GroupId } from '../../../state/groups'
 import type { Store } from '../../../state/store'
 
+export type NoteLevelDataEntity = LevelDataEntity & {
+    origin?: 0 | 1 | 2
+}
+
 export const serializeSlidesToLevelDataEntities = (
     timeScaleGroupEntities: Map<GroupId, LevelDataEntity>,
     store: Store,
@@ -10,7 +14,7 @@ export const serializeSlidesToLevelDataEntities = (
 ) => {
     const entities: LevelDataEntity[] = []
 
-    const noteEntities = new Map<NoteEntity, LevelDataEntity>()
+    const noteEntities = new Map<NoteEntity, NoteLevelDataEntity>()
 
     const getEntity = (note: NoteEntity) => {
         const entity = noteEntities.get(note)
@@ -22,13 +26,13 @@ export const serializeSlidesToLevelDataEntities = (
     const allowSimLines = new Map<number, NoteEntity[]>()
 
     for (const infos of store.slides.info.values()) {
-        let prev: LevelDataEntity | undefined
+        let prev: NoteLevelDataEntity | undefined
         let prevConnector: LevelDataEntity | undefined
         for (const [i, { note }] of infos.entries()) {
             const timeScaleGroup = timeScaleGroupEntities.get(note.groupId)
             if (!timeScaleGroup) throw new Error('Unexpected missing group')
 
-            const entity: LevelDataEntity = {
+            const entity: NoteLevelDataEntity = {
                 archetype: '',
                 data: [
                     {
@@ -144,6 +148,9 @@ export const serializeSlidesToLevelDataEntities = (
             // }
 
             entity.archetype += 'Note'
+
+            if (isFirst && isLast) entity.origin = 0
+            else entity.origin = isFirst ? 1 : isLast ? 2 : 0
 
             // const tick = Math.round(info.note.beat * beatToTicks)
 
