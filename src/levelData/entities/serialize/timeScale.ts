@@ -72,6 +72,7 @@ export const serializeTimeScaleChangesToLevelDataEntities = (
                                 value: timeScale.timeScale,
                             },
                         ],
+                        name: "t" + getName()
                     }
 
                     if (prev) {
