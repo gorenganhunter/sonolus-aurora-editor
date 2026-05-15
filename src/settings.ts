@@ -144,7 +144,16 @@ const settingsProperties = {
             {
                 default: [
                     ['stats', 'utilities', 'reset', 'save', 'open'],
-                    ['offset', 'bgm', 'speedUp', 'speedDown', 'stop', 'play'],
+                    [
+                        'offset',
+                        'bgm',
+                        'toggleSfxVolume',
+                        'toggleBgmVolume',
+                        'speedUp',
+                        'speedDown',
+                        'stop',
+                        'play',
+                    ],
                     ['flip', 'paste', 'cut', 'copy', 'redo', 'undo'],
                     ['brush', 'eraser', 'deselect', 'select'],
                     ['note4', 'note3', 'note2', 'note1', 'note0', 'note'],
