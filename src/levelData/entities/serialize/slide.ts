@@ -258,7 +258,7 @@ export const serializeSlidesToLevelDataEntities = (
                         //     ref: (getEntity(info.segmentTail).name ??= getName()),
                         // },
                     ],
-                    name: getName()
+                    name: "h" + (getEntity(head).name ??= getName())
                 }
 
                 if (prevConnector) {
