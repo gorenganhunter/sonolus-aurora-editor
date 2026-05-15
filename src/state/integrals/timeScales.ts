@@ -1,7 +1,8 @@
 import { findIntegral, integrate, type Integral } from '.'
-import type { Chart, TimeScaleObject } from '../../chart'
+import type { Chart } from '../../chart'
+import type { GroupId } from '../../chart/groups'
+import type { TimeScaleObject } from '../../chart/timeScale'
 import { state } from '../../history'
-import type { GroupId } from '../groups'
 import { beatToTime, type BpmIntegral } from './bpms'
 
 export type TimeScaleIntegral = Integral & {
