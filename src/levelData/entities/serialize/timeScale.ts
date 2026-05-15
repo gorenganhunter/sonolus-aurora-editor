@@ -28,6 +28,7 @@ export const serializeTimeScalesToLevelDataEntities = (
 
         let prev: LevelDataEntity | undefined
         entities.push(
+            timeScaleGroup,
             ...timeScales
                 .sort((a, b) => a.beat - b.beat)
                 .map((timeScale) => {

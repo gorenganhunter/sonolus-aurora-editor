@@ -20,7 +20,7 @@ export const serializeToLevelDataEntities = (store: Store, groups: Groups) => {
 
     const slideEntities = serializeSlidesToLevelDataEntities(groupEntities, store, getName)
 
-    return [...waypointEntities, ...bpmEntities, ...groupEntities.values(), ...timeScaleEntities, ...slideEntities]
+    return [...waypointEntities, ...bpmEntities, ...timeScaleEntities, ...slideEntities]
 }
 
 export const getStoreEntities = <T>(map: Map<number, Set<T>>) => {
