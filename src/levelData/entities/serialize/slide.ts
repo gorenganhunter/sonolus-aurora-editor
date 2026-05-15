@@ -262,11 +262,11 @@ export const serializeSlidesToLevelDataEntities = (
                 }
 
                 if (prevConnector) {
-                    connector.data.push({
+                    connector.data.unshift({
                         name: 'prev',
                         ref: prevConnector.name ??= getName()
                     })
-                    prevConnector.data.push({
+                    prevConnector.data.unshift({
                         name: 'next',
                         ref: connector.name ??= getName()
                     })
