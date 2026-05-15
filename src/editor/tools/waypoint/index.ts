@@ -1,5 +1,5 @@
 import type { Tool } from '..'
-import type { WaypointObject } from '../../../chart'
+import type { WaypointObject } from '../../../chart/waypoint'
 import { pushState, replaceState, state } from '../../../history'
 import { selectedEntities } from '../../../history/selectedEntities'
 import { store } from '../../../history/store'

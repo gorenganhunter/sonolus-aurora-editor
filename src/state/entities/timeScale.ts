@@ -1,6 +1,6 @@
 import { type BaseEntity } from '.'
-import type { TimeScaleObject } from '../../chart'
-import type { GroupId } from '../groups'
+import type { GroupId } from '../../chart/groups'
+import type { TimeScaleObject } from '../../chart/timeScale'
 
 export type TimeScaleEntity = BaseEntity & {
     type: 'timeScale'

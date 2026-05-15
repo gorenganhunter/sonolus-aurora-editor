@@ -666,6 +666,9 @@
                 "cyan": "Cyan",
                 "black": "Black"
             },
+            "connectorIsPassThrough": {
+                "label": "Connector Pass Through"
+            },
             "connectorLayer": {
                 "label": "Connector Layer",
                 "top": "Top",

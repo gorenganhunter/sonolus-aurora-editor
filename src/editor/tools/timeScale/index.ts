@@ -1,5 +1,6 @@
 import type { Tool } from '..'
-import type { TimeScaleObject } from '../../../chart'
+import type { GroupId } from '../../../chart/groups'
+import type { TimeScaleObject } from '../../../chart/timeScale'
 import { pushState, replaceState, state } from '../../../history'
 import { defaultGroupId } from '../../../history/groups'
 import { selectedEntities } from '../../../history/selectedEntities'
@@ -8,7 +9,6 @@ import { i18n } from '../../../i18n'
 import { showModal } from '../../../modals'
 import type { Entity } from '../../../state/entities'
 import { toTimeScaleEntity, type TimeScaleEntity } from '../../../state/entities/timeScale'
-import type { GroupId } from '../../../state/groups'
 import { addTimeScale, removeTimeScale } from '../../../state/mutations/timeScale'
 import { getInStoreGrid } from '../../../state/store/grid'
 import { createTransaction, type Transaction } from '../../../state/transaction'
@@ -85,21 +85,21 @@ export const timeScale: Tool = {
                             groupId: entity.groupId,
                             beat: entity.beat,
                             timeScale: entity.timeScale,
-                            skip: entity.skip,
-                            ...(entity.ease === 'none' && !entity.hideNotes
-                                ? {
-                                      ease: 'linear',
-                                      hideNotes: false,
-                                  }
-                                : entity.ease === 'linear' && !entity.hideNotes
-                                  ? {
-                                        ease: 'none',
-                                        hideNotes: true,
-                                    }
-                                  : {
-                                        ease: 'none',
-                                        hideNotes: false,
-                                    }),
+                            // skip: entity.skip,
+                            // ...(entity.timeScaleEase === 'none' && !entity.hideNotes
+                            //     ? {
+                            //         timeScaleEase: 'linear',
+                            //         hideNotes: false,
+                            //     }
+                            //     : entity.timeScaleEase === 'linear' && !entity.hideNotes
+                            //         ? {
+                            //             timeScaleEase: 'none',
+                            //             hideNotes: true,
+                            //         }
+                            //         : {
+                            //             timeScaleEase: 'none',
+                            //             hideNotes: false,
+                            //         }),
                         })
                     } else {
                         void showModal(TimeScalePropertiesModal, {})

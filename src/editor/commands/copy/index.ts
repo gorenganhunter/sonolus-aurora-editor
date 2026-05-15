@@ -1,6 +1,7 @@
 import type { Command } from '..'
 import type { ClipboardData } from '../../../clipboardData/schema'
 import { groups } from '../../../history/groups'
+import { initialLife } from '../../../history/initialLife'
 import { selectedEntities } from '../../../history/selectedEntities'
 import { store } from '../../../history/store'
 import { i18n } from '../../../i18n'

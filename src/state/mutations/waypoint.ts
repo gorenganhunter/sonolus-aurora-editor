@@ -1,4 +1,4 @@
-import type { WaypointObject } from '../../chart'
+import type { WaypointObject } from '../../chart/waypoint'
 import { addToOrdered, removeFromOrdered } from '../../utils/ordered'
 import { toWaypointEntity, type WaypointEntity } from '../entities/waypoint'
 import { addToStoreGrid, removeFromStoreGrid } from '../store/grid'

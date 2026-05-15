@@ -3,6 +3,7 @@ import { pushState, replaceState, state } from '../../history'
 import { selectedEntities } from '../../history/selectedEntities'
 import { i18n } from '../../i18n'
 import type { Entity } from '../../state/entities'
+import type { RemoveMutation } from '../../state/mutations'
 import { removeBpm } from '../../state/mutations/bpm'
 import { removeNote } from '../../state/mutations/slides/note'
 import { removeTimeScale } from '../../state/mutations/timeScale'
@@ -112,20 +113,25 @@ export const eraser: Tool = {
 }
 
 const canRemoves: {
-    [T in Entity as T['type']]?: (entity: T) => boolean
+    [T in Entity as T['type']]: ((entity: T) => boolean) | undefined
 } = {
     bpm: (entity) => entity.beat > 0,
-    timeScale: (entity) => entity.beat > 0
+    timeScale: (entity) => entity.beat > 0,
+
+    waypoint: undefined,
+    note: undefined,
+    connector: undefined,
 }
 
 const removes: {
-    [T in Entity as T['type']]?: (transaction: Transaction, entity: T) => void
+    [T in Entity as T['type']]: RemoveMutation<T> | undefined
 } = {
     bpm: removeBpm,
     timeScale: removeTimeScale,
 
     note: removeNote,
-    waypoint: removeWaypoint
+    waypoint: removeWaypoint,
+    connector: undefined,
 }
 
 const canRemove = (entity: Entity) => canRemoves[entity.type]?.(entity as never) ?? true

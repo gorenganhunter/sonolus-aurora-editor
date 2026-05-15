@@ -1,27 +1,11 @@
 import { Type } from '@sinclair/typebox'
 import { EngineArchetypeDataName, type LevelDataEntity } from '@sonolus/core'
-// <<<<<<< HEAD
-// import {
-//     getGroup,
-//     getOptionalRef,
-//     getOptionalValue,
-//     getRef,
-//     getValue,
-//     type ParseToChart,
-//     type TimeScaleNames,
-// } from '.'
-// import type { Chart, NoteObject } from '../..'
-// import { beatSchema } from './schemas'
-//
-// export const parseSlidesToChart: ParseToChart = (chart, timeScaleNames, entities) => {
-//     const refs = new Map<string, LevelDataEntity>()
-// =======
-import { getOptionalRef, getOptionalValue, getRef, getValue, type ParseToChart } from '.'
-import type { NoteObject } from '../..'
-import type { GroupId } from '../../../state/groups'
+import { getOptionalRef, getOptionalValue, getRef, getValue, type ParseCtx } from '.'
+import type { GroupId } from '../../groups'
+import type { NoteObject } from '../../note'
 import { beatSchema } from './schemas'
 
-export const parseSlidesToChart: ParseToChart = ({ chart, entities, getGroupId }) => {
+export const parseSlidesToChart = ({ chart, entities, getGroupId }: ParseCtx) => {
     const refs = new Map<string, LevelDataEntity>()
     const slides = new Map<string, string[]>()
     const used: string[] = []
@@ -323,6 +307,8 @@ const earlyWindows = {
     2: 'great',
     3: 'good'
 } as const
+
+const segmentThroughJudgeLineSchema = Type.Number()
 
 const trimStart = <T extends string, U extends string>(
     name: T,

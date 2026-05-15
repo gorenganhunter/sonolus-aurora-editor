@@ -1,5 +1,8 @@
 import { type Tool } from '.'
-import type { BpmObject, NoteObject, TimeScaleObject, WaypointObject } from '../../chart'
+import type { BpmObject } from '../../chart/bpm'
+import type { NoteObject } from '../../chart/note'
+import type { TimeScaleObject } from '../../chart/timeScale'
+import type { WaypointObject } from '../../chart/waypoint'
 import { pushState, replaceState, state } from '../../history'
 import { selectedEntities } from '../../history/selectedEntities'
 import { i18n } from '../../i18n'
@@ -309,12 +312,12 @@ export const select: Tool = {
 }
 
 const toMovedBpmObject = (entity: BpmEntity, beat: number): BpmObject => ({
+    ...entity,
     beat,
-    bpm: entity.bpm,
 })
 
 const toMovedTimeScaleObject = (entity: TimeScaleEntity, beat: number): TimeScaleObject => ({
-    groupId: entity.groupId,
+    ...entity,
     beat,
     timeScale: entity.timeScale,
     // skip: entity.skip,
@@ -375,7 +378,7 @@ type Create<T extends Entity> = (
 ) => Entity | undefined
 
 const creates: {
-    [T in Entity as T['type']]?: Create<T>
+    [T in Entity as T['type']]: Create<T> | undefined
 } = {
     bpm: (entities, entity, startLane, lane, beat) => toBpmEntity(toMovedBpmObject(entity, beat)),
     timeScale: (entities, entity, startLane, lane, beat) =>
@@ -389,6 +392,8 @@ const creates: {
         ),
 
     waypoint: (entities, entity, startLane, lane, beat) => toWaypointEntity(toMovedWaypointObject(entity, beat)),
+
+    connector: undefined,
 }
 
 type Move<T extends Entity> = (
@@ -402,7 +407,7 @@ type Move<T extends Entity> = (
 ) => Entity[] | undefined
 
 const moves: {
-    [T in Entity as T['type']]?: Move<T>
+    [T in Entity as T['type']]: Move<T> | undefined
 } = {
     bpm: (transaction, entities, entity, startLane, lane, beat) => {
         const object = toMovedBpmObject(entity, beat)
@@ -446,5 +451,7 @@ const moves: {
         if (overlap) removeWaypoint(transaction, overlap)
 
         return addWaypoint(transaction, object)
-    }
+    },
+
+    connector: undefined,
 }

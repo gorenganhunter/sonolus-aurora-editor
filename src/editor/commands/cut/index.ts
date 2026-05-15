@@ -2,16 +2,19 @@ import type { Command } from '..'
 import type { ClipboardData } from '../../../clipboardData/schema'
 import { pushState, replaceState, state } from '../../../history'
 import { groups } from '../../../history/groups'
+import { initialLife } from '../../../history/initialLife'
 import { selectedEntities } from '../../../history/selectedEntities'
 import { store } from '../../../history/store'
 import { i18n } from '../../../i18n'
 import { serializeToLevelDataEntities } from '../../../levelData/entities/serialize'
 import type { Entity, EntityOfType, EntityType } from '../../../state/entities'
+import type { RemoveMutation } from '../../../state/mutations'
 import { removeBpm } from '../../../state/mutations/bpm'
 import { removeNote } from '../../../state/mutations/slides/note'
 import { removeTimeScale } from '../../../state/mutations/timeScale'
+import { removeWaypoint } from '../../../state/mutations/waypoint'
 import { createStore } from '../../../state/store/creates'
-import { createTransaction, type Transaction } from '../../../state/transaction'
+import { createTransaction } from '../../../state/transaction'
 import { interpolate } from '../../../utils/interpolate'
 import { notify } from '../../notification'
 import { view, xToLane, yToValidBeat } from '../../view'
@@ -99,17 +102,23 @@ const getSlides = (entities: Entity[]) => {
 }
 
 const canRemoves: {
-    [T in Entity as T['type']]?: (entity: T) => boolean
+    [T in Entity as T['type']]: ((entity: T) => boolean) | undefined
 } = {
     bpm: (entity) => entity.beat > 0,
-    timeScale: (entity) => entity.beat > 0
+    timeScale: (entity) => entity.beat > 0,
+
+    note: undefined,
+    connector: undefined,
+    waypoint: undefined
 }
 
 const removes: {
-    [T in Entity as T['type']]?: (transaction: Transaction, entity: T) => void
+    [T in Entity as T['type']]: RemoveMutation<T> | undefined
 } = {
     bpm: removeBpm,
     timeScale: removeTimeScale,
 
     note: removeNote,
+    connector: undefined,
+    waypoint: removeWaypoint
 }

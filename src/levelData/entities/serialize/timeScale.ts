@@ -1,36 +1,11 @@
 import { EngineArchetypeDataName, EngineArchetypeName, type LevelDataEntity } from '@sonolus/core'
 import { getStoreEntities } from '.'
+import type { GroupId } from '../../../chart/groups'
 import type { TimeScaleEntity } from '../../../state/entities/timeScale'
-import type { GroupId, Groups } from '../../../state/groups'
 import type { Store } from '../../../state/store'
 
-export const serializeTimeScaleGroupsToLevelDataEntities = (groups: Groups) =>
-    new Map(
-        [...groups.entries()].map(([id, { name, forceNoteSpeed }]): [GroupId, LevelDataEntity] => [
-            id,
-            {
-                archetype: 'TimeScaleGroup',
-                data: [
-                    {
-                        name: 'editorName',
-                        ref: name,
-                    },
-                    ...(forceNoteSpeed
-                        ? [
-                            {
-                                name: 'noteSpeed',
-                                value: forceNoteSpeed,
-                            },
-                        ]
-                        : []),
-                ],
-                name: "g" + name
-            },
-        ]),
-    )
-
-export const serializeTimeScaleChangesToLevelDataEntities = (
-    timeScaleGroupEntities: Map<GroupId, LevelDataEntity>,
+export const serializeTimeScalesToLevelDataEntities = (
+    groupEntities: Map<GroupId, LevelDataEntity>,
     store: Store,
     getName: () => string,
 ) => {
@@ -48,7 +23,7 @@ export const serializeTimeScaleChangesToLevelDataEntities = (
     const entities: LevelDataEntity[] = []
 
     for (const [groupId, timeScales] of timeScalesByGroup) {
-        const timeScaleGroup = timeScaleGroupEntities.get(groupId)
+        const timeScaleGroup = groupEntities.get(groupId)
         if (!timeScaleGroup) throw new Error('Unexpected missing group')
 
         let prev: LevelDataEntity | undefined
@@ -71,6 +46,18 @@ export const serializeTimeScaleChangesToLevelDataEntities = (
                                 name: EngineArchetypeDataName.TimeScale,
                                 value: timeScale.timeScale,
                             },
+                            // {
+                            //     name: '#TIMESCALE_SKIP',
+                            //     value: timeScale.skip,
+                            // },
+                            // {
+                            //     name: '#TIMESCALE_EASE',
+                            //     value: timeScaleEases[timeScale.timeScaleEase],
+                            // },
+                            // {
+                            //     name: 'hideNotes',
+                            //     value: +timeScale.hideNotes,
+                            // },
                         ],
                         name: "t" + getName()
                     }

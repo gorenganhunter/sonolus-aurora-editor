@@ -7,7 +7,7 @@ import type {
     // NoteSfx,
     NoteType,
     ShortenEarlyWindow,
-} from '../../chart'
+} from '../../chart/note'
 import { selectedEntities } from '../../history/selectedEntities'
 import type { DefaultNoteSlideProperties } from '../../settings'
 import { entries } from '../../utils/object'

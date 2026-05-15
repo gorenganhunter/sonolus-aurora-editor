@@ -14,9 +14,9 @@ const { entities, createModel } = useSelectedEntitiesProperties(
 )
 
 const timeScale = createModel('timeScale')
-const skip = createModel('skip')
-const ease = createModel('ease')
-const hideNotes = createModel('hideNotes')
+/*const skip = createModel('skip')
+const timeScaleEase = createModel('timeScaleEase')
+const hideNotes = createModel('hideNotes')*/
 const groupId = createModel('groupId')
 const beat = createModel('beat')
 </script>
@@ -24,9 +24,9 @@ const beat = createModel('beat')
 <template>
     <PropertiesModal :title="i18n.tools.timeScale.modal.title">
         <MultiTimeScaleField v-model="timeScale" />
-        <MultiSkipField v-model="skip" />
-        <MultiTimeScaleEaseField v-model="ease" />
-        <MultiHideNotesField v-model="hideNotes" />
+        <!--MultiSkipField v-model="skip" />
+        <MultiTimeScaleEaseField v-model="timeScaleEase" />
+        <MultiHideNotesField v-model="hideNotes" /-->
         <MultiGroupField v-model="groupId" />
         <MultiBeatField v-if="entities.length === 1" v-model="beat" />
     </PropertiesModal>

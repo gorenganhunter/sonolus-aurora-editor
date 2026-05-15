@@ -1,5 +1,5 @@
 import { type BaseEntity } from '.'
-import type { WaypointObject } from '../../chart'
+import type { WaypointObject } from '../../chart/waypoint'
 
 export type WaypointEntity = BaseEntity & {
     type: 'waypoint'

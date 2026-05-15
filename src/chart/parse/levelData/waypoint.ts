@@ -1,5 +1,5 @@
 import { EngineArchetypeDataName, EngineArchetypeName, type LevelDataEntity } from '@sonolus/core'
-import { getValue, type ParseToChart } from '.'
+import { getValue } from '.'
 import { beatSchema } from './schemas'
 import type { Chart } from '../..'
 

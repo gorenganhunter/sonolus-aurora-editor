@@ -1,5 +1,6 @@
 import { ref } from 'vue'
 import type { Tool } from '..'
+import type { GroupId } from '../../../chart/groups'
 import type {
     ConnectorEase,
     // ConnectorGuideColor,
@@ -10,12 +11,11 @@ import type {
     NoteType,
     ShortenEarlyWindow,
     // TimeScaleEase,
-} from '../../../chart'
+} from '../../../chart/note'
 import { pushState, replaceState, state } from '../../../history'
 import { selectedEntities } from '../../../history/selectedEntities'
 import { i18n } from '../../../i18n'
 import type { Entity } from '../../../state/entities'
-import type { GroupId } from '../../../state/groups'
 import { createTransaction, type Transaction } from '../../../state/transaction'
 import { interpolate } from '../../../utils/interpolate'
 import { notify } from '../../notification'
@@ -156,10 +156,14 @@ export const brush: Tool = {
 type Apply<T> = (transaction: Transaction, entity: T, object: BrushProperties) => Entity[]
 
 const applies: {
-    [T in Entity as T['type']]?: Apply<T>
+    [T in Entity as T['type']]: Apply<T> | undefined
 } = {
+    bpm: undefined,
     timeScale: editSelectedTimeScale,
+
     note: editSelectedNote,
+    connector: undefined,
+    waypoint: undefined
 }
 
 const apply = (entities: Entity[]) => {
