@@ -7,7 +7,7 @@ import type {
     // ConnectorLayer,
     // ConnectorType,
     FlickDirection,
-    // NoteSfx,
+    NoteSfx,
     NoteType,
     ShortenEarlyWindow,
     // TimeScaleEase,
@@ -39,7 +39,7 @@ export type BrushProperties = {
     flickDirection?: FlickDirection
     shortenEarlyWindow?: ShortenEarlyWindow
     // isFake?: boolean
-    // sfx?: NoteSfx
+    sfx?: NoteSfx
     // isConnectorSeparator?: boolean
     // connectorType?: ConnectorType
     connectorEase?: ConnectorEase

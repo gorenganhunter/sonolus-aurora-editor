@@ -10,7 +10,7 @@ export type NoteFields = {
     flickDirection: boolean
     shortenEarlyWindow: boolean
     // isFake: boolean
-    // sfx: boolean
+    sfx: boolean
     // isConnectorSeparator: boolean
     // connectorType: boolean
     connectorEase: boolean
@@ -48,7 +48,7 @@ export const getNoteFields = (note: NoteEntity): NoteFields => {
             (note.noteType === 'default'),
         shortenEarlyWindow: !isAnchor,
         // isFake: note.noteType !== 'anchor',
-        // sfx: !note.isFake,
+        sfx: !isAnchor,
         // isConnectorSeparator: !isFirst && !isLast,
         // connectorType: (isFirst || note.isConnectorSeparator) && !isLast,
         connectorEase: (isFirst || !note.isAttached) && !isLast,

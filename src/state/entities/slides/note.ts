@@ -8,7 +8,7 @@ import type {
     // ConnectorType,
     FlickDirection,
     NoteObject,
-    // NoteSfx,
+    NoteSfx,
     NoteType,
     ShortenEarlyWindow,
 } from '../../../chart/note'
@@ -24,7 +24,7 @@ export type NoteEntity = BaseEntity & {
     flickDirection: FlickDirection
     shortenEarlyWindow: ShortenEarlyWindow
     // isFake: boolean
-    // sfx: NoteSfx
+    sfx: NoteSfx
     // isConnectorSeparator: boolean
     // connectorType: ConnectorType
     connectorEase: ConnectorEase
@@ -59,6 +59,7 @@ export const toNoteEntity = (
     // spawnLane: object.spawnLane,
     flickDirection: object.flickDirection,
     shortenEarlyWindow: object.shortenEarlyWindow,
+    sfx: object.sfx,
     connectorEase: object.connectorEase,
     // isFake: object.isFake,
 

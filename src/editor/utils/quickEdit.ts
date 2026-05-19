@@ -4,7 +4,7 @@ import type {
     // ConnectorLayer,
     // ConnectorType,
     FlickDirection,
-    // NoteSfx,
+    NoteSfx,
     NoteType,
     ShortenEarlyWindow,
 } from '../../chart/note'
@@ -91,23 +91,23 @@ export const quickEdit = (properties: DefaultNoteSlideProperties) => {
         // case 'isFake':
         //     editSelectedEditableEntities({ isFake: !value })
         //     break
-        // case 'sfx':
-        //     editSelectedEditableEntities({
-        //         sfx: rotate(value as NoteSfx, [
-        //             'default',
-        //             'none',
-        //             'normalTap',
-        //             'criticalTap',
-        //             'normalFlick',
-        //             'criticalFlick',
-        //             'normalTrace',
-        //             'criticalTrace',
-        //             'normalTick',
-        //             'criticalTick',
-        //             'damage',
-        //         ]),
-        //     })
-        //     break
+        case 'sfx':
+            editSelectedEditableEntities({
+                sfx: rotate(value as NoteSfx, [
+                    'default',
+                    'none',
+                    //             'normalTap',
+                    //             'criticalTap',
+                    //             'normalFlick',
+                    //             'criticalFlick',
+                    //             'normalTrace',
+                    //             'criticalTrace',
+                    //             'normalTick',
+                    //             'criticalTick',
+                    //             'damage',
+                ]),
+            })
+            break
         // case 'isConnectorSeparator':
         //     editSelectedEditableEntities({ isConnectorSeparator: !value })
         //     break

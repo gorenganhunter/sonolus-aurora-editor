@@ -84,10 +84,10 @@ export const serializeSlidesToLevelDataEntities = (
                     //     name: 'segmentLayer',
                     //     value: segmentLayers[note.connectorLayer],
                     // },
-                    // {
-                    //     name: 'effectKind',
-                    //     value: sfxs[note.sfx],
-                    // },
+                    {
+                        name: 'sfx',
+                        value: sfxs[note.sfx],
+                    },
                 ],
                 name: getName()
             }
@@ -361,19 +361,19 @@ const earlyWindows = {
     good: 3
 }
 //
-// const sfxs = {
-//     default: 0,
-//     none: 1,
-//     normalTap: 2,
-//     criticalTap: 6,
-//     normalFlick: 3,
-//     criticalFlick: 7,
-//     normalTrace: 4,
-//     criticalTrace: 8,
-//     normalTick: 5,
-//     criticalTick: 9,
-//     damage: 10,
-// }
+const sfxs = {
+    default: 0,
+    none: 1,
+    //     normalTap: 2,
+    //     criticalTap: 6,
+    //     normalFlick: 3,
+    //     criticalFlick: 7,
+    //     normalTrace: 4,
+    //     criticalTrace: 8,
+    //     normalTick: 5,
+    //     criticalTick: 9,
+    //     damage: 10,
+}
 //
 const connectorEases = {
     linear: 0,

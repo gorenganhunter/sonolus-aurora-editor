@@ -17,7 +17,7 @@ import OptionalIsAttachedField from '../../../modals/form/OptionalIsAttachedFiel
 // import OptionalIsCriticalField from '../../../modals/form/OptionalIsCriticalField.vue'
 // import OptionalIsFakeField from '../../../modals/form/OptionalIsFakeField.vue'
 import OptionalNoteTypeField from '../../../modals/form/OptionalNoteTypeField.vue'
-// import OptionalSfxField from '../../../modals/form/OptionalSfxField.vue'
+import OptionalSfxField from '../../../modals/form/OptionalSfxField.vue'
 // import OptionalSizeField from '../../../modals/form/OptionalSizeField.vue'
 // import OptionalSkipField from '../../../modals/form/OptionalSkipField.vue'
 // import OptionalTimeScaleEaseField from '../../../modals/form/OptionalTimeScaleEaseField.vue'
@@ -35,7 +35,7 @@ const isAttached = createModel('isAttached')
 const flickDirection = createModel('flickDirection')
 const shortenEarlyWindow = createModel('shortenEarlyWindow')
 // const isFake = createModel('isFake')
-// const sfx = createModel('sfx')
+const sfx = createModel('sfx')
 // const isConnectorSeparator = createModel('isConnectorSeparator')
 // const connectorType = createModel('connectorType')
 const connectorEase = createModel('connectorEase')
@@ -59,9 +59,9 @@ const timeScale = createModel('timeScale')
         <OptionalIsCriticalField v-model="isCritical" /-->
         <OptionalFlickDirectionField v-model="flickDirection" />
         <OptionalShortenEarlyWindowField v-model="shortenEarlyWindow" />
-        <!--OptionalIsFakeField v-model="isFake" />
+        <!--OptionalIsFakeField v-model="isFake" /-->
         <OptionalSfxField v-model="sfx" />
-        <OptionalIsConnectorSeparatorField v-model="isConnectorSeparator" />
+        <!--OptionalIsConnectorSeparatorField v-model="isConnectorSeparator" />
         <OptionalConnectorTypeField v-model="connectorType" /-->
         <OptionalConnectorEaseField v-model="connectorEase" />
         <!--OptionalConnectorActiveIsCriticalField v-model="connectorActiveIsCritical" />

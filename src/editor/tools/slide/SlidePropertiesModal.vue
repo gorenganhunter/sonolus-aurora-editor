@@ -17,7 +17,7 @@ import MultiIsAttachedField from '../../../modals/form/MultiIsAttachedField.vue'
 // import MultiIsFakeField from '../../../modals/form/MultiIsFakeField.vue'
 import MultiLaneField from '../../../modals/form/MultiLaneField.vue'
 import MultiNoteTypeField from '../../../modals/form/MultiNoteTypeField.vue'
-// import MultiSfxField from '../../../modals/form/MultiSfxField.vue'
+import MultiSfxField from '../../../modals/form/MultiSfxField.vue'
 // import MultiSizeField from '../../../modals/form/MultiSizeField.vue'
 import PropertiesModal from '../../../modals/form/PropertiesModal.vue'
 import { useSelectedEntitiesProperties } from '../../utils/properties'
@@ -36,7 +36,7 @@ const lane = createModel('lane')
 const flickDirection = createModel('flickDirection')
 const shortenEarlyWindow = createModel('shortenEarlyWindow')
 // const isFake = createModel('isFake')
-// const sfx = createModel('sfx')
+const sfx = createModel('sfx')
 // const isConnectorSeparator = createModel('isConnectorSeparator')
 // const connectorType = createModel('connectorType')
 const connectorEase = createModel('connectorEase')
@@ -64,9 +64,9 @@ const connectorEase = createModel('connectorEase')
             v-if="noteFields.shortenEarlyWindow !== false"
             v-model="shortenEarlyWindow"
         />
-        <!--MultiIsFakeField v-if="noteFields.isFake !== false" v-model="isFake" />
+        <!--MultiIsFakeField v-if="noteFields.isFake !== false" v-model="isFake" /-->
         <MultiSfxField v-if="noteFields.sfx !== false" v-model="sfx" />
-        <MultiIsConnectorSeparatorField
+        <!--MultiIsConnectorSeparatorField
             v-if="noteFields.isConnectorSeparator !== false"
             v-model="isConnectorSeparator"
         />

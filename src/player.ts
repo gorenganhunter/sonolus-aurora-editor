@@ -104,7 +104,7 @@ watch(time, ({ now }) => {
 
         // if (entity.isFake) continue
 
-        // if (entity.sfx === 'none') continue
+        if (entity.sfx === 'none') continue
         // if (entity.sfx === 'damage') continue
         //
         // if (entity.sfx !== 'default') {

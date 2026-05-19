@@ -15,9 +15,9 @@ export type FlickDirection =
     | 'downLeft'
     | 'downRight'*/
 
-// export type NoteSfx =
-//     | 'default'
-//     | 'none'
+export type NoteSfx =
+    | 'default'
+    | 'none'
 //     | 'normalTap'
 //     | 'criticalTap'
 //     | 'normalFlick'
@@ -59,7 +59,7 @@ export type NoteObject = {
     flickDirection: FlickDirection
     shortenEarlyWindow: ShortenEarlyWindow
     // isFake: boolean
-    // sfx: NoteSfx
+    sfx: NoteSfx
     // isConnectorSeparator: boolean
     // connectorType: ConnectorType
     connectorEase: ConnectorEase

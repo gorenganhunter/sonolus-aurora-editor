@@ -147,33 +147,33 @@ const directions = {
     // 5: 'downRight',
 } as const
 
-// const sfxSchema = Type.Union([
-//     Type.Literal(0),
-//     Type.Literal(1),
-//     Type.Literal(2),
-//     Type.Literal(3),
-//     Type.Literal(4),
-//     Type.Literal(5),
-//     Type.Literal(6),
-//     Type.Literal(7),
-//     Type.Literal(8),
-//     Type.Literal(9),
-//     Type.Literal(10),
-// ])
-//
-// const sfxs = {
-//     0: 'default',
-//     1: 'none',
-//     2: 'normalTap',
-//     3: 'normalFlick',
-//     4: 'normalTrace',
-//     5: 'normalTick',
-//     6: 'criticalTap',
-//     7: 'criticalFlick',
-//     8: 'criticalTrace',
-//     9: 'criticalTick',
-//     10: 'damage',
-// } as const
+const sfxSchema = Type.Union([
+    Type.Literal(0),
+    Type.Literal(1),
+    // Type.Literal(2),
+    // Type.Literal(3),
+    // Type.Literal(4),
+    // Type.Literal(5),
+    // Type.Literal(6),
+    // Type.Literal(7),
+    // Type.Literal(8),
+    // Type.Literal(9),
+    // Type.Literal(10),
+])
+
+const sfxs = {
+    0: 'default',
+    1: 'none',
+    // 2: 'normalTap',
+    // 3: 'normalFlick',
+    // 4: 'normalTrace',
+    // 5: 'normalTick',
+    // 6: 'criticalTap',
+    // 7: 'criticalFlick',
+    // 8: 'criticalTrace',
+    // 9: 'criticalTick',
+    // 10: 'damage',
+} as const
 //
 // const isSeparatorSchema = Type.Number()
 //
@@ -339,6 +339,7 @@ const toNoteObject = (
         lane,
         flickDirection: direction === undefined ? "none" : directions[direction],
         shortenEarlyWindow: earlyCut === undefined ? 'none' : earlyWindows[earlyCut],
+        sfx: sfxs[getOptionalValue(entity, 'sfx', sfxSchema) ?? 0],
         connectorEase: connectorEase === undefined ? 'linear' : connectorEases[connectorEase]
     }
 
