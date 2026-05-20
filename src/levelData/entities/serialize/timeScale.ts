@@ -22,9 +22,13 @@ export const serializeTimeScalesToLevelDataEntities = (
 
     const entities: LevelDataEntity[] = []
 
+    const added: GroupId[] = []
+
     for (const [groupId, timeScales] of timeScalesByGroup) {
         const timeScaleGroup = groupEntities.get(groupId)
         if (!timeScaleGroup) throw new Error('Unexpected missing group')
+
+        added.push(groupId)
 
         let prev: LevelDataEntity | undefined
         entities.push(
@@ -78,6 +82,10 @@ export const serializeTimeScalesToLevelDataEntities = (
                     return (prev = entity)
                 }),
         )
+    }
+
+    for (const [id, entity] of groupEntities.entries()) {
+        if (!added.includes(id)) entities.push(entity)
     }
 
     return entities
