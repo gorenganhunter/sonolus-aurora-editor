@@ -7,7 +7,10 @@
 <template>
     <circle :cx="0" :cy="0" :r="0.5" fill="#ff50cb" />
     
-    <text :x="0" :y="0" text-anchor="middle" dominant-baseline="middle" fill="#fff" font-size="1">٨</text>
+    <svg :x="-0.5" :y="-0.5" :width="1" :height="1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+        <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+        <path fill="#fff" d="M297.4 201.4C309.9 188.9 330.2 188.9 342.7 201.4L502.7 361.4C515.2 373.9 515.2 394.2 502.7 406.7C490.2 419.2 469.9 419.2 457.4 406.7L320 269.3L182.6 406.6C170.1 419.1 149.8 419.1 137.3 406.6C124.8 394.1 124.8 373.8 137.3 361.3L297.3 201.3z"/>
+    </svg>
     <!--rect x="0" y="0" :width="size" height="0.8" rx="0.1" ry="0.1" fill="#aabfff" />
     <rect x="0.1" y="0.1" :width="size - 0.2" height="0.6" rx="0.1" ry="0.1" fill="#e6edff" />
     <rect x="0.1" y="0.3" width="0.2" height="0.2" fill="#0f0" />

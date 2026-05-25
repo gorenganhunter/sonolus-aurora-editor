@@ -11,7 +11,7 @@ import { lerp, unlerp } from '../utils/math'
 import { state } from "../history"
 // import { rotate, resize, moveX, moveY } from './events'
 import { getLane } from './lane'
-import { noteDuration, approachPos, approachSize } from './note'
+import { noteDuration, approachPos, approachSize, arrows } from './note'
 import { Vec } from "./Vec"
 
 const notes = computed(() =>
@@ -75,7 +75,7 @@ const notes = computed(() =>
             s: isTick ? size * 0.8 : size,
             stroke: color,
             color: isTick ? "#00000000" : color,
-            text: flickDirection === 'left' ? "<" : flickDirection === 'right' ? ">" : flickDirection === 'up' ? "٨" : flickDirection === 'down' ? "v" : ""
+            arrows: flickDirection !== 'none' ? arrows[flickDirection] : null
         }
 
             // return {
@@ -88,9 +88,12 @@ const notes = computed(() =>
 <template>
     <g stroke="white" stroke-width="0">
         <!--polygon v-for="(polygon, index) in tapNotes" :key="index" v-bind="polygon" /-->
-        <template v-for="({ cx, cy, s, stroke, color, text }, index) in notes" :key="index">
+        <template v-for="({ cx, cy, s, stroke, color, arrows }, index) in notes" :key="index">
             <circle :cx :cy :r="0.1 * s" :stroke :fill="color" :stroke-width="0.02 * s"/>
-            <text :x="cx" :y="cy" text-anchor="middle" dominant-baseline="central" fill="#fff" :font-size="0.24 * s">{{ text }}</text>
+            <svg v-if="arrows" :x="cx - 0.1 * s" :y="cy - 0.1 * s" :width="0.2 * s" :height="0.2 * s" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+                <path fill="#fff" :d="arrows" />
+            </svg>
         </template>
     </g>
 </template>
