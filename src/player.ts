@@ -1,20 +1,20 @@
-import { watch } from 'vue'
-import defaultTapUrl from './assets/se/default/perfect.mp3'
-import defaultTickUrl from './assets/se/default/tick.mp3'
-import defaultFlickUrl from './assets/se/default/flick.mp3'
-import defaultConnectorUrl from './assets/se/default/connect.mp3'
-import alt2TapUrl from './assets/se/alt2/perfect.mp3'
-import alt2TickUrl from './assets/se/alt2/tick.mp3'
-import alt2FlickUrl from './assets/se/alt2/flick.mp3'
-import alt2ConnectorUrl from './assets/se/alt2/connect.mp3'
-import alt3TapUrl from './assets/se/alt3/perfect.mp3'
-import alt3TickUrl from './assets/se/alt3/tick.mp3'
-import alt3FlickUrl from './assets/se/alt3/flick.mp3'
-import alt3ConnectorUrl from './assets/se/alt3/connect.mp3'
-import alt4TapUrl from './assets/se/alt4/perfect.mp3'
-import alt4TickUrl from './assets/se/alt4/tick.mp3'
-import alt4FlickUrl from './assets/se/alt4/flick.mp3'
-import alt4ConnectorUrl from './assets/se/alt4/connect.mp3'
+import { ref, watch } from 'vue'
+import defaultTapUrl from './assets/se/default/perfect.mp3?url'
+import defaultTickUrl from './assets/se/default/tick.mp3?url'
+import defaultFlickUrl from './assets/se/default/flick.mp3?url'
+import defaultConnectorUrl from './assets/se/default/connect.mp3?url'
+import alt2TapUrl from './assets/se/alt2/perfect.mp3?url'
+import alt2TickUrl from './assets/se/alt2/tick.mp3?url'
+import alt2FlickUrl from './assets/se/alt2/flick.mp3?url'
+import alt2ConnectorUrl from './assets/se/alt2/connect.mp3?url'
+import alt3TapUrl from './assets/se/alt3/perfect.mp3?url'
+import alt3TickUrl from './assets/se/alt3/tick.mp3?url'
+import alt3FlickUrl from './assets/se/alt3/flick.mp3?url'
+import alt3ConnectorUrl from './assets/se/alt3/connect.mp3?url'
+import alt4TapUrl from './assets/se/alt4/perfect.mp3?url'
+import alt4TickUrl from './assets/se/alt4/tick.mp3?url'
+import alt4FlickUrl from './assets/se/alt4/flick.mp3?url'
+import alt4ConnectorUrl from './assets/se/alt4/connect.mp3?url'
 import { view } from './editor/view'
 import { bgm } from './history/bgm'
 import { bpms } from './history/bpms'
@@ -64,9 +64,6 @@ type ActiveAudio = {
     endBeat: number
 }
 
-let bgmVolumeMultiplier = 1
-let sfxVolumeMultiplier = 1
-
 let state:
     | {
         speed: number
@@ -84,6 +81,34 @@ let state:
         }
     }
     | undefined
+
+export const isBgmEnabled = ref(true)
+watch(isBgmEnabled, () => {
+    if (!state) return
+
+    const value = isBgmEnabled.value ? settings.playBgmVolume / 100 : 0
+
+    for (const node of state.bgmNodes) {
+        node.gain.value = value
+    }
+})
+
+export const isSfxEnabled = ref(true)
+watch(isSfxEnabled, () => {
+    if (!state) return
+
+    const value = isSfxEnabled.value ? settings.playSfxVolume / 100 : 0
+
+    for (const node of state.sfxNodes) {
+        node.gain.value = value
+    }
+
+    for (const actives of Object.values(state.actives)) {
+        for (const { node } of actives) {
+            node.gain.value = value
+        }
+    }
+})
 
 let preview: AudioNode | undefined
 
@@ -313,7 +338,7 @@ watch(time, ({ now }) => {
                 schedule(
                     state.sfxNodes,
                     sfxBuffers[pack][type],
-                    settings.playSfxVolume * sfxVolumeMultiplier,
+                    isSfxEnabled.value ? settings.playSfxVolume : 0,
                     (beatToTime(bpms.value, beat) - state.bgmTime) / state.speed +
                     state.contextTime +
                     delay,
@@ -350,7 +375,7 @@ watch(time, ({ now }) => {
                 sfxBuffers[type].connector,
                 entity.head.beat,
                 entity.tail.beat,
-                settings.playSfxVolume * sfxVolumeMultiplier,
+                isSfxEnabled.value ? settings.playSfxVolume : 0,
                 (beatToTime(bpms.value, entity.head.beat) - state.bgmTime) / state.speed +
                 state.contextTime +
                 delay,
@@ -393,7 +418,7 @@ export const startPlayer = (bgmTime: number, speed: number) => {
         schedule(
             state.bgmNodes,
             bgm.value.buffer,
-            settings.playBgmVolume * bgmVolumeMultiplier,
+            isBgmEnabled.value ? settings.playBgmVolume : 0,
             contextTime + delay,
             bgmTime + bgm.value.offset,
             speed,
@@ -447,32 +472,6 @@ export const previewPlayer = () => {
     const time = context.currentTime
     gain.gain.linearRampToValueAtTime(0, time + duration)
     source.start(time, offset, duration)
-}
-
-export const togglePlayerBgmVolume = () => {
-    bgmVolumeMultiplier = 1 - bgmVolumeMultiplier
-
-    if (!state) return
-
-    for (const node of state.bgmNodes) {
-        node.gain.value = (settings.playBgmVolume * bgmVolumeMultiplier) / 100
-    }
-}
-
-export const togglePlayerSfxVolume = () => {
-    sfxVolumeMultiplier = 1 - sfxVolumeMultiplier
-
-    if (!state) return
-
-    for (const node of state.sfxNodes) {
-        node.gain.value = (settings.playSfxVolume * sfxVolumeMultiplier) / 100
-    }
-
-    for (const actives of Object.values(state.actives)) {
-        for (const { node } of actives) {
-            node.gain.value = (settings.playSfxVolume * sfxVolumeMultiplier) / 100
-        }
-    }
 }
 
 const startContext = () => {
