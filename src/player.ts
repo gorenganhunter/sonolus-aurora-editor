@@ -1,4 +1,4 @@
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import defaultTapUrl from './assets/se/default/perfect.mp3?url'
 import defaultTickUrl from './assets/se/default/tick.mp3?url'
 import defaultFlickUrl from './assets/se/default/flick.mp3?url'
@@ -64,46 +64,46 @@ type ActiveAudio = {
     endBeat: number
 }
 
-let state:
-    | {
-        speed: number
-        time: number
-        bgmTime: number
-        contextTime: number
-        lastTime: number
-        bgmNodes: Set<GainNode>
-        sfxNodes: Set<GainNode>
-        actives: {
-            default: Set<ActiveAudio>,
-            alt2: Set<ActiveAudio>,
-            alt3: Set<ActiveAudio>,
-            alt4: Set<ActiveAudio>,
-        }
+const state = ref<{
+    speed: number
+    time: number
+    bgmTime: number
+    contextTime: number
+
+    lastTime: number
+    bgmNodes: Set<GainNode>
+    sfxNodes: Set<GainNode>
+    actives: {
+        default: Set<ActiveAudio>,
+        alt2: Set<ActiveAudio>,
+        alt3: Set<ActiveAudio>,
+        alt4: Set<ActiveAudio>,
     }
-    | undefined
+}>()
+export const isPlaying = computed(() => !!state.value)
 
 export const isBgmEnabled = ref(true)
 watch(isBgmEnabled, () => {
-    if (!state) return
+    if (!state.value) return
 
     const value = isBgmEnabled.value ? settings.playBgmVolume / 100 : 0
 
-    for (const node of state.bgmNodes) {
+    for (const node of state.value.bgmNodes) {
         node.gain.value = value
     }
 })
 
 export const isSfxEnabled = ref(true)
 watch(isSfxEnabled, () => {
-    if (!state) return
+    if (!state.value) return
 
     const value = isSfxEnabled.value ? settings.playSfxVolume / 100 : 0
 
-    for (const node of state.sfxNodes) {
+    for (const node of state.value.sfxNodes) {
         node.gain.value = value
     }
 
-    for (const actives of Object.values(state.actives)) {
+    for (const actives of Object.values(state.value.actives)) {
         for (const { node } of actives) {
             node.gain.value = value
         }
@@ -113,11 +113,17 @@ watch(isSfxEnabled, () => {
 let preview: AudioNode | undefined
 
 watch(time, ({ now }) => {
-    if (!state) return
+    if (!state.value) return
 
     const beats = {
-        min: timeToBeat(bpms.value, (state.lastTime - state.time) * state.speed + state.bgmTime),
-        max: timeToBeat(bpms.value, (now - state.time) * state.speed + state.bgmTime),
+        min: timeToBeat(
+            bpms.value,
+            (state.value.lastTime - state.value.time) * state.value.speed + state.value.bgmTime,
+        ),
+        max: timeToBeat(
+            bpms.value,
+            (now - state.value.time) * state.value.speed + state.value.bgmTime,
+        ),
     }
 
     const keys = {
@@ -336,11 +342,11 @@ watch(time, ({ now }) => {
 
             for (const beat of beats) {
                 schedule(
-                    state.sfxNodes,
+                    state.value.sfxNodes,
                     sfxBuffers[pack][type],
                     isSfxEnabled.value ? settings.playSfxVolume : 0,
-                    (beatToTime(bpms.value, beat) - state.bgmTime) / state.speed +
-                    state.contextTime +
+                    (beatToTime(bpms.value, beat) - state.value.bgmTime) / state.value.speed +
+                    state.value.contextTime +
                     delay,
                 )
             }
@@ -371,22 +377,25 @@ watch(time, ({ now }) => {
 
         for (const entity of entities.sort((a, b) => a.head.beat - b.head.beat)) {
             scheduleActive(
-                state.actives[type],
+
+                state.value.actives[type],
                 sfxBuffers[type].connector,
                 entity.head.beat,
                 entity.tail.beat,
                 isSfxEnabled.value ? settings.playSfxVolume : 0,
-                (beatToTime(bpms.value, entity.head.beat) - state.bgmTime) / state.speed +
-                state.contextTime +
-                delay,
-                (beatToTime(bpms.value, entity.tail.beat) - state.bgmTime) / state.speed +
-                state.contextTime +
-                delay,
+                (beatToTime(bpms.value, entity.head.beat) - state.value.bgmTime) /
+                    state.value.speed +
+                    state.value.contextTime +
+                    delay,
+                (beatToTime(bpms.value, entity.tail.beat) - state.value.bgmTime) /
+                    state.value.speed +
+                    state.value.contextTime +
+                    delay,
             )
         }
     }
 
-    state.lastTime = now
+    state.value.lastTime = now
 })
 
 export const loadBgm = (data: ArrayBuffer) => context.decodeAudioData(data)
@@ -395,7 +404,7 @@ export const startPlayer = (bgmTime: number, speed: number) => {
     const time = performance.now() / 1000
     const contextTime = context.currentTime
 
-    state = {
+    state.value = {
         speed,
         time,
         bgmTime,
@@ -416,7 +425,7 @@ export const startPlayer = (bgmTime: number, speed: number) => {
 
     if (bgm.value.buffer)
         schedule(
-            state.bgmNodes,
+            state.value.bgmNodes,
             bgm.value.buffer,
             isBgmEnabled.value ? settings.playBgmVolume : 0,
             contextTime + delay,
@@ -428,22 +437,22 @@ export const startPlayer = (bgmTime: number, speed: number) => {
 }
 
 export const stopPlayer = () => {
-    if (!state) return
+    if (!state.value) return
 
-    for (const node of state.bgmNodes) {
+    for (const node of state.value.bgmNodes) {
         node.disconnect()
     }
-    for (const node of state.sfxNodes) {
+    for (const node of state.value.sfxNodes) {
         node.disconnect()
     }
 
-    for (const actives of Object.values(state.actives)) {
+    for (const actives of Object.values(state.value.actives)) {
         for (const { node } of actives) {
             node.disconnect()
         }
     }
 
-    state = undefined
+    state.value = undefined
 }
 
 export const previewPlayer = () => {
