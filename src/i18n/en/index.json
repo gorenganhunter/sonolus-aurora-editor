@@ -289,6 +289,22 @@
             "title": "Waypoint",
             "switched": "Switched to Waypoint tool"
         },
+        "visibilities": {
+            "cycle": {
+                "title": "Cycle Object Visibilities",
+                "cycled": "Cycled object visibilities"
+            },
+            "toggle": {
+                "title": "Toggle {0} Visibility",
+                "toggled": "Toggled {0} visibility",
+                "types": {
+                    "note": "Note",
+                    "timeScale": "Time Scale",
+                    "bpm": "BPM",
+                    "waypoint": "Waypoint"
+                }
+            }
+        },
         "zooms": {
             "zoomXIn": {
                 "title": "Zoom in X",

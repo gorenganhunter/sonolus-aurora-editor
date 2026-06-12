@@ -20,6 +20,7 @@ const getLayer = (entity: Entity) => {
             return layers.connector
     }
 }
+
 </script>
 
 <script setup lang="ts">
@@ -78,7 +79,9 @@ const visibleEntityInfos = computed(() => {
 
     return entities.sort(
         (a, b) =>
-            +a.isSelected - +b.isSelected || a.layer - b.layer || b.entity.beat - a.entity.beat,
+            +a.isSelected - +b.isSelected ||
+            a.layer - b.layer ||
+            b.entity.beat - a.entity.beat,
     )
 })
 </script>
@@ -90,6 +93,6 @@ const visibleEntityInfos = computed(() => {
         :key="entity as never"
         :entity="entity as never"
         :is-highlighted="isSelected || isHovered"
-        :opacity="isVisible ? 1 : 0.25"
+        :opacity="view.visibilities[entity.type] && isVisible ? 1 : 0.25"
     />
 </template>

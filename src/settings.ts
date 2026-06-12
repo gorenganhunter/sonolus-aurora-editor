@@ -314,6 +314,13 @@ export const settingsProperties = {
                         'waypoint',
                     ],
                     [
+                        'waypointVisibility',
+                        'bpmVisibility',
+                        'timeScaleVisibility',
+                        'noteVisibility',
+                        'cycleVisibilities',
+                    ],
+                    [
                         'keepTiming',
                         'snapping',
                         'divisionCustom',
@@ -453,6 +460,7 @@ export const settingsProperties = {
                 division12: { key: '9' },
                 division16: { key: '0' },
                 divisionCustom: { key: '`' },
+                cycleVisibilities: { key: '/' },
                 snapping: { key: 'i' },
                 keepTiming: { key: 'l' },
                 zoomXIn: { key: ']' },

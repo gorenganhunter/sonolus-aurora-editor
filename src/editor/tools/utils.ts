@@ -66,8 +66,27 @@ export const toSelection = (startLane: number, startTime: number, x: number, y: 
     }
 }
 
-const isVisible = (entity: Entity) =>
-    view.groupId === undefined ||
-    entity.type === 'bpm' ||
-    entity.type === 'waypoint' ||
-    (entity.type !== 'connector' && entity.groupId === view.groupId)
+// <<<<<<< HEAD
+// const isVisible = (entity: Entity) =>
+//     view.groupId === undefined ||
+//     entity.type === 'bpm' ||
+//     entity.type === 'waypoint' ||
+//     (entity.type !== 'connector' && entity.groupId === view.groupId)
+// =======
+const isVisible = (entity: Entity) => {
+    if (!view.visibilities[entity.type]) return false
+
+    switch (entity.type) {
+        case 'bpm':
+        case 'waypoint':
+            return true
+        case 'timeScale':
+            return view.groupId === undefined || entity.groupId === view.groupId
+        case 'note':
+            return (
+                (view.groupId === undefined || entity.groupId === view.groupId)
+            )
+        case 'connector':
+            return false
+    }
+}

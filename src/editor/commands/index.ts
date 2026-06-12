@@ -44,6 +44,10 @@ import { toggleBgmVolume } from './toggleVolume/bgm'
 import { toggleSfxVolume } from './toggleVolume/sfx'
 import { undo } from './undo'
 import { utilities } from './utilities'
+import { bpmVisibility } from './visibilities/bpm'
+import { cycleVisibilities } from './visibilities/cycle'
+import { noteVisibility } from './visibilities/note'
+import { timeScaleVisibility } from './visibilities/timeScale'
 import { zoomXIn } from './zooms/zoomXIn'
 import { zoomXOut } from './zooms/zoomXOut'
 import { zoomYIn } from './zooms/zoomYIn'
@@ -55,6 +59,7 @@ import { keepTiming } from './keepTiming'
 import { snap } from './snap'
 import { markerPrev } from './markers/markerPrev'
 import { markerNext } from './markers/markerNext'
+import { waypointVisibility } from './visibilities/waypoint'
 
 export type Command = {
     title: () => string
@@ -128,6 +133,12 @@ export const commands = {
     scrollPageDown,
     jumpUp,
     jumpDown,
+
+    cycleVisibilities,
+    noteVisibility,
+    timeScaleVisibility,
+    bpmVisibility,
+    waypointVisibility,
 
     division1: division(1),
     division2: division(2),

@@ -35,6 +35,16 @@ export const view = shallowReactive({
 
     groupId: optional<GroupId>(),
 
+    visibilities: {
+        bpm: true,
+        timeScale: true,
+
+        waypoint: true,
+
+        note: true,
+        connector: true,
+    },
+
     pointer: {
         x: 0,
         y: 0,
