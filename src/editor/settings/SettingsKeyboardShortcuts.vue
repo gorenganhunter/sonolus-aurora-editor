@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { i18n } from '../../i18n'
 import KeyField from '../../modals/form/KeyField.vue'
-import { settings } from '../../settings'
+import { settings, type KeyboardShortcut } from '../../settings'
 import { commands, type CommandName } from '../commands'
 import SettingsSection from './SettingsSection.vue'
 
 const getKey = (name: CommandName) => settings.keyboardShortcuts[name]
 
-const setKey = (name: CommandName, key: string | undefined) => {
+const setKey = (name: CommandName, key: KeyboardShortcut | undefined) => {
     settings.keyboardShortcuts = {
         ...settings.keyboardShortcuts,
         [name]: key,

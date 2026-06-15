@@ -3,12 +3,13 @@ import { ref } from 'vue'
 import { i18n } from '../../i18n'
 import { formatShortcut } from '../../utils/format'
 import BaseField from './BaseField.vue'
+import type { KeyboardShortcut } from '../../settings.ts';
 
 defineProps<{
     label: string
 }>()
 
-const modelValue = defineModel<string | undefined>({ required: true })
+const modelValue = defineModel<KeyboardShortcut | undefined>({ required: true })
 
 const isActive = ref(false)
 
@@ -21,7 +22,7 @@ const onClick = () => {
 const onKeyDown = (event: KeyboardEvent) => {
     if (!isActive.value) return
 
-    modelValue.value = event.key
+    modelValue.value = { key: event.key, ctrl: event.ctrlKey, shift: event.shiftKey, alt: event.altKey }
 }
 
 const onBlur = () => {

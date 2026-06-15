@@ -1,5 +1,7 @@
 // import type { TimeScaleEase } from '../chart'
 
+import type { KeyboardShortcut } from "../settings"
+
 export const formatIntegerTime = (time: number) =>
     `${`${Math.floor(time / 60)}`.padStart(2, '0')}:${`${time % 60}`.padStart(2, '0')}`
 
@@ -27,5 +29,9 @@ export const formatTimeScale = (value: number/*, skip: number, ease: TimeScaleEa
     return text
 }
 
-export const formatShortcut = (shortcut: string | undefined) =>
-    shortcut === ' ' ? 'Space' : shortcut
+export const formatShortcut = (shortcut: KeyboardShortcut | undefined) => {
+    if (!shortcut) return shortcut
+    shortcut.key = shortcut.key === ' ' ? 'Space' : shortcut.key
+
+    return (shortcut.ctrl && shortcut.key !== "Control" ? "Ctrl and " : "") + (shortcut.shift && shortcut.key !== "Shift" ? "Shift and " : "") + (shortcut.alt && shortcut.key !== "Alt" ? "Alt and " : "") + shortcut.key
+}
