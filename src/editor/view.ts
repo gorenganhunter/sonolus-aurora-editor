@@ -209,14 +209,18 @@ export const scrollViewXBy = (dx: number, smooth = false) => {
                 time: time.value.now + 0.25,
                 viewLane: clamp(
                     (view.scrollingX?.type === 'ease' ? view.scrollingX.to.viewLane : view.lane) +
-                    (dx / view.w) * settings.width,
-                    -12,
-                    12,
+                        (dx / view.w) * settings.width,
+                    -settings.maxScrollX,
+                    settings.maxScrollX,
                 ),
             },
         }
     } else {
-        view.lane = clamp(view.lane + (dx / view.w) * settings.width, -12, 12)
+        view.lane = clamp(
+            view.lane + (dx / view.w) * settings.width,
+            -settings.maxScrollX,
+            settings.maxScrollX,
+        )
     }
 }
 
