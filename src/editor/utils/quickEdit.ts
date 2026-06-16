@@ -11,11 +11,23 @@ import type {
 import { selectedEntities } from '../../history/selectedEntities'
 import type { DefaultNoteSlideProperties } from '../../settings'
 import { entries } from '../../utils/object'
+import { noteModifier } from '../controls/keyboard'
 import { editSelectedEditableEntities } from '../sidebars/default'
 
 export const quickEdit = (properties: DefaultNoteSlideProperties) => {
     let count = 0
     let key: Exclude<keyof DefaultNoteSlideProperties, 'copyProperties'> | undefined
+
+    let sc = false
+
+    for (const [k, v] of Object.entries(noteModifier)) {
+        if (v) sc = true
+    }
+
+    if (sc) {
+        editSelectedEditableEntities(noteModifier)
+        return
+    }
 
     for (const [k, v] of entries(properties)) {
         if (k === 'copyProperties') continue

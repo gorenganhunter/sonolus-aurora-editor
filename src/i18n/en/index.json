@@ -28,7 +28,6 @@
             "modal": {
                 "title": "Statistics",
                 "global": "Global",
-                "waypoints": "Waypoints",
                 "chartInfo": "Chart Info",
                 "level": "Level Estimation",
                 "hp": "Health Point",
@@ -393,6 +392,15 @@
     },
     "settings": {
         "title": "Settings",
+        "import": {
+            "title": "Import Settings"
+        },
+        "export": {
+            "title": "Export Settings"
+        },
+        "reset": {
+            "title": "Reset Settings"
+        },
         "editor": {
             "title": "Editor",
             "locale": "Language",
@@ -415,6 +423,9 @@
         },
         "keyboardShortcuts": {
             "title": "Keyboard Shortcuts"
+        },
+        "noteModifiers": {
+            "title": "Note Modifiers"
         },
         "mouse": {
             "title": "Mouse",

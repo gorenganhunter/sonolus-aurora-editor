@@ -29,6 +29,8 @@ import {
 import { hitEntitiesAtPoint, modifyEntities, offset, resize } from '../utils'
 import NotePropertiesModal from './NotePropertiesModal.vue'
 import NoteSidebar from './NoteSidebar.vue'
+import { noteModifier } from '../../controls/keyboard.ts'
+import { editSelectedEditableEntities } from '../../sidebars/default/index.ts'
 
 export const defaultNotePropertiesPresetIndex = ref(0)
 
@@ -112,6 +114,8 @@ export const note: Tool = {
                 }
                 focusViewAtBeat(entity.beat)
 
+                editSelectedEditableEntities(noteModifier)
+
                 notify(interpolate(() => i18n.value.tools.note.selected, `${targets.length}`))
             } else {
                 if (entities.every((entity) => selectedEntities.value.includes(entity))) {
@@ -132,6 +136,8 @@ export const note: Tool = {
                         creating: [],
                     }
                     focusViewAtBeat(entity.beat)
+
+                    editSelectedEditableEntities(noteModifier)
 
                     notify(interpolate(() => i18n.value.tools.note.selected, `${entities.length}`))
                 }
@@ -378,19 +384,19 @@ const getPropertiesFromSelection = () => {
     const note = getNoteFromSelection()
 
     return {
-        noteType: defaultNoteProperties.value.noteType ?? note?.noteType ?? 'default',
-        isAttached: defaultNoteProperties.value.isAttached ?? note?.isAttached ?? false,
+        noteType: noteModifier.noteType ?? defaultNoteProperties.value.noteType ?? note?.noteType ?? 'default',
+        isAttached: noteModifier.isAttached ?? defaultNoteProperties.value.isAttached ?? note?.isAttached ?? false,
         // size: defaultNoteProperties.value.size ?? note?.size ?? 3,
         // isCritical: defaultNoteProperties.value.isCritical ?? note?.isCritical ?? false,
         flickDirection:
-            defaultNoteProperties.value.flickDirection ?? note?.flickDirection ?? 'none',
+            noteModifier.flickDirection ?? defaultNoteProperties.value.flickDirection ?? note?.flickDirection ?? 'none',
         shortenEarlyWindow:
-            defaultNoteProperties.value.shortenEarlyWindow ?? note?.shortenEarlyWindow ?? 'none',
+            noteModifier.shortenEarlyWindow ?? defaultNoteProperties.value.shortenEarlyWindow ?? note?.shortenEarlyWindow ?? 'none',
         // isFake: defaultNoteProperties.value.isFake ?? note?.isFake ?? false,
-        sfx: defaultNoteProperties.value.sfx ?? note?.sfx ?? 'default',
+        sfx: noteModifier.sfx ?? defaultNoteProperties.value.sfx ?? note?.sfx ?? 'default',
         // isConnectorSeparator: defaultNoteProperties.value.isConnectorSeparator ?? false,
         // connectorType: defaultNoteProperties.value.connectorType ?? 'active',
-        connectorEase: defaultNoteProperties.value.connectorEase ?? 'linear',
+        connectorEase: noteModifier.connectorEase ?? defaultNoteProperties.value.connectorEase ?? 'linear',
         // connectorActiveIsCritical:
         //     defaultNoteProperties.value.connectorActiveIsCritical ??
         //     defaultNoteProperties.value.isCritical ??

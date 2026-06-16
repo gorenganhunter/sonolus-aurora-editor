@@ -6,92 +6,173 @@ import { defaultLocale } from './i18n/locale'
 import { localizations } from './i18n/localizations'
 import { storageGet, storageRemove, storageSet } from './storage'
 import { clamp } from './utils/math'
+import { FlickDirection } from './chart/note'
 
-export type KeyboardShortcut = {
-    key: string,
-    ctrl: boolean,
-    shift: boolean,
-    alt: boolean
-}
+const KeyboardShortcut = Type.Object({
+    key: Type.String(),
+    ctrl: Type.Optional(Type.Boolean({ default: false })),
+    shift: Type.Optional(Type.Boolean({ default: false })),
+    alt: Type.Optional(Type.Boolean({ default: false }))
+})
+
+export type KeyboardShortcut = Static<typeof KeyboardShortcut>
 
 const number = (def: number, min: number, max: number) =>
     Type.Transform(Type.Number({ default: def }))
         .Decode((value) => clamp(value, min, max))
         .Encode((value) => value)
 
+export const NoteModifier = Type.Object({
+    noteType: Type.Union([
+        Type.Literal('default'),
+        // Type.Literal('trace'),
+        Type.Literal('anchor'),
+        // Type.Literal('damage'),
+        // Type.Literal('forceTick'),
+        // Type.Literal('forceNonTick'),
+    ]),
+    isAttached: Type.Boolean(),
+    // size: Type.Number(),
+    // isCritical: Type.Boolean(),
+    flickDirection: Type.Union([
+        Type.Literal('none'),
+        Type.Literal('left'),
+        Type.Literal('right'),
+        Type.Literal('up'),
+        Type.Literal('down')
+        // Type.Literal('up'),
+        // Type.Literal('upLeft'),
+        // Type.Literal('upRight'),
+        // Type.Literal('down'),
+        // Type.Literal('downLeft'),
+        // Type.Literal('downRight'),
+    ]),
+    shortenEarlyWindow: Type.Union([
+        Type.Literal('none'),
+        Type.Literal('perfect'),
+        Type.Literal('great'),
+        Type.Literal('good'),
+    ]),
+    // isFake: Type.Boolean(),
+    sfx: Type.Union([
+        Type.Literal('default'),
+        Type.Literal('none'),
+        //     Type.Literal('normalTap'),
+        //     Type.Literal('criticalTap'),
+        //     Type.Literal('normalFlick'),
+        //     Type.Literal('criticalFlick'),
+        //     Type.Literal('normalTrace'),
+        //     Type.Literal('criticalTrace'),
+        //     Type.Literal('normalTick'),
+        //     Type.Literal('criticalTick'),
+        //     Type.Literal('damage'),
+    ]),
+    // isConnectorSeparator: Type.Boolean(),
+    // connectorType: Type.Union([Type.Literal('active'), Type.Literal('guide')]),
+    connectorEase: Type.Union([
+        Type.Literal('linear'),
+        Type.Literal('in'),
+        Type.Literal('out'),
+        Type.Literal('inOut'),
+        Type.Literal('outIn'),
+        Type.Literal('none'),
+    ]),
+    // connectorActiveIsCritical: Type.Boolean(),
+    // connectorActiveIsFake: Type.Boolean(),
+    // connectorGuideColor: Type.Union([
+    //     Type.Literal('neutral'),
+    //     Type.Literal('red'),
+    //     Type.Literal('green'),
+    //     Type.Literal('blue'),
+    //     Type.Literal('yellow'),
+    //     Type.Literal('purple'),
+    //     Type.Literal('cyan'),
+    //     Type.Literal('black'),
+    // ]),
+    // connectorGuideAlpha: Type.Number(),
+    // connectorLayer: Type.Union([Type.Literal('top'), Type.Literal('bottom')]),
+})
+
+export type NoteModifier = Static<typeof NoteModifier>
+
+export const NoteModifierRecord = Type.Partial(Type.Object({
+    noteType: Type.Partial(Type.Record(Type.Union([
+        Type.Literal('default'),
+        // Type.Literal('trace'),
+        Type.Literal('anchor'),
+        // Type.Literal('damage'),
+        // Type.Literal('forceTick'),
+        // Type.Literal('forceNonTick'),
+    ]), KeyboardShortcut)),
+    isAttached: Type.Partial(Type.Record(Type.Union([
+        Type.Literal("true"),
+        Type.Literal("false"),
+    ]), KeyboardShortcut)),
+    // size: Type.Number(),
+    // isCritical: Type.Boolean(),
+    flickDirection: Type.Partial(Type.Record(Type.Union([
+        Type.Literal('none'),
+        Type.Literal('left'),
+        Type.Literal('right'),
+        Type.Literal('up'),
+        Type.Literal('down')
+        // Type.Literal('up'),
+        // Type.Literal('upLeft'),
+        // Type.Literal('upRight'),
+        // Type.Literal('down'),
+        // Type.Literal('downLeft'),
+        // Type.Literal('downRight'),
+    ]), KeyboardShortcut)),
+    shortenEarlyWindow: Type.Partial(Type.Record(Type.Union([
+        Type.Literal('none'),
+        Type.Literal('perfect'),
+        Type.Literal('great'),
+        Type.Literal('good'),
+    ]), KeyboardShortcut)),
+    // isFake: Type.Boolean(),
+    sfx: Type.Partial(Type.Record(Type.Union([
+        Type.Literal('default'),
+        Type.Literal('none'),
+        //     Type.Literal('normalTap'),
+        //     Type.Literal('criticalTap'),
+        //     Type.Literal('normalFlick'),
+        //     Type.Literal('criticalFlick'),
+        //     Type.Literal('normalTrace'),
+        //     Type.Literal('criticalTrace'),
+        //     Type.Literal('normalTick'),
+        //     Type.Literal('criticalTick'),
+        //     Type.Literal('damage'),
+    ]), KeyboardShortcut)),
+    // isConnectorSeparator: Type.Boolean(),
+    // connectorType: Type.Partial(Type.Record(Type.Union([Type.Literal('active'), Type.Literal('guide')]), KeyboardShortcut)),
+    connectorEase: Type.Partial(Type.Record(Type.Union([
+        Type.Literal('linear'),
+        Type.Literal('in'),
+        Type.Literal('out'),
+        Type.Literal('inOut'),
+        Type.Literal('outIn'),
+        Type.Literal('none'),
+    ]), KeyboardShortcut)),
+    // connectorActiveIsCritical: Type.Boolean(),
+    // connectorActiveIsFake: Type.Boolean(),
+    // connectorGuideColor: Type.Partial(Type.Record(Type.Union([
+    //     Type.Literal('neutral'),
+    //     Type.Literal('red'),
+    //     Type.Literal('green'),
+    //     Type.Literal('blue'),
+    //     Type.Literal('yellow'),
+    //     Type.Literal('purple'),
+    //     Type.Literal('cyan'),
+    //     Type.Literal('black'),
+    // ]), KeyboardShortcut)),
+    // connectorGuideAlpha: Type.Number(),
+    // connectorLayer: Type.Partial(Type.Record(Type.Union([Type.Literal('top'), Type.Literal('bottom')]), KeyboardShortcut)),
+}))
+
+export type NoteModifierRecord = Static<typeof NoteModifierRecord>
+
 const defaultNoteSlidePropertiesSchema = Type.Intersect([
-    Type.Partial(
-        Type.Object({
-            noteType: Type.Union([
-                Type.Literal('default'),
-                // Type.Literal('trace'),
-                Type.Literal('anchor'),
-                // Type.Literal('damage'),
-                // Type.Literal('forceTick'),
-                // Type.Literal('forceNonTick'),
-            ]),
-            isAttached: Type.Boolean(),
-            // size: Type.Number(),
-            // isCritical: Type.Boolean(),
-            flickDirection: Type.Union([
-                Type.Literal('none'),
-                Type.Literal('left'),
-                Type.Literal('right'),
-                Type.Literal('up'),
-                Type.Literal('down')
-                // Type.Literal('up'),
-                // Type.Literal('upLeft'),
-                // Type.Literal('upRight'),
-                // Type.Literal('down'),
-                // Type.Literal('downLeft'),
-                // Type.Literal('downRight'),
-            ]),
-            shortenEarlyWindow: Type.Union([
-                Type.Literal('none'),
-                Type.Literal('perfect'),
-                Type.Literal('great'),
-                Type.Literal('good'),
-            ]),
-            // isFake: Type.Boolean(),
-            sfx: Type.Union([
-                Type.Literal('default'),
-                Type.Literal('none'),
-                //     Type.Literal('normalTap'),
-                //     Type.Literal('criticalTap'),
-                //     Type.Literal('normalFlick'),
-                //     Type.Literal('criticalFlick'),
-                //     Type.Literal('normalTrace'),
-                //     Type.Literal('criticalTrace'),
-                //     Type.Literal('normalTick'),
-                //     Type.Literal('criticalTick'),
-                //     Type.Literal('damage'),
-            ]),
-            // isConnectorSeparator: Type.Boolean(),
-            // connectorType: Type.Union([Type.Literal('active'), Type.Literal('guide')]),
-            connectorEase: Type.Union([
-                Type.Literal('linear'),
-                Type.Literal('in'),
-                Type.Literal('out'),
-                Type.Literal('inOut'),
-                Type.Literal('outIn'),
-                Type.Literal('none'),
-            ]),
-            // connectorActiveIsCritical: Type.Boolean(),
-            // connectorActiveIsFake: Type.Boolean(),
-            // connectorGuideColor: Type.Union([
-            //     Type.Literal('neutral'),
-            //     Type.Literal('red'),
-            //     Type.Literal('green'),
-            //     Type.Literal('blue'),
-            //     Type.Literal('yellow'),
-            //     Type.Literal('purple'),
-            //     Type.Literal('cyan'),
-            //     Type.Literal('black'),
-            // ]),
-            // connectorGuideAlpha: Type.Number(),
-            // connectorLayer: Type.Union([Type.Literal('top'), Type.Literal('bottom')]),
-        }),
-    ),
+    Type.Partial(NoteModifier),
     Type.Object({
         copyProperties: Type.Boolean({ default: true }),
     }),
@@ -99,7 +180,7 @@ const defaultNoteSlidePropertiesSchema = Type.Intersect([
 
 export type DefaultNoteSlideProperties = Static<typeof defaultNoteSlidePropertiesSchema>
 
-const settingsProperties = {
+export const settingsProperties = {
     showSidebar: Type.Boolean({ default: true }),
 
     sidebarWidth: Type.Number(),
@@ -219,57 +300,110 @@ const settingsProperties = {
 
     touchScrollInertia: Type.Boolean({ default: true }),
 
-    keyboardShortcuts: Type.Transform(
-        Type.Record(Type.String(), Type.Object({ key: Type.String(), ctrl: Type.Boolean({ default: false }), shift: Type.Boolean({ default: false }), alt: Type.Boolean({ default: false }) }), {
+    // flickDirectionKey: Type.Transform(
+    //     Type.Record(Type.String(), Type.Object({ key: Type.String(), ctrl: Type.Boolean({ default: false }), shift: Type.Boolean({ default: false }), alt: Type.Boolean({ default: false }) }), {
+    //         default: {
+    //             left: { ctrl: false, shift: false, alt: true, key: 'w' },
+    //             right: { ctrl: false, shift: false, alt: true, key: 'a' },
+    //             up: { ctrl: false, shift: false, alt: true, key: 's' },
+    //             down: { ctrl: false, shift: false, alt: true, key: 'd' },
+    //         } satisfies Partial<Record<FlickDirection, KeyboardShortcut>>,
+    //     }),
+    // )
+    //     .Decode(
+    //         (value) =>
+    //             Object.fromEntries(
+    //                 Object.entries(value).filter(([key]) => FlickDirection.includes(key as FlickDirection)),
+    //             ) as Partial<Record<FlickDirection, KeyboardShortcut>>,
+    //     )
+    //     .Encode((values) => values),
+
+    noteModifierKey: Type.Transform(
+        Type.Record(Type.String(), Type.Record(Type.String(), KeyboardShortcut), {
             default: {
-                open: { ctrl: false, shift: false, alt: false, key: 'o' },
-                save: { ctrl: false, shift: false, alt: false, key: 'p' },
-                reset: { ctrl: false, shift: false, alt: false, key: 'n' },
-                utilities: { ctrl: false, shift: false, alt: false, key: '.' },
-                play: { ctrl: false, shift: false, alt: false, key: ' ' },
-                stop: { ctrl: false, shift: false, alt: false, key: 'Backspace' },
-                bgm: { ctrl: false, shift: false, alt: false, key: 'm' },
-                speedUp: { ctrl: false, shift: false, alt: false, key: "'" },
-                speedDown: { ctrl: false, shift: false, alt: false, key: ';' },
-                select: { ctrl: false, shift: false, alt: false, key: 'f' },
-                deselect: { ctrl: false, shift: false, alt: false, key: 'Escape' },
-                eraser: { ctrl: false, shift: false, alt: false, key: 'g' },
-                brush: { ctrl: false, shift: false, alt: false, key: 'b' },
-                flip: { ctrl: false, shift: false, alt: false, key: 'u' },
-                cut: { ctrl: false, shift: false, alt: false, key: 'x' },
-                copy: { ctrl: false, shift: false, alt: false, key: 'c' },
-                paste: { ctrl: false, shift: false, alt: false, key: 'v' },
-                undo: { ctrl: false, shift: false, alt: false, key: 'z' },
-                redo: { ctrl: false, shift: false, alt: false, key: 'y' },
-                note: { ctrl: false, shift: false, alt: false, key: 'a' },
-                slide: { ctrl: false, shift: false, alt: false, key: 's' },
-                bpm: { ctrl: false, shift: false, alt: false, key: 'q' },
-                timeScale: { ctrl: false, shift: false, alt: false, key: 'w' },
-                manageGroups: { ctrl: false, shift: false, alt: false, key: 'e' },
-                scrollLeft: { ctrl: false, shift: false, alt: false, key: 'ArrowLeft' },
-                scrollRight: { ctrl: false, shift: false, alt: false, key: 'ArrowRight' },
-                scrollUp: { ctrl: false, shift: false, alt: false, key: 'ArrowUp' },
-                scrollDown: { ctrl: false, shift: false, alt: false, key: 'ArrowDown' },
-                scrollPageUp: { ctrl: false, shift: false, alt: false, key: 'PageUp' },
-                scrollPageDown: { ctrl: false, shift: false, alt: false, key: 'PageDown' },
-                jumpUp: { ctrl: false, shift: false, alt: false, key: 'End' },
-                jumpDown: { ctrl: false, shift: false, alt: false, key: 'Home' },
-                division1: { ctrl: false, shift: false, alt: false, key: '1' },
-                division2: { ctrl: false, shift: false, alt: false, key: '2' },
-                division3: { ctrl: false, shift: false, alt: false, key: '3' },
-                division4: { ctrl: false, shift: false, alt: false, key: '4' },
-                division6: { ctrl: false, shift: false, alt: false, key: '6' },
-                division8: { ctrl: false, shift: false, alt: false, key: '8' },
-                division12: { ctrl: false, shift: false, alt: false, key: '9' },
-                division16: { ctrl: false, shift: false, alt: false, key: '0' },
-                divisionCustom: { ctrl: false, shift: false, alt: false, key: '`' },
-                snapping: { ctrl: false, shift: false, alt: false, key: 'i' },
-                zoomXIn: { ctrl: false, shift: false, alt: false, key: ']' },
-                zoomXOut: { ctrl: false, shift: false, alt: false, key: '[' },
-                zoomYIn: { ctrl: false, shift: false, alt: false, key: '=' },
-                zoomYOut: { ctrl: false, shift: false, alt: false, key: '-' },
-                help: { ctrl: false, shift: false, alt: false, key: 'h' },
-                settings: { ctrl: false, shift: false, alt: false, key: ',' },
+                flickDirection: {
+                    left: { alt: true, key: 'a' },
+                    right: { alt: true, key: 'd' },
+                    up: { alt: true, key: 'w' },
+                    down: { alt: true, key: 's' }
+                }
+            } satisfies NoteModifierRecord,
+        }),
+    )
+        .Decode(
+            (value) =>
+                {
+                    console.log(1, value)
+                    const a = Object.fromEntries(
+                    Object.entries(value)
+                        .filter(([property]) => Object.keys(NoteModifierRecord.properties).includes(property))
+                        // .map(([property, v]) => ([
+                        //     property,
+                        //     Object.fromEntries(
+                        //         Object.entries(v)
+                        //             .filter(([k]) =>
+                        //                 // @ts-ignore
+                        //                 Object.keys(NoteModifierRecord.properties[property]).includes(k)
+                        //             )
+                        //     )
+                        // ])),
+                ) as NoteModifierRecord
+                console.log(a)
+            return a},
+        )
+        .Encode((values) => values),
+
+    keyboardShortcuts: Type.Transform(
+        Type.Record(Type.String(), KeyboardShortcut, {
+            default: {
+                open: { key: 'o' },
+                save: { key: 'p' },
+                reset: { key: 'n' },
+                utilities: { key: '.' },
+                play: { key: ' ' },
+                stop: { key: 'Backspace' },
+                bgm: { key: 'm' },
+                speedUp: { key: "'" },
+                speedDown: { key: ';' },
+                select: { key: 'f' },
+                deselect: { key: 'Escape' },
+                eraser: { key: 'g' },
+                brush: { key: 'b' },
+                flip: { key: 'u' },
+                cut: { key: 'x' },
+                copy: { key: 'c' },
+                paste: { key: 'v' },
+                undo: { key: 'z' },
+                redo: { key: 'y' },
+                note: { key: 'a' },
+                slide: { key: 's' },
+                bpm: { key: 'q' },
+                timeScale: { key: 'w' },
+                manageGroups: { key: 'e' },
+                scrollLeft: { key: 'ArrowLeft' },
+                scrollRight: { key: 'ArrowRight' },
+                scrollUp: { key: 'ArrowUp' },
+                scrollDown: { key: 'ArrowDown' },
+                scrollPageUp: { key: 'PageUp' },
+                scrollPageDown: { key: 'PageDown' },
+                jumpUp: { key: 'End' },
+                jumpDown: { key: 'Home' },
+                division1: { key: '1' },
+                division2: { key: '2' },
+                division3: { key: '3' },
+                division4: { key: '4' },
+                division6: { key: '6' },
+                division8: { key: '8' },
+                division12: { key: '9' },
+                division16: { key: '0' },
+                divisionCustom: { key: '`' },
+                snapping: { key: 'i' },
+                zoomXIn: { key: ']' },
+                zoomXOut: { key: '[' },
+                zoomYIn: { key: '=' },
+                zoomYOut: { key: '-' },
+                help: { key: 'h' },
+                settings: { key: ',' },
             } satisfies Partial<Record<CommandName, KeyboardShortcut>>,
         }),
     )

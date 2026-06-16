@@ -2,13 +2,14 @@ import type { GroupId } from './groups'
 
 export type NoteType = 'default' | 'anchor' /*| 'trace' | 'anchor' | 'damage'/* | 'forceTick' | 'forceNonTick'*/
 
-export type FlickDirection =
-    | 'none'
+export const FlickDirection = ["none", "left", "right", "up", "down"] as const
+export type FlickDirection = typeof FlickDirection[number]
+/*    | 'none'
     | 'left'
     | 'right'
     | 'up'
     | 'down'
-/*    | 'up'
+    | 'up'
     | 'upLeft'
     | 'upRight'
     | 'down'

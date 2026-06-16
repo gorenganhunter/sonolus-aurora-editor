@@ -16,7 +16,7 @@ export const pickFile = () =>
 
 export const getFilename = (file: File) => file.name.split('.')[0]?.trim()
 
-export const pickFileForOpen = async (id: string) => {
+export const pickFileForOpen = async (id: string, types?: FilePickerAcceptType[]) => {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!window.showOpenFilePicker)
         return {
@@ -26,6 +26,7 @@ export const pickFileForOpen = async (id: string) => {
     try {
         const [handle] = await window.showOpenFilePicker({
             id,
+            types
         })
 
         return {

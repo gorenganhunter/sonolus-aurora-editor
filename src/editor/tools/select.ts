@@ -18,7 +18,9 @@ import { addWaypoint, removeWaypoint } from '../../state/mutations/waypoint'
 import { getInStoreGrid } from '../../state/store/grid'
 import { createTransaction, type Transaction } from '../../state/transaction'
 import { interpolate } from '../../utils/interpolate'
+import { noteModifier } from '../controls/keyboard'
 import { notify } from '../notification'
+import { editSelectedEditableEntities } from '../sidebars/default'
 import {
     focusViewAtBeat,
     setViewHover,
@@ -86,6 +88,8 @@ export const select: Tool = {
             }
             focusViewAtBeat(entity.beat)
 
+            editSelectedEditableEntities(noteModifier)
+
             notify(interpolate(() => i18n.value.tools.select.selected, `${targets.length}`))
         } else {
             const entities = hitAllEntitiesAtPoint(x, y)
@@ -108,6 +112,8 @@ export const select: Tool = {
 
             if (entity) {
                 focusViewAtBeat(entity.beat)
+
+                editSelectedEditableEntities(noteModifier)
 
                 notify(interpolate(() => i18n.value.tools.select.selected, `${targets.length}`))
             } else {
@@ -301,6 +307,8 @@ export const select: Tool = {
                     hovered: [],
                     creating: [],
                 }
+
+                editSelectedEditableEntities(noteModifier)
 
                 notify(interpolate(() => i18n.value.tools.select.selected, `${targets.length}`))
                 break

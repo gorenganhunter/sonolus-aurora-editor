@@ -31,6 +31,8 @@ import {
 import { hitEntitiesAtPoint, modifyEntities, offset, resize } from '../utils'
 import SlidePropertiesModal from './SlidePropertiesModal.vue'
 import SlideSidebar from './SlideSidebar.vue'
+import { noteModifier } from '../../controls/keyboard.ts'
+import { editSelectedEditableEntities } from '../../sidebars/default/index.ts'
 
 export const defaultSlidePropertiesPresetIndex = ref(0)
 
@@ -114,6 +116,8 @@ export const slide: Tool = {
                 }
                 focusViewAtBeat(entity.beat)
 
+                editSelectedEditableEntities(noteModifier)
+
                 notify(interpolate(() => i18n.value.tools.slide.selected, `${targets.length}`))
             } else {
                 if (entities.every((entity) => selectedEntities.value.includes(entity))) {
@@ -134,6 +138,8 @@ export const slide: Tool = {
                         creating: [],
                     }
                     focusViewAtBeat(entity.beat)
+
+                    editSelectedEditableEntities(noteModifier)
 
                     notify(interpolate(() => i18n.value.tools.slide.selected, `${entities.length}`))
                 }
@@ -329,20 +335,20 @@ const getPropertiesFromSelection = (beat: number) => {
     const nearest = note && getNearestNoteInSlide(note.slideId, beat)
 
     return {
-        noteType: defaultSlideProperties.value.noteType ?? note?.noteType ?? 'default',
-        isAttached: defaultSlideProperties.value.isAttached ?? note?.isAttached ?? false,
+        noteType: noteModifier.noteType ?? defaultSlideProperties.value.noteType ?? note?.noteType ?? 'default',
+        isAttached: noteModifier.isAttached ?? defaultSlideProperties.value.isAttached ?? note?.isAttached ?? false,
         // size: defaultSlideProperties.value.size ?? note?.size ?? 3,
         // isCritical: defaultSlideProperties.value.isCritical ?? note?.isCritical ?? false,
         flickDirection:
-            defaultSlideProperties.value.flickDirection ?? note?.flickDirection ?? 'none',
+            noteModifier.flickDirection ?? defaultSlideProperties.value.flickDirection ?? note?.flickDirection ?? 'none',
         shortenEarlyWindow:
-            defaultSlideProperties.value.shortenEarlyWindow ?? note?.shortenEarlyWindow ?? 'none',
+            noteModifier.shortenEarlyWindow ?? defaultSlideProperties.value.shortenEarlyWindow ?? note?.shortenEarlyWindow ?? 'none',
         // isFake: defaultSlideProperties.value.isFake ?? note?.isFake ?? false,
-        sfx: defaultSlideProperties.value.sfx ?? note?.sfx ?? 'default',
+        sfx: noteModifier.sfx ?? defaultSlideProperties.value.sfx ?? note?.sfx ?? 'default',
         // isConnectorSeparator: defaultSlideProperties.value.isConnectorSeparator ?? false,
         // connectorType:
         //     defaultSlideProperties.value.connectorType ?? nearest?.connectorType ?? 'active',
-        connectorEase: defaultSlideProperties.value.connectorEase ?? 'linear',
+        connectorEase: noteModifier.connectorEase ?? defaultSlideProperties.value.connectorEase ?? 'linear',
         // connectorActiveIsCritical:
         //     defaultSlideProperties.value.connectorActiveIsCritical ??
         //     defaultSlideProperties.value.isCritical ??
