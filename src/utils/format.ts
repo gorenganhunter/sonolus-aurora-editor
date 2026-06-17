@@ -31,7 +31,7 @@ export const formatTimeScale = (value: number/*, skip: number, ease: TimeScaleEa
 
 export const formatShortcut = (shortcut: KeyboardShortcut | undefined) => {
     if (!shortcut) return shortcut
-    shortcut.key = shortcut.key === ' ' ? 'Space' : shortcut.key
+    let key = shortcut.key === ' ' ? 'Space' : shortcut.key
 
-    return (shortcut.ctrl && shortcut.key !== "Control" ? "Ctrl and " : "") + (shortcut.shift && shortcut.key !== "Shift" ? "Shift and " : "") + (shortcut.alt && shortcut.key !== "Alt" ? "Alt and " : "") + shortcut.key
+    return (shortcut.ctrl && key !== "Control" ? "Ctrl and " : "") + (shortcut.shift && key !== "Shift" ? "Shift and " : "") + (shortcut.alt && key !== "Alt" ? "Alt and " : "") + key
 }
