@@ -86,6 +86,7 @@ const onDelete = (groupId: GroupId, name: string) => {
             removeNote(transaction, entity)
         },
         connector: undefined,
+        waypoint: undefined
     }
 
     for (const entity of getAllEntities()) {
@@ -94,6 +95,7 @@ const onDelete = (groupId: GroupId, name: string) => {
 
     transaction.timeScales.delete(groupId)
 
+    transaction.groups.delete(groupId)
     if (!transaction.groups.size) {
         addToGroups(transaction.groups)
     }

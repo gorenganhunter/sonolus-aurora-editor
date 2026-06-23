@@ -5,7 +5,7 @@ import { beats, keys, scaledTimes } from '.'
 import { bpms } from '../history/bpms'
 import { cullEntities } from '../history/store'
 import { timeScales } from '../history/timeScales'
-import { beatToTime } from '../state/integrals/bpms'
+import { beatToTime, timeToBeat } from '../state/integrals/bpms'
 import { timeToScaledTime } from '../state/integrals/timeScales'
 import { lerp, unlerp } from '../utils/math'
 import { state } from "../history"
@@ -13,10 +13,15 @@ import { state } from "../history"
 import { getLane } from './lane'
 import { noteDuration, approachPos, approachSize, arrows } from './note'
 import { Vec } from "./Vec"
+import { view } from '../editor/view'
 
 const notes = computed(() =>
     [...cullEntities('note', keys.value.min, keys.value.max)]
-        .filter(({ beat, groupId, noteType }) => beat >= beats(groupId).value.min && beat < beats(groupId).value.max && noteType !== 'anchor')
+        .filter(({ beat, groupId, noteType }) => {
+            return (beat >= timeToBeat(bpms.value, view.cursorTime))
+                && (timeToScaledTime(timeScales.value.get(groupId)!, beatToTime(bpms.value, beat)) < scaledTimes(groupId).value.max)
+                && noteType !== 'anchor'
+        })
         .sort((a, b) => b.beat - a.beat)
         .map(({ beat, lane, groupId, noteType, flickDirection, slideId }) => {
         // let layout = new Quad(
