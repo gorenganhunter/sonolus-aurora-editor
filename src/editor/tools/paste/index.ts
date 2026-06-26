@@ -59,6 +59,7 @@ export const paste: Tool = {
             if (beat < 0) continue
 
             const result = creates[entity.type]?.(
+                clipboardEntry.data.entities,
                 entity as never,
                 clipboardEntry.data.lane,
                 lane,
@@ -95,6 +96,7 @@ export const paste: Tool = {
 
             const result = pastes[entity.type]?.(
                 transaction,
+                data.entities,
                 entity as never,
                 data.lane,
                 lane,
@@ -201,10 +203,22 @@ const toMovedBpmObject = (entity: BpmEntity, beat: number): BpmObject => ({
     beat,
 })
 
-const toMovedTimeScaleObject = (entity: TimeScaleEntity, beat: number): TimeScaleObject => ({
+const toMovedTimeScaleObject = (
+    entities: Entity[],
+    entity: TimeScaleEntity,
+    startLane: number,
+    lane: number,
+    beat: number,
+    flip: boolean,
+): TimeScaleObject => ({
     ...entity,
     groupId: view.groupId ?? entity.groupId,
     beat,
+    editorLane: entities.every((entity) => entity.type === 'timeScale')
+        ? flip
+            ? -entity.editorLane + align(startLane) + align(lane)
+            : entity.editorLane - align(startLane) + align(lane)
+        : entity.editorLane,
 })
 
 const flippedFlickDirections: Record<FlickDirection, FlickDirection> = {
@@ -232,6 +246,7 @@ const toMovedNoteObject = (
 })
 
 type Create<T extends Entity> = (
+    entities: Entity[],
     entity: T,
     startLane: number,
     lane: number,
@@ -242,11 +257,11 @@ type Create<T extends Entity> = (
 const creates: {
     [T in Entity as T['type']]: Create<T> | undefined
 } = {
-    bpm: (entity, startLane, lane, beat) => toBpmEntity(toMovedBpmObject(entity, beat)),
-    timeScale: (entity, startLane, lane, beat) =>
-        toTimeScaleEntity(toMovedTimeScaleObject(entity, beat)),
+    bpm: (entities, entity, startLane, lane, beat) => toBpmEntity(toMovedBpmObject(entity, beat)),
+    timeScale: (entities, entity, startLane, lane, beat, flip) =>
+        toTimeScaleEntity(toMovedTimeScaleObject(entities, entity, startLane, lane, beat, flip)),
 
-    note: (entity, startLane, lane, beat, flip) =>
+    note: (entities, entity, startLane, lane, beat, flip) =>
         toNoteEntity(entity.slideId, toMovedNoteObject(entity, startLane, lane, beat, flip)),
     connector: undefined,
     waypoint: undefined
@@ -254,6 +269,7 @@ const creates: {
 
 type Paste<T extends Entity> = (
     transaction: Transaction,
+    entities: Entity[],
     entity: T,
     startLane: number,
     lane: number,
@@ -264,7 +280,7 @@ type Paste<T extends Entity> = (
 const pastes: {
     [T in Entity as T['type']]: Paste<T> | undefined
 } = {
-    bpm: (transaction, entity, startLane, lane, beat) => {
+    bpm: (transaction, entities, entity, startLane, lane, beat) => {
         const object = toMovedBpmObject(entity, beat)
 
         const overlap = getInStoreGrid(transaction.store.grid, 'bpm', object.beat)?.find(
@@ -274,8 +290,8 @@ const pastes: {
 
         return addBpm(transaction, object)
     },
-    timeScale: (transaction, entity, startLane, lane, beat) => {
-        const object = toMovedTimeScaleObject(entity, beat)
+    timeScale: (transaction, entities, entity, startLane, lane, beat, flip) => {
+        const object = toMovedTimeScaleObject(entities, entity, startLane, lane, beat, flip)
 
         const overlap = getInStoreGrid(transaction.store.grid, 'timeScale', object.beat)?.find(
             (entity) => entity.beat === object.beat && entity.groupId === object.groupId,
@@ -285,7 +301,7 @@ const pastes: {
         return addTimeScale(transaction, object)
     },
 
-    note: (transaction, entity, startLane, lane, beat, flip) => {
+    note: (transaction, entities, entity, startLane, lane, beat, flip) => {
         const object = toMovedNoteObject(entity, startLane, lane, beat, flip)
 
         return addNote(transaction, entity.slideId, object)

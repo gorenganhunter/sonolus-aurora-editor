@@ -15,22 +15,25 @@ const props = defineProps<{
 
 const time = computed(() => beatToTime(bpms.value, props.entity.beat))
 
+const x = computed(() => props.entity.editorLane)
 const y = computed(() => time.value * ups.value)
+
+const x1 = computed(() => Math.min(x.value, -4.5) - x.value)
+const x2 = computed(() => Math.max(x.value, 4.5) - x.value)
 </script>
 
 <template>
-    <g>
+    <g :transform="`translate(${x}, ${y})`">
         <line
-            :x1="-4.5"
-            :x2="4.5"
-            :y1="y"
-            :y2="y"
+            :x1
+            :x2
             stroke="#ff0"
             stroke-opacity="0.5"
             stroke-dashoffset="0"
         />
+        <circle r="0.1" stroke="#fff" fill="#ff0" />
 
-        <text :x="-4.6" :y text-anchor="end" dominant-baseline="middle" fill="#ff0">
+        <text x="-0.2" text-anchor="end" dominant-baseline="middle" fill="#ff0">
             {{ formatTimeScale(entity.timeScale) }}
         </text>
         <text
@@ -39,8 +42,7 @@ const y = computed(() => time.value * ups.value)
                 entity.groupId !== defaultGroupId &&
                 (isHighlighted || isViewRecentlyActive)
             "
-            :x="-4.6"
-            :y
+            x="0.2"
             font-size="0.4"
             text-anchor="start"
             dominant-baseline="middle"

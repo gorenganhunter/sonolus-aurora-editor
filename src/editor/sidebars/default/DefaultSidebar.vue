@@ -7,6 +7,7 @@ import MultiBpmField from '../../../modals/form/MultiBpmField.vue'
 // import MultiConnectorActiveIsCriticalField from '../../../modals/form/MultiConnectorActiveIsCriticalField.vue'
 // import MultiConnectorActiveIsFakeField from '../../../modals/form/MultiConnectorActiveIsFakeField.vue'
 import MultiConnectorEaseField from '../../../modals/form/MultiConnectorEaseField.vue'
+import MultiEditorLaneField from '../../../modals/form/MultiEditorLaneField.vue'
 // import MultiConnectorGuideAlphaField from '../../../modals/form/MultiConnectorGuideAlphaField.vue'
 // import MultiConnectorGuideColorField from '../../../modals/form/MultiConnectorGuideColorField.vue'
 // import MultiConnectorLayerField from '../../../modals/form/MultiConnectorLayerField.vue'
@@ -23,6 +24,7 @@ import MultiLaneField from '../../../modals/form/MultiLaneField.vue'
 import MultiMarkerField from '../../../modals/form/MultiMarkerField.vue'
 import MultiNoteTypeField from '../../../modals/form/MultiNoteTypeField.vue'
 import MultiSfxField from '../../../modals/form/MultiSfxField.vue'
+import MultiShortenEarlyWindowField from '../../../modals/form/MultiShortenEarlyWindowField.vue'
 // import MultiSizeField from '../../../modals/form/MultiSizeField.vue'
 // import MultiSkipField from '../../../modals/form/MultiSkipField.vue'
 // import MultiTimeScaleEaseField from '../../../modals/form/MultiTimeScaleEaseField.vue'
@@ -36,6 +38,7 @@ const beat = createModel('beat')
 const bpm = createModel('bpm')
 const groupId = createModel('groupId')
 const timeScale = createModel('timeScale')
+const editorLane = createModel('editorLane')
 // const skip = createModel('skip')
 // const ease = createModel('ease')
 // const hideNotes = createModel('hideNotes')
@@ -45,6 +48,7 @@ const lane = createModel('lane')
 // const size = createModel('size')
 // const isCritical = createModel('isCritical')
 const flickDirection = createModel('flickDirection')
+const shortenEarlyWindow = createModel('shortenEarlyWindow')
 // const isFake = createModel('isFake')
 const sfx = createModel('sfx')
 const holdSfx = createModel('holdSfx')
@@ -75,6 +79,10 @@ const comment = createModel('comment')
                 v-if="entities.length === 1 || (!types.bpm && !types.timeScale)"
                 v-model="beat"
             />
+            <MultiEditorLaneField
+                v-if="types.timeScale"
+                v-model="editorLane"
+            />
             <MultiIsAttachedField
                 v-if="types.note && noteFields.isAttached !== false"
                 v-model="isAttached"
@@ -89,6 +97,7 @@ const comment = createModel('comment')
                 v-if="types.note && noteFields.flickDirection !== false"
                 v-model="flickDirection"
             />
+            <MultiShortenEarlyWindowField v-if="types.note && noteFields.shortenEarlyWindow !== false" v-model="shortenEarlyWindow" />
             <!--MultiIsFakeField v-if="types.note && noteFields.isFake !== false" v-model="isFake" /-->
             <MultiSfxField v-if="types.note && noteFields.sfx !== false" v-model="sfx" />
             <MultiHoldSfxField v-if="types.note && noteFields.holdSfx !== false" v-model="holdSfx" />

@@ -324,13 +324,18 @@ const toMovedBpmObject = (entity: BpmEntity, beat: number): BpmObject => ({
     beat,
 })
 
-const toMovedTimeScaleObject = (entity: TimeScaleEntity, beat: number): TimeScaleObject => ({
+const toMovedTimeScaleObject = (
+    entities: Entity[],
+    entity: TimeScaleEntity,
+    startLane: number,
+    lane: number,
+    beat: number,
+): TimeScaleObject => ({
     ...entity,
     beat,
-    timeScale: entity.timeScale,
-    // skip: entity.skip,
-    // ease: entity.ease,
-    // hideNotes: entity.hideNotes,
+    editorLane: entities.every((entity) => entity.type === 'timeScale')
+        ? entity.editorLane + offset(startLane, lane)
+        : entity.editorLane,
 })
 
 const toMovedWaypointObject = (entity: WaypointEntity, beat: number): WaypointObject => ({
@@ -390,7 +395,7 @@ const creates: {
 } = {
     bpm: (entities, entity, startLane, lane, beat) => toBpmEntity(toMovedBpmObject(entity, beat)),
     timeScale: (entities, entity, startLane, lane, beat) =>
-        toTimeScaleEntity(toMovedTimeScaleObject(entity, beat)),
+        toTimeScaleEntity(toMovedTimeScaleObject(entities, entity, startLane, lane, beat)),
 
     note: (entities, entity, startLane, lane, beat, focus) =>
         toNoteEntity(
@@ -430,7 +435,7 @@ const moves: {
         return addBpm(transaction, object)
     },
     timeScale: (transaction, entities, entity, startLane, lane, beat) => {
-        const object = toMovedTimeScaleObject(entity, beat)
+        const object = toMovedTimeScaleObject(entities, entity, startLane, lane, beat)
 
         if (entity.beat) removeTimeScale(transaction, entity)
 

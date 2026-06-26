@@ -48,6 +48,10 @@ export const serializeTimeScalesToLevelDataEntities = (
                                 value: timeScale.beat,
                             },
                             {
+                                name: 'editorLane',
+                                value: timeScale.editorLane,
+                            },
+                            {
                                 name: EngineArchetypeDataName.TimeScale,
                                 value: timeScale.timeScale,
                             },

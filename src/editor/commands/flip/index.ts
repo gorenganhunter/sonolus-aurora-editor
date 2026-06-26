@@ -8,6 +8,7 @@ import { createTransaction, type Transaction } from '../../../state/transaction'
 import { interpolate } from '../../../utils/interpolate'
 import { notify } from '../../notification'
 import { editSelectedNote } from '../../tools/note'
+import { editSelectedTimeScale } from '../../tools/timeScale/index.ts'
 import { view } from '../../view'
 import FlipIcon from './FlipIcon.vue'
 
@@ -60,7 +61,12 @@ const flips: {
     [T in Entity as T['type']]: Flip<T> | undefined
 } = {
     bpm: undefined,
-    timeScale: undefined,
+    timeScale: (transaction, entities, entity) =>
+        editSelectedTimeScale(transaction, entity, {
+            editorLane: entities.every((entity) => entity.type === 'timeScale')
+                ? -entity.editorLane
+                : entity.editorLane,
+        }),
 
     note: (transaction, entity) =>
         editSelectedNote(transaction, entity, {

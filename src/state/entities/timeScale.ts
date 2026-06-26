@@ -5,6 +5,7 @@ import type { TimeScaleObject } from '../../chart/timeScale'
 export type TimeScaleEntity = BaseEntity & {
     type: 'timeScale'
     groupId: GroupId
+    editorLane: number
     timeScale: number
     // skip: number
     // ease: TimeScaleEase
@@ -14,14 +15,15 @@ export type TimeScaleEntity = BaseEntity & {
 export const toTimeScaleEntity = (object: TimeScaleObject): TimeScaleEntity => ({
     type: 'timeScale',
     hitbox: {
-        lane: -5,
+        lane: object.editorLane,
         beat: object.beat,
-        w: 0.5,
-        h: 0.4,
+        w: 0.2,
+        h: 0.2,
     },
 
     groupId: object.groupId,
     beat: object.beat,
+    editorLane: object.editorLane,
     timeScale: object.timeScale,
     // skip: object.skip,
     // ease: object.ease,

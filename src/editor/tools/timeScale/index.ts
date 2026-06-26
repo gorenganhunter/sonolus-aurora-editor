@@ -15,7 +15,14 @@ import { createTransaction, type Transaction } from '../../../state/transaction'
 import { interpolate } from '../../../utils/interpolate'
 import { notify } from '../../notification'
 import { isSidebarVisible } from '../../sidebars'
-import { focusViewAtBeat, setViewHover, snapYToBeat, view, yToValidBeat } from '../../view'
+import {
+    focusViewAtBeat,
+    setViewHover,
+    snapYToBeat,
+    view,
+    xToValidLane,
+    yToValidBeat,
+} from '../../view'
 import { hitEntitiesAtPoint } from '../utils'
 import TimeScalePropertiesModal from './TimeScalePropertiesModal.vue'
 
@@ -33,7 +40,7 @@ export const timeScale: Tool = {
     title: () => i18n.value.tools.timeScale.title,
 
     hover(x, y) {
-        const [entity, beat] = tryFind(x, y)
+        const [entity, beat, lane] = tryFind(x, y)
         if (entity) {
             view.entities = {
                 hovered: [entity],
@@ -46,6 +53,7 @@ export const timeScale: Tool = {
                     toTimeScaleEntity({
                         groupId: view.groupId ?? defaultGroupId.value,
                         beat,
+                        editorLane: lane,
                         timeScale: 1,
                     }),
                 ],
@@ -54,7 +62,7 @@ export const timeScale: Tool = {
     },
 
     tap(x, y, modifiers) {
-        const [entity, beat] = tryFind(x, y)
+        const [entity, beat, lane] = tryFind(x, y)
         if (entity) {
             if (modifiers.ctrl) {
                 const selectedTimeScaleEntities: Entity[] = selectedEntities.value.filter(
@@ -84,6 +92,7 @@ export const timeScale: Tool = {
                         editMoveOrReplace(entity, {
                             groupId: entity.groupId,
                             beat: entity.beat,
+                            editorLane: entity.editorLane,
                             timeScale: entity.timeScale,
                             // skip: entity.skip,
                             // ...(entity.timeScaleEase === 'none' && !entity.hideNotes
@@ -122,6 +131,7 @@ export const timeScale: Tool = {
             const object: TimeScaleObject = {
                 groupId: view.groupId ?? defaultGroupId.value,
                 beat,
+                editorLane: lane,
                 timeScale: 1,
             }
 
@@ -174,6 +184,8 @@ export const timeScale: Tool = {
 
         setViewHover(y)
 
+        const lane = xToValidLane(x)
+
         switch (active.type) {
             case 'add': {
                 const [entity, beat] = tryFind(x, y)
@@ -190,6 +202,7 @@ export const timeScale: Tool = {
                             toTimeScaleEntity({
                                 groupId: view.groupId ?? defaultGroupId.value,
                                 beat,
+                                editorLane: lane,
                                 timeScale: 1,
                             }),
                         ],
@@ -207,6 +220,7 @@ export const timeScale: Tool = {
                         toTimeScaleEntity({
                             groupId: active.entity.groupId,
                             beat,
+                            editorLane: lane,
                             timeScale: active.entity.timeScale,
                         }),
                     ],
@@ -219,6 +233,8 @@ export const timeScale: Tool = {
 
     dragEnd(x, y) {
         if (!active) return
+
+        const lane = xToValidLane(x)
 
         switch (active.type) {
             case 'add': {
@@ -239,6 +255,7 @@ export const timeScale: Tool = {
                     const object: TimeScaleObject = {
                         groupId: view.groupId ?? defaultGroupId.value,
                         beat,
+                        editorLane: lane,
                         timeScale: 1,
                     }
 
@@ -260,6 +277,7 @@ export const timeScale: Tool = {
                 editMoveOrReplace(active.entity, {
                     groupId: active.entity.groupId,
                     beat,
+                    editorLane: lane,
                     timeScale: active.entity.timeScale,
                 })
                 focusViewAtBeat(beat)
@@ -275,6 +293,7 @@ export const editTimeScale = (entity: TimeScaleEntity, object: Partial<TimeScale
     editMoveOrReplace(entity, {
         groupId: object.groupId ?? entity.groupId,
         beat: object.beat ?? entity.beat,
+        editorLane: object.editorLane ?? entity.editorLane,
         timeScale: object.timeScale ?? entity.timeScale,
     })
 }
@@ -288,6 +307,7 @@ export const editSelectedTimeScale = (
     return addTimeScale(transaction, {
         groupId: object.groupId ?? entity.groupId,
         beat: object.beat ?? entity.beat,
+        editorLane: object.editorLane ?? entity.editorLane,
         timeScale: object.timeScale ?? entity.timeScale,
     })
 }
@@ -297,7 +317,7 @@ const find = (groupId: GroupId | undefined, beat: number) =>
         (entity) => entity.beat === beat && (groupId === undefined || entity.groupId === groupId),
     )
 
-const tryFind = (x: number, y: number): [TimeScaleEntity] | [undefined, number] => {
+const tryFind = (x: number, y: number): [TimeScaleEntity] | [undefined, number, number] => {
     const [hit] = hitEntitiesAtPoint('timeScale', x, y).sort(
         (a, b) => +selectedEntities.value.includes(b) - +selectedEntities.value.includes(a),
     )
@@ -307,7 +327,7 @@ const tryFind = (x: number, y: number): [TimeScaleEntity] | [undefined, number] 
     const nearest = find(view.groupId, beat)
     if (nearest) return [nearest]
 
-    return [undefined, beat]
+    return [undefined, beat, xToValidLane(x)]
 }
 
 const editMoveOrReplace = (entity: TimeScaleEntity, object: TimeScaleObject) => {
