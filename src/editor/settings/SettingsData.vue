@@ -7,7 +7,7 @@ import { settings, settingsProperties } from '../../settings'
 import SettingsSection from './SettingsSection.vue'
 import { notify } from '../notification.ts'
 import { pickFileForOpen } from '../../utils/file.ts'
-import { Value } from '@sinclair/typebox/value'
+import { Value } from 'typebox/value'
 
 const importSettings = async () => {
     console.log(1)

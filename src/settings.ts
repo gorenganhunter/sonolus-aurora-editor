@@ -1,5 +1,5 @@
-import { Type, type Static, type StaticDecode, type TSchema, type TString } from '@sinclair/typebox'
-import { Value } from '@sinclair/typebox/value'
+import Type, { type Static } from 'typebox'
+import Value from 'typebox/value'
 import { shallowRef, watch } from 'vue'
 import { isCommandName, type CommandName } from './editor/commands'
 import { defaultLocale } from './i18n/locale'
@@ -18,7 +18,7 @@ const KeyboardShortcut = Type.Object({
 export type KeyboardShortcut = Static<typeof KeyboardShortcut>
 
 const number = (def: number, min: number, max: number) =>
-    Type.Transform(Type.Number({ default: def }))
+    Type.Codec(Type.Number({ default: def }))
         .Decode((value) => clamp(value, min, max))
         .Encode((value) => value)
 
@@ -229,7 +229,7 @@ const defaultNoteSlidePropertiesSchema = Type.Intersect([
     }),
 ])
 
-export type DefaultNoteSlideProperties = Static<typeof defaultNoteSlidePropertiesSchema>
+export type DefaultNoteSlideProperties = Type.Static<typeof defaultNoteSlidePropertiesSchema>
 
 export const settingsProperties = {
     showSidebar: Type.Boolean({ default: true }),
@@ -253,7 +253,7 @@ export const settingsProperties = {
     locale: Type.Union(
         Object.keys(localizations).map((locale) => Type.Literal(locale)),
         { default: defaultLocale },
-    ) as never as TString,
+    ) as never as Type.TString,
 
     autoSave: Type.Boolean({ default: true }),
 
@@ -277,9 +277,9 @@ export const settingsProperties = {
 
     showLaneDivisor: Type.Boolean({ default: true }),
 
-    toolbar: Type.Transform(
+    toolbar: Type.Codec(
         Type.Array(
-            Type.Transform(Type.Array(Type.String()))
+            Type.Codec(Type.Array(Type.String()))
                 .Decode((values) => values.filter(isCommandName))
                 .Encode((values) => values),
             {
@@ -362,27 +362,8 @@ export const settingsProperties = {
 
     touchScrollInertia: Type.Boolean({ default: true }),
 
-    // flickDirectionKey: Type.Transform(
-    //     Type.Record(Type.String(), Type.Object({ key: Type.String(), ctrl: Type.Boolean({ default: false }), shift: Type.Boolean({ default: false }), alt: Type.Boolean({ default: false }) }), {
-    //         default: {
-    //             left: { ctrl: false, shift: false, alt: true, key: 'w' },
-    //             right: { ctrl: false, shift: false, alt: true, key: 'a' },
-    //             up: { ctrl: false, shift: false, alt: true, key: 's' },
-    //             down: { ctrl: false, shift: false, alt: true, key: 'd' },
-    //         } satisfies Partial<Record<FlickDirection, KeyboardShortcut>>,
-    //     }),
-    // )
-    //     .Decode(
-    //         (value) =>
-    //             Object.fromEntries(
-    //                 Object.entries(value).filter(([key]) => FlickDirection.includes(key as FlickDirection)),
-    //             ) as Partial<Record<FlickDirection, KeyboardShortcut>>,
-    //     )
-    //     .Encode((values) => values),
-
-    noteModifierKey: Type.Transform(
-        Type.Record(Type.String(), Type.Record(Type.String(), KeyboardShortcut), {
-            default: {
+    noteModifierKey: Type.Codec(
+        Type.Record(Type.String(), Type.Record(Type.String(), KeyboardShortcut), {            default: {
                 flickDirection: {
                     left: { alt: true, key: 'a' },
                     right: { alt: true, key: 'd' },
@@ -415,7 +396,7 @@ export const settingsProperties = {
         )
         .Encode((values) => values),
 
-    keyboardShortcuts: Type.Transform(
+    keyboardShortcuts: Type.Codec(
         Type.Record(Type.String(), KeyboardShortcut, {
             default: {
                 open: { key: 'o' },
@@ -533,8 +514,8 @@ export const settingsProperties = {
     }),
 }
 
-const normalize = <T extends TSchema>(schema: T, value: unknown) =>
-    Value.Decode(schema, Value.Cast(schema, value))
+const normalize = <T extends Type.TSchema>(schema: T, value: unknown) =>
+    Value.Decode(schema, Value.Repair(schema, value))
 
 export const settings = Object.defineProperties(
     {},
@@ -542,7 +523,7 @@ export const settings = Object.defineProperties(
         Object.entries(settingsProperties).map(([key, schema]) => {
             const defaultValue = Value.Create(schema)
 
-            const prop = shallowRef(normalize(schema, storageGet(key)))
+            const prop = shallowRef(normalize(schema, storageGet(key, defaultValue)))
             watch(prop, (value) => {
                 if (Value.Equal(value, defaultValue)) {
                     storageRemove(key)
@@ -562,5 +543,5 @@ export const settings = Object.defineProperties(
         }),
     ),
 ) as {
-        [K in keyof typeof settingsProperties]: StaticDecode<(typeof settingsProperties)[K]>
-    }
+    [K in keyof typeof settingsProperties]: Type.StaticDecode<(typeof settingsProperties)[K]>
+}

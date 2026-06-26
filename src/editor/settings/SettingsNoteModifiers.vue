@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import { Boolean, Extract, Type, Union, type TBoolean, type TUnion } from '@sinclair/typebox'
 import { i18n } from '../../i18n'
 import KeyField from '../../modals/form/KeyField.vue'
 import { settings, type KeyboardShortcut, NoteModifier, type NoteModifier as NoteModifierType, type NoteModifierRecord, NoteModifierRecord as NMR } from '../../settings'
-import { commands, type CommandName } from '../commands'
 import SettingsSection from './SettingsSection.vue'
-import { IsBoolean, Check } from '@sinclair/typebox/value'
 
 const getKey = <P extends keyof NoteModifierRecord>(property: P, value: keyof NoteModifierRecord[P]): KeyboardShortcut | undefined => {
 // console.log("pv", property, value)
@@ -35,8 +32,8 @@ const setKey = <P extends keyof NoteModifierRecord>(property: P, value: keyof No
             v-for="(k, value) in v.properties"
             :key="`${property}.${value}`"
             :label="`${property}.${value}`"
-            :model-value="getKey(property, value)"
-            @update:model-value="setKey(property, value, $event)"
+            :model-value="getKey(property, value as never)"
+            @update:model-value="setKey(property, value as never, $event)"
         />
         </template>
     </SettingsSection>
