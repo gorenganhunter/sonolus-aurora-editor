@@ -28,7 +28,7 @@ export const integrate = <T extends Integral>(integrals: T[]) => {
 export const findIntegral = <T extends Integral>(integrals: T[], key: 'x' | 'y', value: number) => {
     const index = search(integrals, key, value)
 
-    const integral = integrals[integrals[index]?.[key]! === value ? index : index - 1]
+    const integral = integrals[index] //integrals[integrals[index]?.[key]! === value ? index : index - 1]
     if (!integral) {
         console.log(integrals, key, value)
         throw new Error('Unexpected integral not found')

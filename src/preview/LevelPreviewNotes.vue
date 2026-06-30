@@ -37,10 +37,10 @@ const notes = computed(() =>
         //
             const targetTime = timeToScaledTime(timeScales.value.get(groupId)!, beatToTime(bpms.value, beat))
         //     //const z = unlerp(targetTime - noteDuration.value, targetTime, scaledTimes.value.min)
-        //
+        // console.log(targetTime)
         const ns = state.value.groups.get(groupId)?.forceNoteSpeed
 
-        const s = unlerp(targetTime - (ns ? 5 / ns : noteDuration.value), targetTime, scaledTimes(groupId).value.min)
+        const s = unlerp(targetTime - (ns ? 5 / ns : noteDuration.value), targetTime, timeToScaledTime(timeScales.value.get(groupId)!, view.cursorTime))
 
         const size = approachSize(s - 1)
         //

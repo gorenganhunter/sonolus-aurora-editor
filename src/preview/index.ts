@@ -8,27 +8,36 @@ import { beatToKey } from '../state/store/grid'
 import { computedRange } from '../utils/range'
 import { noteDuration } from './note'
 import { state } from '../history'
-import type { GroupId } from '../state/groups'
+import type { GroupId } from '../chart/groups'
 
 export const scaledTimes = (group: GroupId) => computed(() => {
     const min = timeToScaledTime(timeScales.value.get(group)!, view.cursorTime)
     const ns = state.value.groups.get(group)?.forceNoteSpeed
 
     return {
-        min,
+        min: min - (ns ? 5 / ns : noteDuration.value),
         max: min + (ns ? 5 / ns : noteDuration.value)
     }
 })
 
-export const times = (group: GroupId) => computed(() => ({
-    min: view.cursorTime,
-    max: scaledTimeToTime(timeScales.value.get(group)!, scaledTimes(group).value.max),
-}))
+export const times = (group: GroupId) => computed(() => {
+    const ts = timeScales.value.get(group)!
+    const t = scaledTimes(group).value
+    // console.log("times", t)
+    return {
+        min: scaledTimeToTime(ts, t.min),
+        max: scaledTimeToTime(ts, t.max),
+    }
+})
 
-export const beats = (group: GroupId) => computed(() => ({
-    min: timeToBeat(bpms.value, view.cursorTime),
-    max: timeToBeat(bpms.value, times(group).value.max),
-}))
+export const beats = (group: GroupId) => computed(() => {
+    const t = times(group).value
+    // console.log("beats", t)
+    return {
+        min: timeToBeat(bpms.value, t.min),
+        max: timeToBeat(bpms.value, t.max),
+    }
+})
 
 export const keys = computedRange(() => {
     let range = {

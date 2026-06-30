@@ -25,9 +25,15 @@ export const search = <K extends PropertyKey>(
     key: K,
     value: number,
 ) => {
+    // let i = 0
+
+    // while (i < array.length && array[i]![key] < value) {
+    //     i++
+    // }
+
     let i = 0
 
-    while (i < array.length && array[i]![key] < value) {
+    while (i < array.length - 1 && !((array[i]![key] <= value && value < array[i + 1]![key]) || (array[i]![key] >= value && value > array[i + 1]![key]))) {
         i++
     }
 

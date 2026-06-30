@@ -43,13 +43,13 @@ export const timeToScaledTime = (timeScales: TimeScaleIntegral[], time: number) 
 }
 
 export const scaledTimeToTime = (timeScales: TimeScaleIntegral[], scaledTime: number) => {
-  let i = 0
+  // let i = 0
 
-  while (i < timeScales.length - 1 && !((timeScales[i]!.y <= scaledTime && scaledTime < timeScales[i +  1]!.y) || (timeScales[i]!.y >= scaledTime && scaledTime > timeScales[i +  1]!.y))) {
-    i++
-  }
+  // while (i < timeScales.length - 1 && !((timeScales[i]!.y <= scaledTime && scaledTime < timeScales[i +  1]!.y) || (timeScales[i]!.y >= scaledTime && scaledTime > timeScales[i +  1]!.y))) {
+  //   i++
+  // }
 
-  const { x, y, s } = timeScales[i]!
+  const { x, y, s } = findIntegral(timeScales, 'y', scaledTime)
 
   return x + (scaledTime - y) / s
 }
