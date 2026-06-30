@@ -24,7 +24,7 @@ export const serializeToLevelData = (
         if (firstBeat !== Infinity && lastBeat !== -Infinity) {
             duration = beatToTime(bpms.value, lastBeat) - beatToTime(bpms.value, firstBeat)
         }
-        hp = Math.floor(duration / 6) + 1
+        hp = Math.floor(duration / 4) + 1
     }
     const data = {
         bgmOffset,

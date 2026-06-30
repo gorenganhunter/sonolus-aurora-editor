@@ -32,7 +32,7 @@ const autoSet = () => {
     if (firstBeat !== Infinity && lastBeat !== -Infinity) {
         duration = beatToTime(bpms.value, lastBeat) - beatToTime(bpms.value, firstBeat)
     }
-    model.value = Math.floor(duration / 6) + 1
+    model.value = Math.floor(duration / 4) + 1
 }
 </script>
 
