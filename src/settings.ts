@@ -224,6 +224,8 @@ export const settingsProperties = {
 
     hitboxAsSelectionBox: Type.Boolean({ default: false }),
 
+    showLaneDivisor: Type.Boolean({ default: true }),
+
     toolbar: Type.Transform(
         Type.Array(
             Type.Transform(Type.Array(Type.String()))

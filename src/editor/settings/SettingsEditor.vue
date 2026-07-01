@@ -72,5 +72,10 @@ watch(
             v-model="settings.hitboxAsSelectionBox"
             :label="i18n.settings.editor.hitboxAsSelectionBox"
         />
+        
+        <ToggleField
+            v-model="settings.showLaneDivisor"
+            :label="i18n.settings.editor.showLaneDivisor"
+        />
     </SettingsSection>
 </template>

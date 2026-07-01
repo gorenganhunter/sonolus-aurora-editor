@@ -429,7 +429,8 @@
             "autoAddGroup": "Auto Add Group",
             "showGroupName": "Show Group Name",
             "showOtherGroups": "Show Other Groups",
-            "hitboxAsSelectionBox": "Note Hitbox as Selection Box"
+            "hitboxAsSelectionBox": "Note Hitbox as Selection Box",
+            "showLaneDivisor": "Show Lane Divisor"
         },
         "keyboardShortcuts": {
             "title": "Keyboard Shortcuts"

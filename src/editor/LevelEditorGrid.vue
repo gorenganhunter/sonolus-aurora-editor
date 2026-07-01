@@ -6,6 +6,7 @@ import { beatToTime } from '../state/integrals/bpms'
 import { formatIntegerBeat, formatIntegerTime } from '../utils/format'
 import { computedRange } from '../utils/range'
 import { ups, view, viewBox } from './view'
+import { settings } from '../settings'
 
 const range = computedRange(() => ({
     min: Math.ceil(beats.value.min * view.division),
@@ -56,7 +57,7 @@ const timeNumbers = computed(() =>
                 :x2="i"
                 :y1="0"
                 :y2="1"
-                :stroke-opacity="i === 1 || i === 10 ? 0.5 : 0.25"
+                :stroke-opacity="i === 1 || i === 10 ? 0.5 : settings.showLaneDivisor ? 0.25 : 0"
             />
             <rect
                 v-for="i in 9"
