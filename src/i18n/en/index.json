@@ -234,6 +234,11 @@
                 "title": "Default Slide Properties"
             }
         },
+        "snap": {
+            "title": "Snap",
+            "noSelected": "No object selected to snap",
+            "snapped": "Snapped {0} objects"
+        },
         "snapping": {
             "title": "Snapping",
             "absolute": "Switch to absolute snapping",

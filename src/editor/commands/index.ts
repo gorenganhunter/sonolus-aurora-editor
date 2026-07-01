@@ -52,6 +52,7 @@ import { hp } from './hp'
 import { stats } from './stats'
 import { waypoint } from './waypoint'
 import { keepTiming } from './keepTiming'
+import { snap } from './snap'
 
 export type Command = {
     title: () => string
@@ -84,6 +85,7 @@ export const commands = {
     eraser,
     brush,
     flip,
+    snap,
     cut,
     copy,
     paste,
