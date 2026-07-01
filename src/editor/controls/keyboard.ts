@@ -32,7 +32,7 @@ const onKeydown = (event: KeyboardEvent) => {
                 noteModifier[property] = value === "true" ? true : value === "false" ? false : value
             }
         }
-        console.log(noteModifier)
+        // console.log(noteModifier)
     }
 
     for (const [name, sc] of Object.entries(settings.keyboardShortcuts) as [

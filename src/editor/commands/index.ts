@@ -51,6 +51,7 @@ import { zoomYOut } from './zooms/zoomYOut'
 import { hp } from './hp'
 import { stats } from './stats'
 import { waypoint } from './waypoint'
+import { keepTiming } from './keepTiming'
 
 export type Command = {
     title: () => string
@@ -134,6 +135,7 @@ export const commands = {
     division16: division(16),
     divisionCustom,
     snapping,
+    keepTiming,
 
     zoomXIn,
     zoomXOut,

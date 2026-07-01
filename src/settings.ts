@@ -261,6 +261,7 @@ export const settingsProperties = {
                         'waypoint',
                     ],
                     [
+                        'keepTiming',
                         'snapping',
                         'divisionCustom',
                         'division16',

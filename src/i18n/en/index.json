@@ -118,6 +118,11 @@
                 "title": "Jump Up"
             }
         },
+        "keepTiming": {
+            "title": "Keep Timing",
+            "beat": "Switch to keep beat",
+            "time": "Switch to keep time"
+        },
         "manageGroups": {
             "title": "Manage groups",
             "modal": {

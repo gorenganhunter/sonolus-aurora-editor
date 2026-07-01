@@ -31,6 +31,7 @@ export const view = shallowReactive({
 
     division: 4,
     snapping: 'absolute' as 'absolute' | 'relative',
+    keepTiming: 'beat' as 'beat' | 'time',
 
     groupId: optional<GroupId>(),
 

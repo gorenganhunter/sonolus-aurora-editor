@@ -14,6 +14,7 @@ export type BaseEntity = {
     hitbox?: EntityHitbox
 
     beat: number
+    realTimeCache?: number
 }
 
 export type Entity = BpmEntity | TimeScaleEntity | SlideEntity | WaypointEntity
