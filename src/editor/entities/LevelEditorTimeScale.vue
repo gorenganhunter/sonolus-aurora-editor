@@ -33,7 +33,12 @@ const x2 = computed(() => Math.max(x.value, 4.5) - x.value)
         />
         <circle r="0.1" stroke="#fff" fill="#ff0" />
 
-        <text x="-0.2" text-anchor="end" dominant-baseline="middle" fill="#ff0">
+        <text
+            :x="x > 0 ? 0.2 : -0.2"
+            :text-anchor="x > 0 ? 'start' : 'end'"
+            dominant-baseline="middle"
+            fill="#ff0"
+        >
             {{ formatTimeScale(entity.timeScale) }}
         </text>
         <text
@@ -42,9 +47,9 @@ const x2 = computed(() => Math.max(x.value, 4.5) - x.value)
                 entity.groupId !== defaultGroupId &&
                 (isHighlighted || isViewRecentlyActive)
             "
-            x="0.2"
+            :x="x > 0 ? -0.2 : 0.2"
             font-size="0.4"
-            text-anchor="start"
+            :text-anchor="x > 0 ? 'end' : 'start'"
             dominant-baseline="middle"
             fill="#0aa"
         >
