@@ -13,6 +13,9 @@ const modelValue = defineModel<NoteSfx | undefined>({ required: true })
         :options="[
             [i18n.modals.form.sfx.default, 'default'],
             [i18n.modals.form.sfx.none, 'none'],
+            [i18n.modals.form.sfx.alt2, 'alt2'],
+            [i18n.modals.form.sfx.alt3, 'alt3'],
+            [i18n.modals.form.sfx.alt4, 'alt4']
 /*            [i18n.modals.form.sfx.normalTap, 'normalTap'],
             [i18n.modals.form.sfx.criticalTap, 'criticalTap'],
             [i18n.modals.form.sfx.normalFlick, 'normalFlick'],

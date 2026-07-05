@@ -150,9 +150,9 @@ const directions = {
 const sfxSchema = Type.Union([
     Type.Literal(0),
     Type.Literal(1),
-    // Type.Literal(2),
-    // Type.Literal(3),
-    // Type.Literal(4),
+    Type.Literal(2),
+    Type.Literal(3),
+    Type.Literal(4),
     // Type.Literal(5),
     // Type.Literal(6),
     // Type.Literal(7),
@@ -164,6 +164,9 @@ const sfxSchema = Type.Union([
 const sfxs = {
     0: 'default',
     1: 'none',
+    2: 'alt2',
+    3: 'alt3',
+    4: 'alt4'
     // 2: 'normalTap',
     // 3: 'normalFlick',
     // 4: 'normalTrace',

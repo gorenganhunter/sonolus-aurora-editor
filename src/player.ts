@@ -1,18 +1,20 @@
 import { watch } from 'vue'
-import tapUrl from './assets/se_live_tap.mp3'
-import tickUrl from './assets/se_live_tick.mp3'
-import flickUrl from './assets/se_live_flick.mp3'
-import connectorUrl from './assets/se_live_connector.mp3'
-// import normalTickUrl from './assets/se_live_connect.mp3?url'
-// import criticalTickUrl from './assets/se_live_connect_critical.mp3?url'
-// import criticalTapUrl from './assets/se_live_critical.mp3?url'
-// import normalFlickUrl from './assets/se_live_flick.mp3?url'
-// import criticalFlickUrl from './assets/se_live_flick_critical.mp3?url'
-// import normalActiveUrl from './assets/se_live_long.mp3?url'
-// import criticalActiveUrl from './assets/se_live_long_critical.mp3?url'
-// import normalTapUrl from './assets/se_live_perfect.mp3?url'
-// import normalTraceUrl from './assets/se_live_trace.mp3?url'
-// import criticalTraceUrl from './assets/se_live_trace_critical.mp3?url'
+import defaultTapUrl from './assets/se/default/perfect.mp3'
+import defaultTickUrl from './assets/se/default/tick.mp3'
+import defaultFlickUrl from './assets/se/default/flick.mp3'
+import defaultConnectorUrl from './assets/se/default/connect.mp3'
+import alt2TapUrl from './assets/se/alt2/perfect.mp3'
+import alt2TickUrl from './assets/se/alt2/tick.mp3'
+import alt2FlickUrl from './assets/se/alt2/flick.mp3'
+import alt2ConnectorUrl from './assets/se/alt2/connect.mp3'
+import alt3TapUrl from './assets/se/alt3/perfect.mp3'
+import alt3TickUrl from './assets/se/alt3/tick.mp3'
+import alt3FlickUrl from './assets/se/alt3/flick.mp3'
+import alt3ConnectorUrl from './assets/se/alt3/connect.mp3'
+import alt4TapUrl from './assets/se/alt4/perfect.mp3'
+import alt4TickUrl from './assets/se/alt4/tick.mp3'
+import alt4FlickUrl from './assets/se/alt4/flick.mp3'
+import alt4ConnectorUrl from './assets/se/alt4/connect.mp3'
 import { view } from './editor/view'
 import { bgm } from './history/bgm'
 import { bpms } from './history/bpms'
@@ -30,20 +32,30 @@ const delay = 0.2
 const context = new AudioContext()
 
 const sfxBuffers = {
-    tap: optional<AudioBuffer>(),
-    tick: optional<AudioBuffer>(),
-    flick: optional<AudioBuffer>(),
-    connector: optional<AudioBuffer>()
-    // normalTap: optional<AudioBuffer>(),
-    // criticalTap: optional<AudioBuffer>(),
-    // normalFlick: optional<AudioBuffer>(),
-    // criticalFlick: optional<AudioBuffer>(),
-    // normalTrace: optional<AudioBuffer>(),
-    // criticalTrace: optional<AudioBuffer>(),
-    // normalTick: optional<AudioBuffer>(),
-    // criticalTick: optional<AudioBuffer>(),
-    // normalActive: optional<AudioBuffer>(),
-    // criticalActive: optional<AudioBuffer>(),
+    default: {
+        tap: optional<AudioBuffer>(),
+        tick: optional<AudioBuffer>(),
+        flick: optional<AudioBuffer>(),
+        connector: optional<AudioBuffer>()
+    },
+    alt2: {
+        tap: optional<AudioBuffer>(),
+        tick: optional<AudioBuffer>(),
+        flick: optional<AudioBuffer>(),
+        connector: optional<AudioBuffer>()
+    },
+    alt3: {
+        tap: optional<AudioBuffer>(),
+        tick: optional<AudioBuffer>(),
+        flick: optional<AudioBuffer>(),
+        connector: optional<AudioBuffer>()
+    },
+    alt4: {
+        tap: optional<AudioBuffer>(),
+        tick: optional<AudioBuffer>(),
+        flick: optional<AudioBuffer>(),
+        connector: optional<AudioBuffer>()
+    },
 }
 
 type ActiveAudio = {
@@ -86,9 +98,26 @@ watch(time, ({ now }) => {
     }
 
     const targets = {
-        tap: new Set<number>(),
-        tick: new Set<number>(),
-        flick: new Set<number>(),
+        default: {
+            tap: new Set<number>(),
+            tick: new Set<number>(),
+            flick: new Set<number>()
+        },
+        alt2: {
+            tap: new Set<number>(),
+            tick: new Set<number>(),
+            flick: new Set<number>()
+        },
+        alt3: {
+            tap: new Set<number>(),
+            tick: new Set<number>(),
+            flick: new Set<number>()
+        },
+        alt4: {
+            tap: new Set<number>(),
+            tick: new Set<number>(),
+            flick: new Set<number>()
+        },
         // normalTap: new Set<number>(),
         // criticalTap: new Set<number>(),
         // normalFlick: new Set<number>(),
@@ -123,16 +152,17 @@ watch(time, ({ now }) => {
         if (!info) throw new Error('Unexpected missing info')
 
         //        const isInActive = info.activeHead !== info.activeTail
-        const isHead = info.segmentHead === info.note
-        const isTail = info.segmentTail === info.note
+        // const isHead = info.head === info.note
+        // const isTail = info.tail === info.note
+        const isHead = infos[0] === info
         const isFlick = info.note.flickDirection !== 'none'
 
         if (isFlick) {
-            targets.flick.add(entity.beat)
+            targets[entity.sfx].flick.add(entity.beat)
         } else if (isHead) {
-            targets.tap.add(entity.beat)
+            targets[entity.sfx].tap.add(entity.beat)
         } else {
-            targets.tick.add(entity.beat)
+            targets[entity.sfx].tick.add(entity.beat)
         }
 
         // targets.normalTap.add(entity.beat)
@@ -272,21 +302,22 @@ watch(time, ({ now }) => {
         // >>>>>>> 392a765d1527e3410ba779872c993250350c7851
     }
 
-    for (const [type, beats] of entries(targets)) {
-        if (!sfxBuffers[type]) continue
+    for (const [pack, types] of entries(targets)) {
+        for (const [type, beats] of entries(types)) {
+            if (!sfxBuffers[pack][type]) continue
 
-        for (const beat of beats) {
-            schedule(
-                state.sfxNodes,
-                sfxBuffers[type],
-                settings.playSfxVolume * sfxVolumeMultiplier,
-                (beatToTime(bpms.value, beat) - state.bgmTime) / state.speed +
-                state.contextTime +
-                delay,
-            )
+            for (const beat of beats) {
+                schedule(
+                    state.sfxNodes,
+                    sfxBuffers[pack][type],
+                    settings.playSfxVolume * sfxVolumeMultiplier,
+                    (beatToTime(bpms.value, beat) - state.bgmTime) / state.speed +
+                    state.contextTime +
+                    delay,
+                )
+            }
         }
     }
-
     const activeTargets = {
         connector: Array<ConnectorEntity>(),
         //        criticalActive: Array<ConnectorEntity>(),
@@ -306,12 +337,12 @@ watch(time, ({ now }) => {
     }
 
     for (const [type, entities] of entries(activeTargets)) {
-        if (!sfxBuffers[type]) continue
+        if (!sfxBuffers.default[type]) continue
 
         for (const entity of entities.sort((a, b) => a.head.beat - b.head.beat)) {
             scheduleActive(
                 state.actives[type],
-                sfxBuffers[type],
+                sfxBuffers.default[type],
                 entity.head.beat,
                 entity.tail.beat,
                 settings.playSfxVolume * sfxVolumeMultiplier,
@@ -524,26 +555,28 @@ const scheduleActive = (
 }
 
 const loadSfx = () => {
-    const load = async (type: keyof typeof sfxBuffers, url: string) => {
+    const load = async <P extends keyof typeof sfxBuffers>(pack: P, type: keyof typeof sfxBuffers[P], url: string) => {
         const response = await fetch(url)
         const data = await response.arrayBuffer()
-        sfxBuffers[type] = await context.decodeAudioData(data)
+        sfxBuffers[pack][type] = await context.decodeAudioData(data) as any
     }
 
-    void load('tap', tapUrl)
-    void load('tick', tickUrl)
-    void load('flick', flickUrl)
-    void load('connector', connectorUrl)
-    // void load('normalTap', normalTapUrl)
-    // void load('criticalTap', criticalTapUrl)
-    // void load('normalFlick', normalFlickUrl)
-    // void load('criticalFlick', criticalFlickUrl)
-    // void load('normalTrace', normalTraceUrl)
-    // void load('criticalTrace', criticalTraceUrl)
-    // void load('normalTick', normalTickUrl)
-    // void load('criticalTick', criticalTickUrl)
-    // void load('normalActive', normalActiveUrl)
-    // void load('criticalActive', criticalActiveUrl)
+    void load('default', 'tap', defaultTapUrl)
+    void load('default', 'tick', defaultTickUrl)
+    void load('default', 'flick', defaultFlickUrl)
+    void load('default', 'connector', defaultConnectorUrl)
+    void load('alt2', 'tap', alt2TapUrl)
+    void load('alt2', 'tick', alt2TickUrl)
+    void load('alt2', 'flick', alt2FlickUrl)
+    void load('alt2', 'connector', alt2ConnectorUrl)
+    void load('alt3', 'tap', alt3TapUrl)
+    void load('alt3', 'tick', alt3TickUrl)
+    void load('alt3', 'flick', alt3FlickUrl)
+    void load('alt3', 'connector', alt3ConnectorUrl)
+    void load('alt4', 'tap', alt4TapUrl)
+    void load('alt4', 'tick', alt4TickUrl)
+    void load('alt4', 'flick', alt4FlickUrl)
+    void load('alt4', 'connector', alt4ConnectorUrl)
 }
 
 loadSfx()

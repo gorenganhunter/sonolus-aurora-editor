@@ -19,6 +19,9 @@ export type FlickDirection = typeof FlickDirection[number]
 export type NoteSfx =
     | 'default'
     | 'none'
+    | 'alt2'
+    | 'alt3'
+    | 'alt4'
 //     | 'normalTap'
 //     | 'criticalTap'
 //     | 'normalFlick'
