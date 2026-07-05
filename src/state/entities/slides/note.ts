@@ -3,6 +3,7 @@ import type { BaseEntity } from '..'
 import type { GroupId } from '../../../chart/groups'
 import type {
     ConnectorEase,
+    ConnectorSfx,
     // ConnectorGuideColor,
     // ConnectorLayer,
     // ConnectorType,
@@ -25,6 +26,7 @@ export type NoteEntity = BaseEntity & {
     shortenEarlyWindow: ShortenEarlyWindow
     // isFake: boolean
     sfx: NoteSfx
+    holdSfx: ConnectorSfx
     // isConnectorSeparator: boolean
     // connectorType: ConnectorType
     connectorEase: ConnectorEase
@@ -60,6 +62,7 @@ export const toNoteEntity = (
     flickDirection: object.flickDirection,
     shortenEarlyWindow: object.shortenEarlyWindow,
     sfx: object.sfx,
+    holdSfx: object.holdSfx,
     connectorEase: object.connectorEase,
     // isFake: object.isFake,
 

@@ -12,6 +12,7 @@ import MultiConnectorEaseField from '../../../modals/form/MultiConnectorEaseFiel
 // import MultiConnectorTypeField from '../../../modals/form/MultiConnectorTypeField.vue'
 import MultiFlickDirectionField from '../../../modals/form/MultiFlickDirectionField.vue'
 import MultiGroupField from '../../../modals/form/MultiGroupField.vue'
+import MultiHoldSfxField from '../../../modals/form/MultiHoldSfxField.vue'
 // import MultiHideNotesField from '../../../modals/form/MultiHideNotesField.vue'
 import MultiIsAttachedField from '../../../modals/form/MultiIsAttachedField.vue'
 // import MultiIsConnectorSeparatorField from '../../../modals/form/MultiIsConnectorSeparatorField.vue'
@@ -44,6 +45,7 @@ const lane = createModel('lane')
 const flickDirection = createModel('flickDirection')
 // const isFake = createModel('isFake')
 const sfx = createModel('sfx')
+const holdSfx = createModel('holdSfx')
 // const isConnectorSeparator = createModel('isConnectorSeparator')
 // const connectorType = createModel('connectorType')
 const connectorEase = createModel('connectorEase')
@@ -85,6 +87,7 @@ const connectorEase = createModel('connectorEase')
             />
             <!--MultiIsFakeField v-if="types.note && noteFields.isFake !== false" v-model="isFake" /-->
             <MultiSfxField v-if="types.note && noteFields.sfx !== false" v-model="sfx" />
+            <MultiHoldSfxField v-if="types.note && noteFields.holdSfx !== false" v-model="holdSfx" />
             <!--MultiIsConnectorSeparatorField
                 v-if="types.note && noteFields.isConnectorSeparator !== false"
                 v-model="isConnectorSeparator"

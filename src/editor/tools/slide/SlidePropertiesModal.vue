@@ -21,6 +21,7 @@ import MultiSfxField from '../../../modals/form/MultiSfxField.vue'
 // import MultiSizeField from '../../../modals/form/MultiSizeField.vue'
 import PropertiesModal from '../../../modals/form/PropertiesModal.vue'
 import { useSelectedEntitiesProperties } from '../../utils/properties'
+import MultiHoldSfxField from '../../../modals/form/MultiHoldSfxField.vue'
 
 const { noteFields, createModel } = useSelectedEntitiesProperties(
     (entity) => entity.type === 'note',
@@ -37,6 +38,7 @@ const flickDirection = createModel('flickDirection')
 const shortenEarlyWindow = createModel('shortenEarlyWindow')
 // const isFake = createModel('isFake')
 const sfx = createModel('sfx')
+const holdSfx = createModel('holdSfx')
 // const isConnectorSeparator = createModel('isConnectorSeparator')
 // const connectorType = createModel('connectorType')
 const connectorEase = createModel('connectorEase')
@@ -66,6 +68,7 @@ const connectorEase = createModel('connectorEase')
         />
         <!--MultiIsFakeField v-if="noteFields.isFake !== false" v-model="isFake" /-->
         <MultiSfxField v-if="noteFields.sfx !== false" v-model="sfx" />
+        <MultiHoldSfxField v-if="noteFields.holdSfx !== false" v-model="holdSfx" />
         <!--MultiIsConnectorSeparatorField
             v-if="noteFields.isConnectorSeparator !== false"
             v-model="isConnectorSeparator"

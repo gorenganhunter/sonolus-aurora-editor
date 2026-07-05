@@ -77,7 +77,10 @@ let state:
         bgmNodes: Set<GainNode>
         sfxNodes: Set<GainNode>
         actives: {
-            connector: Set<ActiveAudio>
+            default: Set<ActiveAudio>,
+            alt2: Set<ActiveAudio>,
+            alt3: Set<ActiveAudio>,
+            alt4: Set<ActiveAudio>,
         }
     }
     | undefined
@@ -319,14 +322,16 @@ watch(time, ({ now }) => {
         }
     }
     const activeTargets = {
-        connector: Array<ConnectorEntity>(),
-        //        criticalActive: Array<ConnectorEntity>(),
+        default: Array<ConnectorEntity>(),
+        alt2: Array<ConnectorEntity>(),
+        alt3: Array<ConnectorEntity>(),
+        alt4: Array<ConnectorEntity>(),
     }
 
     for (const entity of cullEntities('connector', keys.min, keys.max)) {
-        if (entity.head.beat < beats.min || entity.head.beat >= beats.max) continue
+        if (entity.head.beat < beats.min || entity.head.beat >= beats.max || entity.head.holdSfx === 'none') continue
 
-        activeTargets.connector.push(entity)
+        activeTargets[entity.head.holdSfx].push(entity)
         // if (entity.segmentHead.connectorType !== 'active') continue
         //
         // if (entity.segmentHead.connectorActiveIsCritical) {
@@ -337,12 +342,12 @@ watch(time, ({ now }) => {
     }
 
     for (const [type, entities] of entries(activeTargets)) {
-        if (!sfxBuffers.default[type]) continue
+        if (!sfxBuffers[type].connector) continue
 
         for (const entity of entities.sort((a, b) => a.head.beat - b.head.beat)) {
             scheduleActive(
                 state.actives[type],
-                sfxBuffers.default[type],
+                sfxBuffers[type].connector,
                 entity.head.beat,
                 entity.tail.beat,
                 settings.playSfxVolume * sfxVolumeMultiplier,
@@ -375,7 +380,10 @@ export const startPlayer = (bgmTime: number, speed: number) => {
         bgmNodes: new Set(),
         sfxNodes: new Set(),
         actives: {
-            connector: new Set(),
+            default: new Set(),
+            alt2: new Set(),
+            alt3: new Set(),
+            alt4: new Set(),
         },
     }
 

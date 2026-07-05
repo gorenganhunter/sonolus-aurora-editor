@@ -3,8 +3,9 @@ import { modals } from '../../modals'
 import { settings, type KeyboardShortcut } from '../../settings'
 import { commands, type CommandName } from '../commands'
 import { currentSidebar } from '../sidebars'
-import { type ConnectorEase, type FlickDirection, type NoteSfx, type NoteType, type ShortenEarlyWindow } from '../../chart/note'
+import { type ConnectorEase, type ConnectorSfx, type FlickDirection, type NoteSfx, type NoteType, type ShortenEarlyWindow } from '../../chart/note'
 import { toolName } from '../tools'
+import { entries } from '../../utils/object'
 
 type NoteModifier = {
     noteType?: NoteType
@@ -12,6 +13,7 @@ type NoteModifier = {
     shortenEarlyWindow?: ShortenEarlyWindow
     isAttached?: boolean
     sfx?: NoteSfx
+    holdSfx?: ConnectorSfx
     connectorEase?: ConnectorEase
 }
 
@@ -22,13 +24,14 @@ const onKeydown = (event: KeyboardEvent) => {
     if (currentSidebar.value?.contains(document.activeElement)) return
 
     if (["select", "note", "slide"].includes(toolName.value)) {
-        for (const property in settings.noteModifierKey) {
-            if (!settings.noteModifierKey[property]) continue
-            for (const value in settings.noteModifierKey[property]) {
-                const sc = settings.noteModifierKey[property][value] as KeyboardShortcut | undefined
+        for (let [property, values] of entries(settings.noteModifierKey)) {
+            if (!values) continue
+            for (const value of Object.keys(values) as (keyof typeof values)[]) {
+                const sc = values[value as keyof typeof values] as KeyboardShortcut | undefined
                 if (!sc) continue
 
                 if (!!sc.ctrl !== event.ctrlKey || !!sc.shift !== event.shiftKey || !!sc.alt !== event.altKey || sc.key !== event.key) continue
+                // @ts-expect-error
                 noteModifier[property] = value === "true" ? true : value === "false" ? false : value
             }
         }
@@ -49,9 +52,9 @@ const onKeyup = (event: KeyboardEvent) => {
     if (modals.length) return
     if (currentSidebar.value?.contains(document.activeElement)) return
 
-    for (const [p, v] of Object.entries(noteModifier)) {
+    for (const [p, v] of entries(noteModifier)) {
         if (v !== undefined) {
-            for (const [v2, sc] of Object.entries(settings.noteModifierKey[p]) as [typeof v, KeyboardShortcut | undefined][]) {
+            for (const [v2, sc] of Object.entries(settings.noteModifierKey[p] || []) as [typeof v, KeyboardShortcut | undefined][]) {
                 if (!sc) continue
                 if (v !== v2) continue
                 if (!!sc.ctrl !== event.ctrlKey || !!sc.shift !== event.shiftKey || !!sc.alt !== event.altKey || sc.key !== event.key) noteModifier[p] = undefined

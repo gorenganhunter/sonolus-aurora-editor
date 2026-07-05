@@ -36,6 +36,13 @@ export type NoteSfx =
 
 export type ConnectorEase = 'linear' | 'in' | 'out' | 'inOut' | 'outIn' | 'none'
 
+export type ConnectorSfx =
+    | 'default'
+    | 'none'
+    | 'alt2'
+    | 'alt3'
+    | 'alt4'
+
 // export type ConnectorGuideColor =
 //     | 'neutral'
 //     | 'red'
@@ -64,6 +71,7 @@ export type NoteObject = {
     shortenEarlyWindow: ShortenEarlyWindow
     // isFake: boolean
     sfx: NoteSfx
+    holdSfx: ConnectorSfx
     // isConnectorSeparator: boolean
     // connectorType: ConnectorType
     connectorEase: ConnectorEase

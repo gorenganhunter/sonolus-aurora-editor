@@ -24,6 +24,7 @@ import OptionalSfxField from '../../../modals/form/OptionalSfxField.vue'
 import OptionalTimeScaleField from '../../../modals/form/OptionalTimeScaleField.vue'
 import BaseSidebar from '../../sidebars/BaseSidebar.vue'
 import { useProperties } from '../../utils/properties'
+import OptionalHoldSfxField from '../../../modals/form/OptionalHoldSfxField.vue'
 
 const createModel = useProperties(brushProperties)
 
@@ -36,6 +37,7 @@ const flickDirection = createModel('flickDirection')
 const shortenEarlyWindow = createModel('shortenEarlyWindow')
 // const isFake = createModel('isFake')
 const sfx = createModel('sfx')
+const holdSfx = createModel('holdSfx')
 // const isConnectorSeparator = createModel('isConnectorSeparator')
 // const connectorType = createModel('connectorType')
 const connectorEase = createModel('connectorEase')
@@ -61,6 +63,7 @@ const timeScale = createModel('timeScale')
         <OptionalShortenEarlyWindowField v-model="shortenEarlyWindow" />
         <!--OptionalIsFakeField v-model="isFake" /-->
         <OptionalSfxField v-model="sfx" />
+        <OptionalHoldSfxField v-model="holdSfx" />
         <!--OptionalIsConnectorSeparatorField v-model="isConnectorSeparator" />
         <OptionalConnectorTypeField v-model="connectorType" /-->
         <OptionalConnectorEaseField v-model="connectorEase" />

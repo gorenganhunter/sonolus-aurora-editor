@@ -343,6 +343,7 @@ const toNoteObject = (
         flickDirection: direction === undefined ? "none" : directions[direction],
         shortenEarlyWindow: earlyCut === undefined ? 'none' : earlyWindows[earlyCut],
         sfx: sfxs[getOptionalValue(entity, 'sfx', sfxSchema) ?? 0],
+        holdSfx: sfxs[getOptionalValue(entity, 'holdSfx', sfxSchema) ?? 0],
         connectorEase: connectorEase === undefined ? 'linear' : connectorEases[connectorEase]
     }
 

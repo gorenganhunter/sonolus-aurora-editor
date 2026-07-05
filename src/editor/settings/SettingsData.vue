@@ -17,7 +17,7 @@ const importSettings = async () => {
     const json = JSON.parse(await file.text())
 
     for (const key in settings) {
-        settings[key] = json[key]
+        settings[key as keyof typeof settings] = json[key] as never
     }
 }
 
@@ -27,8 +27,8 @@ const exportSettings = () => {
 }
 
 const resetSettings = () => {
-    for (const [k, v] of Object.entries(settingsProperties)) {
-        settings[k] = Value.Create(v)
+    for (const [k, v] of Object.entries(settingsProperties) as [keyof typeof settingsProperties, (typeof settingsProperties)[keyof typeof settingsProperties]][]) {
+        settings[k] = Value.Create(v) as never
     }
 }
 </script>

@@ -14,6 +14,7 @@ import { getLane } from './lane'
 import { noteDuration, approachPos, approachSize, arrows } from './note'
 import { Vec } from "./Vec"
 import { view } from '../editor/view'
+import type { NoteEntity } from '../state/entities/slides/note'
 
 const notes = computed(() =>
     [...cullEntities('note', keys.value.min, keys.value.max)]
@@ -62,13 +63,13 @@ const notes = computed(() =>
         const v = new Vec(0, 1).rotate(-lane * Math.PI / 12)
         const layout = new Vec(0, 0).add(v.x, v.y).mul(approachPos(s - 1))
 
-        const slideNotes = state.value.store.slides.note.get(slideId)
+        const slideNotes = state.value.store.slides.note.get(slideId) as NoteEntity[]
 
         let color = flickDirection === 'left' ? "#f00" : flickDirection === 'right' ? "#f90" : flickDirection === "up" ? "#ff50cb" : flickDirection === 'down' ? "#909" : "#00f"
 
         if (slideNotes.length > 1 && flickDirection === 'none') color = "#0f0"
 
-        const isTick = !(slideNotes[0].lane === lane && slideNotes[0].beat === beat && slideNotes[0].groupId === groupId) && flickDirection === "none"
+        const isTick = !(slideNotes[0]?.lane === lane && slideNotes[0]?.beat === beat && slideNotes[0]?.groupId === groupId) && flickDirection === "none"
         
         // const a = -lane * (Math.PI / 8) * (180 / Math.PI)
 

@@ -345,6 +345,7 @@ const getPropertiesFromSelection = (beat: number) => {
             noteModifier.shortenEarlyWindow ?? defaultSlideProperties.value.shortenEarlyWindow ?? note?.shortenEarlyWindow ?? 'none',
         // isFake: defaultSlideProperties.value.isFake ?? note?.isFake ?? false,
         sfx: noteModifier.sfx ?? defaultSlideProperties.value.sfx ?? note?.sfx ?? 'default',
+        holdSfx: noteModifier.holdSfx ?? defaultSlideProperties.value.holdSfx ?? note?.holdSfx ?? 'default',
         // isConnectorSeparator: defaultSlideProperties.value.isConnectorSeparator ?? false,
         // connectorType:
         //     defaultSlideProperties.value.connectorType ?? nearest?.connectorType ?? 'active',

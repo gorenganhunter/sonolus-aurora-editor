@@ -3,6 +3,7 @@ import type { Tool } from '..'
 import type { GroupId } from '../../../chart/groups'
 import type {
     ConnectorEase,
+    ConnectorSfx,
     // ConnectorGuideColor,
     // ConnectorLayer,
     // ConnectorType,
@@ -40,6 +41,7 @@ export type BrushProperties = {
     shortenEarlyWindow?: ShortenEarlyWindow
     // isFake?: boolean
     sfx?: NoteSfx
+    holdSfx?: ConnectorSfx
     // isConnectorSeparator?: boolean
     // connectorType?: ConnectorType
     connectorEase?: ConnectorEase
