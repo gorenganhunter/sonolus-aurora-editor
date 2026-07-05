@@ -23,16 +23,18 @@ const autoSet = () => {
     let firstBeat = Infinity
     let lastBeat = -Infinity
     let duration = 0
+    let ns = 0
     for (const note of store.value.grid.note.values()) {
         note.forEach(n => {
             if (n.beat < firstBeat) firstBeat = n.beat
             if (n.beat > lastBeat) lastBeat = n.beat
+            if (n.noteType !== 'anchor') ns++
         })
     }
     if (firstBeat !== Infinity && lastBeat !== -Infinity) {
         duration = beatToTime(bpms.value, lastBeat) - beatToTime(bpms.value, firstBeat)
     }
-    model.value = Math.floor(duration / 4) + 1
+    model.value = Math.ceil((8 + ns / duration) * (duration / 60))
 }
 </script>
 

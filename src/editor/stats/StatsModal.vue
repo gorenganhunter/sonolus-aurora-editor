@@ -86,10 +86,10 @@ const data = computed(() => {
         duration = beatToTime(state.value.bpms, lastBeat) - beatToTime(state.value.bpms, firstBeat)
         temp.global.info.secs = duration
     }
-    temp.global.info.hp.recommend = Math.floor(duration / 4) + 1
     const noteW = temp.global.entities.total - temp.global.entities.tick * 0.25
     temp.global.info.level = Math.round((-44 + 12.2 * Math.log(noteW / (duration / 60))) * 100) / 100
-
+    temp.global.info.hp.recommend = Math.ceil((8 + temp.global.entities.total / duration) * (duration / 60))
+    
     let easiest = Infinity
     let hardest = -Infinity
 
