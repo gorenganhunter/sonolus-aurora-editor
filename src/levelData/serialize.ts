@@ -35,6 +35,10 @@ export const serializeToLevelData = (
                     {
                         name: 'life',
                         value: hp
+                    },
+                    {
+                        name: 'scoreSystem',
+                        value: 1
                     }
                 ],
             },
