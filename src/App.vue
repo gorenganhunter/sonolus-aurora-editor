@@ -7,6 +7,7 @@ import ModalManager from './modals/ModalManager.vue'
 import LevelPreview from './preview/LevelPreview.vue'
 import { screenSm, screenWidth } from './screen'
 import { settings } from './settings'
+import { useRegisterSW } from 'virtual:pwa-register/vue'
 
 watch(
     () => settings.locale,
@@ -78,6 +79,13 @@ const onToggle = (panel: Panel) => {
 
 const onFocus = (event: FocusEvent) => {
     ;(event.currentTarget as HTMLElement | null)?.blur()
+}
+
+const { needRefresh, offlineReady, updateServiceWorker } = useRegisterSW()
+
+const close = () => {
+    needRefresh.value = false
+    offlineReady.value = false
 }
 </script>
 
@@ -171,4 +179,43 @@ const onFocus = (event: FocusEvent) => {
     </div>
 
     <ModalManager />
+
+    <div v-if="needRefresh || offlineReady" class="pwa-toast" role="alert">
+        <div class="message">
+            <span v-if="offlineReady">App ready to work offline</span>
+            <span v-else>New content available, click on reload button to update</span>
+        </div>
+        <button v-if="needRefresh" @click="updateServiceWorker()">Reload</button>
+        <button @click="close">Close</button>
+    </div>
 </template>
+
+<style>
+.pwa-toast {
+    background-color: black;
+    color: white;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    margin: 16px;
+    padding: 12px;
+    border: 1px solid #8885;
+    border-radius: 4px;
+    z-index: 1000;
+    text-align: left;
+    box-shadow: 3px 4px 5px 0px #8885;
+}
+
+.pwa-toast .message {
+    margin-bottom: 8px;
+}
+
+.pwa-toast button {
+    background-color: #444;
+    border: 1px solid #8885;
+    outline: none;
+    margin-right: 5px;
+    border-radius: 2px;
+    padding: 3px 10px;
+}
+</style>

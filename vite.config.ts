@@ -13,6 +13,7 @@ export default defineConfig({
         },
     },
     plugins: [vue(), VitePWA({
+        filename: 'service-worker.js',
         manifest: {
             "name": "Sonolus Aurora Editor",
             "short_name": "Ædit",
@@ -48,7 +49,7 @@ export default defineConfig({
             "theme_color": "#77EFDC",
             "description": "Editor for Sonolus Aurora"
         },
-        registerType: "autoUpdate",
+        registerType: "prompt",
         workbox: { globPatterns: ["**/*"] }
     })],
     define: {

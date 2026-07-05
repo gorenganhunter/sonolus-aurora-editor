@@ -9,6 +9,7 @@
     "types": [
       "vite/client",
       "@types/wicg-file-system-access",
+      "vite-plugin-pwa/client"
     ],
 
     "noUncheckedIndexedAccess": true,

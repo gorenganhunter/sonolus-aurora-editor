@@ -12,9 +12,9 @@
   },
   "dependencies": {
     "@breezystack/lamejs": "^1.2.7",
-    "eruda": "^3.4.3",
     "@sinclair/typebox": "^0.34.49",
     "@sonolus/core": "~7.15.1",
+    "eruda": "^3.4.3",
     "file-saver": "^2.0.5",
     "pako": "^2.1.0",
     "vue": "^3.5.32"
@@ -41,6 +41,7 @@
     "typescript-eslint": "^8.58.1",
     "vite": "^7.3.2",
     "vite-plugin-pwa": "^1.2.0",
-    "vue-tsc": "^3.2.6"
+    "vue-tsc": "^3.2.6",
+    "workbox-window": "^7.4.1"
   }
 }
