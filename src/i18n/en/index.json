@@ -43,7 +43,13 @@
                 "start": "Start",
                 "duration": "Duration",
                 "easiest": "Easiest Section",
-                "hardest": "Hardest Section"
+                "hardest": "Hardest Section",
+                "marks": {
+                    "label": "Marks",
+                    "danger": "danger",
+                    "questionable": "questionable",
+                    "info": "info"
+                }
             }
         },
         "brush": {

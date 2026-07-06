@@ -50,7 +50,12 @@ const data = computed(() => {
                 total: 0,
                 bpm: 0,
                 timeScale: 0,
-                waypoint: 0
+                waypoint: 0,
+                marks: {
+                    danger: 0,
+                    questionable: 0,
+                    info: 0
+                }
             }
         },
         waypoints: [] as WaypointData[]
@@ -64,6 +69,8 @@ const data = computed(() => {
             // console.log(arr)
             if (n.beat < firstBeat) firstBeat = n.beat
             if (n.beat > lastBeat) lastBeat = n.beat
+
+            if (n.marker !== "none") temp.global.entities.marks[n.marker]++
 
             if (n.noteType === "anchor") return
             temp.global.entities.total++
@@ -188,6 +195,7 @@ const data = computed(() => {
             <li>{{ i18n.commands.stats.modal.bpms + " = " + data.global.entities.bpm }}</li>
             <li>{{ i18n.commands.stats.modal.timeScales + " = " + data.global.entities.timeScale }}</li>
             <li>{{ i18n.commands.stats.modal.waypoints + " = " + data.global.entities.waypoint }}</li>
+            <li>{{ i18n.commands.stats.modal.marks.label + " = " + data.global.entities.marks.danger + " " + i18n.commands.stats.modal.marks.danger + ", "+ data.global.entities.marks.questionable + " " + i18n.commands.stats.modal.marks.questionable + ", "+ data.global.entities.marks.info + " " + i18n.commands.stats.modal.marks.info }}</li>
         </HelpSection>
         <hr>
         <h1 class="text-center my-2 font-bold">{{ i18n.commands.stats.modal.waypoints }}</h1>
