@@ -92,10 +92,10 @@ const type = computed(() => {
                 entity.groupId !== defaultGroupId &&
                 (isHighlighted || isViewRecentlyActive)
             "
-            :x="1"
-            y="0.4"
+            :x="0.7"
+            :y="0.4"
             font-size="0.4"
-            text-anchor="middle"
+            text-anchor="start"
             dominant-baseline="middle"
             fill="#0aa"
         >
@@ -103,14 +103,32 @@ const type = computed(() => {
         </text>
         <text
             v-if="entity.shortenEarlyWindow !== 'none'"
-            :x="0.6"
-            y="-0.4"
+            :x="0.7"
+            :y="-0.4"
             font-size="0.4"
             text-anchor="start"
             dominant-baseline="middle"
             fill="#b00"
         >
             -{{ entity.shortenEarlyWindow }}
+        </text>
+        <circle
+            v-if="entity.marker !== 'none'"
+            :cx="-0.4"
+            :cy="-0.4"
+            :r="0.2"
+            :fill="entity.marker === 'danger' ? '#f00' : entity.marker === 'questionable' ? '#ff0' : '#0ff'"
+        />
+        <text
+            v-if="entity.marker !== 'none'"
+            :x="-0.4"
+            :y="-0.4"
+            font-size="0.4"
+            text-anchor="middle"
+            dominant-baseline="central"
+            fill="#000"
+        >
+            {{ entity.marker === "danger" ? "!" : entity.marker === "questionable" ? "?" : "i" }}
         </text>
     </g>
 </template>
