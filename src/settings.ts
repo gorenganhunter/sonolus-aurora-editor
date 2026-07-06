@@ -96,6 +96,13 @@ export const NoteModifier = Type.Object({
         Type.Literal('outIn'),
         Type.Literal('none'),
     ]),
+    marker: Type.Union([
+        Type.Literal('none'),
+        Type.Literal('danger'),
+        Type.Literal('questionable'),
+        Type.Literal('info'),
+    ]),
+    comment: Type.Optional(Type.String())
     // connectorActiveIsCritical: Type.Boolean(),
     // connectorActiveIsFake: Type.Boolean(),
     // connectorGuideColor: Type.Union([
@@ -190,6 +197,12 @@ export const NoteModifierRecord = Type.Partial(Type.Object({
         Type.Literal('inOut'),
         Type.Literal('outIn'),
         Type.Literal('none'),
+    ]), KeyboardShortcut)),
+    marker: Type.Partial(Type.Record(Type.Union([
+        Type.Literal('none'),
+        Type.Literal('danger'),
+        Type.Literal('questionable'),
+        Type.Literal('info'),
     ]), KeyboardShortcut)),
     // connectorActiveIsCritical: Type.Boolean(),
     // connectorActiveIsFake: Type.Boolean(),

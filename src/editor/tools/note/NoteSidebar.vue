@@ -23,6 +23,8 @@ import { settings } from '../../../settings'
 import BaseSidebar from '../../sidebars/BaseSidebar.vue'
 import { useProperties } from '../../utils/properties'
 import OptionalHoldSfxField from '../../../modals/form/OptionalHoldSfxField.vue'
+import OptionalMarkerField from '../../../modals/form/OptionalMarkerField.vue'
+import CommentField from '../../../modals/form/CommentField.vue'
 
 const createModel = useProperties(defaultNoteProperties)
 
@@ -38,6 +40,8 @@ const holdSfx = createModel('holdSfx')
 // const isConnectorSeparator = createModel('isConnectorSeparator')
 // const connectorType = createModel('connectorType')
 const connectorEase = createModel('connectorEase')
+const marker = createModel('marker')
+const comment = createModel('comment')
 // const connectorActiveIsCritical = createModel('connectorActiveIsCritical')
 // const connectorActiveIsFake = createModel('connectorActiveIsFake')
 // const connectorGuideColor = createModel('connectorGuideColor')
@@ -64,6 +68,8 @@ const copyProperties = createModel('copyProperties')
         <!--OptionalIsConnectorSeparatorField v-model="isConnectorSeparator" />
         <OptionalConnectorTypeField v-model="connectorType" /-->
         <OptionalConnectorEaseField v-model="connectorEase" />
+        <OptionalMarkerField v-model="marker" />
+        <CommentField v-model="comment" />
         <!--OptionalConnectorActiveIsCriticalField v-model="connectorActiveIsCritical" />
         <OptionalConnectorActiveIsFakeField v-model="connectorActiveIsFake" />
         <OptionalConnectorGuideColorField v-model="connectorGuideColor" />

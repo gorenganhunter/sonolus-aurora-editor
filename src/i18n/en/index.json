@@ -660,6 +660,9 @@
     },
     "modals": {
         "form": {
+            "comment": {
+                "label": "Comment"
+            },
             "confirm": "Confirm",
             "beat": {
                 "label": "Beat"
@@ -762,6 +765,13 @@
             "key": {
                 "input": "Input Key",
                 "press": "Press a key..."
+            },
+            "marker": {
+                "label": "Marker",
+                "none": "None",
+                "danger": "Danger",
+                "questionable": "Questionable",
+                "info": "Info"
             },
             "name": {
                 "label": "Name"

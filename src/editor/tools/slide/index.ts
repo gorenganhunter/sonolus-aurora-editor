@@ -350,6 +350,8 @@ const getPropertiesFromSelection = (beat: number) => {
         // connectorType:
         //     defaultSlideProperties.value.connectorType ?? nearest?.connectorType ?? 'active',
         connectorEase: noteModifier.connectorEase ?? defaultSlideProperties.value.connectorEase ?? 'linear',
+        marker: noteModifier.marker ?? defaultSlideProperties.value.marker ?? note?.marker ?? 'none',
+        comment: note?.comment
         // connectorActiveIsCritical:
         //     defaultSlideProperties.value.connectorActiveIsCritical ??
         //     defaultSlideProperties.value.isCritical ??

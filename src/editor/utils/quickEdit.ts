@@ -5,6 +5,7 @@ import type {
     // ConnectorLayer,
     // ConnectorType,
     FlickDirection,
+    NoteMarker,
     NoteSfx,
     NoteType,
     ShortenEarlyWindow,
@@ -161,6 +162,16 @@ export const quickEdit = (properties: DefaultNoteSlideProperties) => {
                     'inOut',
                     'outIn',
                     'none',
+                ]),
+            })
+            break
+        case 'marker':
+            editSelectedEditableEntities({
+                marker: rotate(value as NoteMarker, [
+                    'none',
+                    'danger',
+                    'questionable',
+                    'info'
                 ]),
             })
             break

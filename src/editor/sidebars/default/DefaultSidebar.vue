@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { isEditableEntity } from '.'
 import { i18n } from '../../../i18n'
+import CommentField from '../../../modals/form/CommentField.vue'
 import MultiBeatField from '../../../modals/form/MultiBeatField.vue'
 import MultiBpmField from '../../../modals/form/MultiBpmField.vue'
 // import MultiConnectorActiveIsCriticalField from '../../../modals/form/MultiConnectorActiveIsCriticalField.vue'
@@ -19,6 +20,7 @@ import MultiIsAttachedField from '../../../modals/form/MultiIsAttachedField.vue'
 // import MultiIsCriticalField from '../../../modals/form/MultiIsCriticalField.vue'
 // import MultiIsFakeField from '../../../modals/form/MultiIsFakeField.vue'
 import MultiLaneField from '../../../modals/form/MultiLaneField.vue'
+import MultiMarkerField from '../../../modals/form/MultiMarkerField.vue'
 import MultiNoteTypeField from '../../../modals/form/MultiNoteTypeField.vue'
 import MultiSfxField from '../../../modals/form/MultiSfxField.vue'
 // import MultiSizeField from '../../../modals/form/MultiSizeField.vue'
@@ -49,6 +51,8 @@ const holdSfx = createModel('holdSfx')
 // const isConnectorSeparator = createModel('isConnectorSeparator')
 // const connectorType = createModel('connectorType')
 const connectorEase = createModel('connectorEase')
+const marker = createModel('marker')
+const comment = createModel('comment')
 // const connectorActiveIsCritical = createModel('connectorActiveIsCritical')
 // const connectorActiveIsFake = createModel('connectorActiveIsFake')
 // const connectorGuideColor = createModel('connectorGuideColor')
@@ -100,6 +104,8 @@ const connectorEase = createModel('connectorEase')
                 v-if="types.note && noteFields.connectorEase !== false"
                 v-model="connectorEase"
             />
+            <MultiMarkerField v-if="types.note && noteFields.marker !== false" v-model="marker" />
+            <CommentField v-if="types.note && noteFields.comment !== false" v-model="comment" />
             <!--MultiConnectorActiveIsCriticalField
                 v-if="types.note && noteFields.connectorActiveIsCritical !== false"
                 v-model="connectorActiveIsCritical"

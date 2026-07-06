@@ -8,6 +8,7 @@ import type {
     // ConnectorLayer,
     // ConnectorType,
     FlickDirection,
+    NoteMarker,
     NoteObject,
     NoteSfx,
     NoteType,
@@ -30,6 +31,8 @@ export type NoteEntity = BaseEntity & {
     // isConnectorSeparator: boolean
     // connectorType: ConnectorType
     connectorEase: ConnectorEase
+    marker: NoteMarker
+    comment?: string
     // connectorLayer: ConnectorLayer
     // connectorActiveIsCritical: boolean
     // connectorActiveIsFake: boolean
@@ -64,6 +67,8 @@ export const toNoteEntity = (
     sfx: object.sfx,
     holdSfx: object.holdSfx,
     connectorEase: object.connectorEase,
+    marker: object.marker,
+    comment: object.comment,
     // isFake: object.isFake,
 
     useInfoOf,

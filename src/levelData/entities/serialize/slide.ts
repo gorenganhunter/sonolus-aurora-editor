@@ -4,7 +4,9 @@ import type { NoteEntity } from '../../../state/entities/slides/note'
 import type { Store } from '../../../state/store'
 
 export type NoteLevelDataEntity = LevelDataEntity & {
-    origin?: 0 | 1 | 2
+    origin?: 0 | 1 | 2,
+    marker?: typeof markers[keyof typeof markers],
+    comment?: string
 }
 
 export const serializeSlidesToLevelDataEntities = (
@@ -155,6 +157,11 @@ export const serializeSlidesToLevelDataEntities = (
 
             if (isFirst && isLast) entity.origin = 0
             else entity.origin = isFirst ? 1 : isLast ? 2 : 0
+
+            if (info.note.marker !== 'none') {
+                entity.marker = markers[info.note.marker]
+                entity.comment = info.note.comment
+            }
 
             // const tick = Math.round(info.note.beat * beatToTicks)
 
@@ -389,6 +396,13 @@ const connectorEases = {
     inOut: 4,
     outIn: 5,
     none: 1,
+}
+
+const markers = {
+    none: 0,
+    danger: 1,
+    questionable: 2,
+    info: 3
 }
 //
 // const guideSegmentKinds = {

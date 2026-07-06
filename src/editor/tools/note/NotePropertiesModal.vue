@@ -22,6 +22,8 @@ import MultiSfxField from '../../../modals/form/MultiSfxField.vue'
 import PropertiesModal from '../../../modals/form/PropertiesModal.vue'
 import { useSelectedEntitiesProperties } from '../../utils/properties'
 import MultiHoldSfxField from '../../../modals/form/MultiHoldSfxField.vue'
+import MultiMarkerField from '../../../modals/form/MultiMarkerField.vue'
+import CommentField from '../../../modals/form/CommentField.vue'
 
 const { noteFields, createModel } = useSelectedEntitiesProperties(
     (entity) => entity.type === 'note',
@@ -42,6 +44,8 @@ const holdSfx = createModel('holdSfx')
 // const isConnectorSeparator = createModel('isConnectorSeparator')
 // const connectorType = createModel('connectorType')
 const connectorEase = createModel('connectorEase')
+const marker = createModel('marker')
+const comment = createModel('comment')
 // const connectorActiveIsCritical = createModel('connectorActiveIsCritical')
 // const connectorActiveIsFake = createModel('connectorActiveIsFake')
 // const connectorGuideColor = createModel('connectorGuideColor')
@@ -81,6 +85,8 @@ const connectorEase = createModel('connectorEase')
             v-if="noteFields.connectorEase !== false"
             v-model="connectorEase"
         />
+        <MultiMarkerField v-if="noteFields.marker !== false" v-model="marker" />
+        <CommentField v-if="noteFields.comment !== false" v-model="comment" />
         <!--MultiConnectorActiveIsCriticalField
             v-if="noteFields.connectorActiveIsCritical !== false"
             v-model="connectorActiveIsCritical"

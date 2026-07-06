@@ -8,6 +8,7 @@ import type {
     // ConnectorLayer,
     // ConnectorType,
     FlickDirection,
+    NoteMarker,
     NoteSfx,
     NoteType,
     ShortenEarlyWindow,
@@ -45,6 +46,8 @@ export type BrushProperties = {
     // isConnectorSeparator?: boolean
     // connectorType?: ConnectorType
     connectorEase?: ConnectorEase
+    marker?: NoteMarker
+    comment?: string
     // connectorActiveIsCritical?: boolean
     // connectorActiveIsFake?: boolean
     // connectorGuideColor?: ConnectorGuideColor

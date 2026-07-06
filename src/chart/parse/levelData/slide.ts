@@ -116,7 +116,7 @@ const noteArchetypeNames = [
 
 type NoteArchetypeName = (typeof noteArchetypeNames)[number]
 
-type NoteEntity = LevelDataEntity & { archetype: NoteArchetypeName }
+type NoteEntity = LevelDataEntity & { archetype: NoteArchetypeName, marker?: keyof typeof markers, comment?: string }
 
 const isNoteEntity = (entity: LevelDataEntity): entity is NoteEntity =>
     noteArchetypeNames.includes(entity.archetype as never)
@@ -287,7 +287,21 @@ const connectorEases = {
     4: 'inOut',
     5: 'outIn',
 } as const
-//
+
+// const markerSchema = Type.Union([
+//     Type.Literal(0),
+//     Type.Literal(1),
+//     Type.Literal(2),
+//     Type.Literal(3),
+// ])
+
+const markers = {
+    0: 'none',
+    1: 'danger',
+    2: 'questionable',
+    3: 'info'
+} as const
+
 // const segmentAlphaSchema = Type.Number({ minimum: 0, maximum: 1 })
 //
 // const segmentLayerSchema = Type.Union([Type.Literal(0), Type.Literal(1)])
@@ -344,7 +358,9 @@ const toNoteObject = (
         shortenEarlyWindow: earlyCut === undefined ? 'none' : earlyWindows[earlyCut],
         sfx: sfxs[getOptionalValue(entity, 'sfx', sfxSchema) ?? 0],
         holdSfx: sfxs[getOptionalValue(entity, 'holdSfx', sfxSchema) ?? 0],
-        connectorEase: connectorEase === undefined ? 'linear' : connectorEases[connectorEase]
+        connectorEase: connectorEase === undefined ? 'linear' : connectorEases[connectorEase],
+        marker: markers[entity.marker ?? 0],
+        comment: entity.comment
     }
 
     // const [isFake, archetype1] = startsWith(entity.archetype, 'Fake')

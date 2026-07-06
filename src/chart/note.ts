@@ -57,6 +57,8 @@ export type ConnectorSfx =
 
 export type ShortenEarlyWindow = 'none' | 'perfect' | 'great' | 'good'
 
+export type NoteMarker = 'none' | 'danger' | 'questionable' | 'info'
+
 export type NoteObject = {
     groupId: GroupId
     beat: number
@@ -75,6 +77,8 @@ export type NoteObject = {
     // isConnectorSeparator: boolean
     // connectorType: ConnectorType
     connectorEase: ConnectorEase
+    marker: NoteMarker
+    comment?: string
     // connectorActiveIsCritical: boolean
     // connectorActiveIsFake: boolean
     // connectorGuideColor: ConnectorGuideColor

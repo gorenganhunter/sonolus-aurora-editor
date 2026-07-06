@@ -326,6 +326,8 @@ export const editNote = (entity: NoteEntity, object: Partial<NoteObject>) => {
         // isConnectorSeparator: object.isConnectorSeparator ?? entity.isConnectorSeparator,
         // connectorType: object.connectorType ?? entity.connectorType,
         connectorEase: object.connectorEase ?? entity.connectorEase,
+        marker: object.marker ?? entity.marker,
+        comment: object.comment ?? entity.comment,
         // connectorActiveIsCritical:
         //     object.connectorActiveIsCritical ??
         //     object.isCritical ??
@@ -359,6 +361,8 @@ export const editSelectedNote = (
         // isConnectorSeparator: object.isConnectorSeparator ?? entity.isConnectorSeparator,
         // connectorType: object.connectorType ?? entity.connectorType,
         connectorEase: object.connectorEase ?? entity.connectorEase,
+        marker: object.marker ?? entity.marker,
+        comment: object.comment ?? entity.comment,
         // connectorActiveIsCritical:
         //     object.connectorActiveIsCritical ??
         //     object.isCritical ??
@@ -400,6 +404,8 @@ const getPropertiesFromSelection = () => {
         // isConnectorSeparator: defaultNoteProperties.value.isConnectorSeparator ?? false,
         // connectorType: defaultNoteProperties.value.connectorType ?? 'active',
         connectorEase: noteModifier.connectorEase ?? defaultNoteProperties.value.connectorEase ?? 'linear',
+        marker: noteModifier.marker ?? defaultNoteProperties.value.marker ?? note?.marker ?? 'none',
+        comment: note?.comment
         // connectorActiveIsCritical:
         //     defaultNoteProperties.value.connectorActiveIsCritical ??
         //     defaultNoteProperties.value.isCritical ??

@@ -3,7 +3,7 @@ import { modals } from '../../modals'
 import { settings, type KeyboardShortcut } from '../../settings'
 import { commands, type CommandName } from '../commands'
 import { currentSidebar } from '../sidebars'
-import { type ConnectorEase, type ConnectorSfx, type FlickDirection, type NoteSfx, type NoteType, type ShortenEarlyWindow } from '../../chart/note'
+import { type ConnectorEase, type ConnectorSfx, type FlickDirection, type NoteMarker, type NoteSfx, type NoteType, type ShortenEarlyWindow } from '../../chart/note'
 import { toolName } from '../tools'
 import { entries } from '../../utils/object'
 
@@ -15,6 +15,7 @@ type NoteModifier = {
     sfx?: NoteSfx
     holdSfx?: ConnectorSfx
     connectorEase?: ConnectorEase
+    marker?: NoteMarker
 }
 
 export const noteModifier = reactive<NoteModifier>({})

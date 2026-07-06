@@ -15,6 +15,8 @@ export type NoteFields = {
     // isConnectorSeparator: boolean
     // connectorType: boolean
     connectorEase: boolean
+    marker: boolean
+    comment: boolean
     // connectorActiveIsCritical: boolean
     // connectorActiveIsFake: boolean
     // connectorGuideColor: boolean
@@ -50,10 +52,12 @@ export const getNoteFields = (note: NoteEntity): NoteFields => {
         shortenEarlyWindow: !isAnchor,
         // isFake: note.noteType !== 'anchor',
         sfx: !isAnchor,
-        holdSfx: !isAnchor && !(isFirst && isLast),
+        holdSfx: !(isFirst && isLast),
         // isConnectorSeparator: !isFirst && !isLast,
         // connectorType: (isFirst || note.isConnectorSeparator) && !isLast,
         connectorEase: (isFirst || !note.isAttached) && !isLast,
+        marker: true,
+        comment: note.marker !== 'none'
         // connectorActiveIsCritical: isInActive && (isActiveHead || note.isConnectorSeparator),
         // connectorActiveIsFake: isInActive && (isActiveHead || note.isConnectorSeparator),
         // connectorGuideColor: isInGuide && (isGuideHead || note.isConnectorSeparator),
