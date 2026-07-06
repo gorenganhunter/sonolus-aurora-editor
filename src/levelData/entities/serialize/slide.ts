@@ -88,6 +88,10 @@ export const serializeSlidesToLevelDataEntities = (
                         name: 'sfx',
                         value: sfxs[note.sfx],
                     },
+                    {
+                        name: 'holdSfx',
+                        value: sfxs[note.holdSfx]
+                    }
                 ],
                 name: getName()
             }
@@ -364,6 +368,9 @@ const earlyWindows = {
 const sfxs = {
     default: 0,
     none: 1,
+    alt2: 2,
+    alt3: 3,
+    alt4: 4
     //     normalTap: 2,
     //     criticalTap: 6,
     //     normalFlick: 3,
