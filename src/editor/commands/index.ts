@@ -53,6 +53,8 @@ import { stats } from './stats'
 import { waypoint } from './waypoint'
 import { keepTiming } from './keepTiming'
 import { snap } from './snap'
+import { markerPrev } from './markers/markerPrev'
+import { markerNext } from './markers/markerNext'
 
 export type Command = {
     title: () => string
@@ -143,6 +145,9 @@ export const commands = {
     zoomXOut,
     zoomYIn,
     zoomYOut,
+
+    markerPrev,
+    markerNext,
 
     help,
     settings,

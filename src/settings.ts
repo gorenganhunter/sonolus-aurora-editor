@@ -327,6 +327,7 @@ export const settingsProperties = {
                         'division1',
                     ],
                     ['zoomXIn', 'zoomXOut', 'zoomYIn', 'zoomYOut'],
+                    ['markerPrev', 'markerNext']
                 ] satisfies CommandName[][],
             },
         ),
@@ -385,25 +386,25 @@ export const settingsProperties = {
         }),
     )
         .Decode(
-            (value) =>
-                {
-                    console.log(1, value)
-                    const a = Object.fromEntries(
+            (value) => {
+                console.log(1, value)
+                const a = Object.fromEntries(
                     Object.entries(value)
                         .filter(([property]) => Object.keys(NoteModifierRecord.properties).includes(property))
-                        // .map(([property, v]) => ([
-                        //     property,
-                        //     Object.fromEntries(
-                        //         Object.entries(v)
-                        //             .filter(([k]) =>
-                        //                 // @ts-ignore
-                        //                 Object.keys(NoteModifierRecord.properties[property]).includes(k)
-                        //             )
-                        //     )
-                        // ])),
+                    // .map(([property, v]) => ([
+                    //     property,
+                    //     Object.fromEntries(
+                    //         Object.entries(v)
+                    //             .filter(([k]) =>
+                    //                 // @ts-ignore
+                    //                 Object.keys(NoteModifierRecord.properties[property]).includes(k)
+                    //             )
+                    //     )
+                    // ])),
                 ) as NoteModifierRecord
                 console.log(a)
-            return a},
+                return a
+            },
         )
         .Encode((values) => values),
 

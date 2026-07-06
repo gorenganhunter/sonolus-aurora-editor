@@ -45,7 +45,7 @@
                 "easiest": "Easiest Section",
                 "hardest": "Hardest Section",
                 "marks": {
-                    "label": "Marks",
+                    "label": "Markers",
                     "danger": "danger",
                     "questionable": "questionable",
                     "info": "info"
@@ -153,6 +153,14 @@
                 "deleted": "Deleted {0} group",
                 "add": "Add",
                 "added": "Added {0} group"
+            }
+        },
+        "markers": {
+            "markerNext": {
+                "title": "Jump to Next Marker"
+            },
+            "markerPrev": {
+                "title": "Jump to Prev Marker"
             }
         },
         "note": {
