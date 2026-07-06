@@ -1,5 +1,6 @@
 import type {
     ConnectorEase,
+    ConnectorSfx,
     // ConnectorGuideColor,
     // ConnectorLayer,
     // ConnectorType,
@@ -108,6 +109,29 @@ export const quickEdit = (properties: DefaultNoteSlideProperties) => {
                 sfx: rotate(value as NoteSfx, [
                     'default',
                     'none',
+                    'alt2',
+                    'alt3',
+                    'alt4'
+                    //             'normalTap',
+                    //             'criticalTap',
+                    //             'normalFlick',
+                    //             'criticalFlick',
+                    //             'normalTrace',
+                    //             'criticalTrace',
+                    //             'normalTick',
+                    //             'criticalTick',
+                    //             'damage',
+                ]),
+            })
+            break
+        case 'holdSfx':
+            editSelectedEditableEntities({
+                sfx: rotate(value as ConnectorSfx, [
+                    'default',
+                    'none',
+                    'alt2',
+                    'alt3',
+                    'alt4'
                     //             'normalTap',
                     //             'criticalTap',
                     //             'normalFlick',
