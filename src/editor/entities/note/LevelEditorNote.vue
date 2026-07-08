@@ -130,5 +130,37 @@ const type = computed(() => {
         >
             {{ entity.marker === "danger" ? "!" : entity.marker === "questionable" ? "?" : "i" }}
         </text>
+        <g transform="translate(-0.4, 0.4) scale(0.5)" v-if="entity.sfx !== 'default' || entity.holdSfx !== 'default'">
+            <svg :x="-0.5" :y="-0.5" :width="1" :height="1" fill="white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                <!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc. -->
+                <path
+                    d="M96 352l-48 0c-26.5 0-48-21.5-48-48l0-96c0-26.5 21.5-48 48-48l48 0 134.1-119.2c6.4-5.7 14.6-8.8 23.1-8.8 19.2 0 34.8 15.6 34.8 34.8l0 378.4c0 19.2-15.6 34.8-34.8 34.8-8.5 0-16.7-3.1-23.1-8.8L96 352z"
+                />
+            </svg>
+            <text
+                v-if="entity.sfx !== 'default'"
+                :x="0.5"
+                :y="0.3"
+                font-size="0.5"
+                font-weight="bold"
+                text-anchor="middle"
+                dominant-baseline="central"
+                fill="#fff"
+            >
+                {{ entity.sfx === "none" ? "x" : entity.sfx === "alt2" ? "2" : entity.sfx === "alt3" ? "3" : "4" }}
+            </text>
+            <text
+                v-if="entity.holdSfx !== 'default'"
+                :x="0.5"
+                :y="-0.3"
+                font-size="0.5"
+                font-weight="bold"
+                text-anchor="middle"
+                dominant-baseline="central"
+                fill="#fff"
+            >
+                {{ entity.holdSfx === "none" ? "x" : entity.holdSfx === "alt2" ? "2" : entity.holdSfx === "alt3" ? "3" : "4" }}
+            </text>
+        </g>
     </g>
 </template>
