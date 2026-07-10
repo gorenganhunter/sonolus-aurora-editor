@@ -33,7 +33,7 @@ import { settings } from '../../settings'
 import type { Entity } from '../../state/entities'
 import { hoveredEntities, view } from '../view'
 
-const isEntityVisible = (entity: Entity) => {
+const isEntityVisibleByGroup = (entity: Entity) => {
     if (view.groupId === undefined) return true
 
     switch (entity.type) {
@@ -69,17 +69,24 @@ const visibleEntityInfos = computed(() => {
         entity,
         isSelected: selectedEntities.value.includes(entity),
         isHovered: hoveredEntities.value.includes(entity),
-        isVisible: isEntityVisible(entity),
+        isVisibleByGroup: isEntityVisibleByGroup(entity),
+        isVisibleByType: view.visibilities[entity.type],
         layer: getLayer(entity),
     }))
 
     if (!settings.showOtherGroups) {
-        entities = entities.filter((entity) => entity.isVisible)
+        entities = entities.filter((entity) => entity.isVisibleByGroup)
+    }
+
+    if (!settings.showOtherObjects) {
+        entities = entities.filter((entity) => entity.isVisibleByType)
     }
 
     return entities.sort(
         (a, b) =>
             +a.isSelected - +b.isSelected ||
+            +(a.isVisibleByGroup && a.isVisibleByType) -
+                +(b.isVisibleByGroup && b.isVisibleByType) ||
             a.layer - b.layer ||
             b.entity.beat - a.entity.beat,
     )
@@ -89,10 +96,16 @@ const visibleEntityInfos = computed(() => {
 <template>
     <component
         :is="entityComponents[entity.type]"
-        v-for="{ entity, isSelected, isHovered, isVisible } in visibleEntityInfos"
+        v-for="{
+            entity,
+            isSelected,
+            isHovered,
+            isVisibleByGroup,
+            isVisibleByType,
+        } in visibleEntityInfos"
         :key="entity as never"
         :entity="entity as never"
         :is-highlighted="isSelected || isHovered"
-        :opacity="view.visibilities[entity.type] && isVisible ? 1 : 0.25"
+        :opacity="isVisibleByGroup && isVisibleByType ? 1 : 0.25"
     />
 </template>

@@ -459,6 +459,7 @@
             "autoAddGroup": "Auto Add Group",
             "showGroupName": "Show Group Name",
             "showOtherGroups": "Show Other Groups",
+            "showOtherObjects": "Show Other Objects",
             "hitboxAsSelectionBox": "Note Hitbox as Selection Box",
             "showLaneDivisor": "Show Lane Divisor"
         },

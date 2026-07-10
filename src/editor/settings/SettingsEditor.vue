@@ -81,5 +81,10 @@ watch(
             v-model="settings.showLaneDivisor"
             :label="i18n.settings.editor.showLaneDivisor"
         />
+
+        <ToggleField
+            v-model="settings.showOtherObjects"
+            :label="i18n.settings.editor.showOtherObjects"
+        />
     </SettingsSection>
 </template>

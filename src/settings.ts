@@ -277,6 +277,8 @@ export const settingsProperties = {
 
     showLaneDivisor: Type.Boolean({ default: true }),
 
+    showOtherObjects: Type.Boolean({ default: true }),
+
     toolbar: Type.Codec(
         Type.Array(
             Type.Codec(Type.Array(Type.String()))
