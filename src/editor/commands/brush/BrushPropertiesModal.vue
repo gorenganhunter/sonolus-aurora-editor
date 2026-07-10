@@ -1,86 +1,11 @@
 <script setup lang="ts">
 import { i18n } from '../../../i18n'
-// import OptionalConnectorActiveIsCriticalField from '../../../modals/form/OptionalConnectorActiveIsCriticalField.vue'
-// import OptionalConnectorActiveIsFakeField from '../../../modals/form/OptionalConnectorActiveIsFakeField.vue'
-import OptionalConnectorEaseField from '../../../modals/form/OptionalConnectorEaseField.vue'
-// import OptionalConnectorGuideAlphaField from '../../../modals/form/OptionalConnectorGuideAlphaField.vue'
-// import OptionalConnectorGuideColorField from '../../../modals/form/OptionalConnectorGuideColorField.vue'
-// import OptionalConnectorLayerField from '../../../modals/form/OptionalConnectorLayerField.vue'
-// import OptionalConnectorTypeField from '../../../modals/form/OptionalConnectorTypeField.vue'
-import OptionalFlickDirectionField from '../../../modals/form/OptionalFlickDirectionField.vue'
-import OptionalShortenEarlyWindowField from '../../../modals/form/OptionalShortenEarlyWindowField.vue'
-import OptionalGroupField from '../../../modals/form/OptionalGroupField.vue'
-// import OptionalHideNotesField from '../../../modals/form/OptionalHideNotesField.vue'
-import OptionalIsAttachedField from '../../../modals/form/OptionalIsAttachedField.vue'
-// import OptionalIsConnectorSeparatorField from '../../../modals/form/OptionalIsConnectorSeparatorField.vue'
-// import OptionalIsCriticalField from '../../../modals/form/OptionalIsCriticalField.vue'
-// import OptionalIsFakeField from '../../../modals/form/OptionalIsFakeField.vue'
-import OptionalNoteTypeField from '../../../modals/form/OptionalNoteTypeField.vue'
-import OptionalSfxField from '../../../modals/form/OptionalSfxField.vue'
-import OptionalHoldSfxField from '../../../modals/form/OptionalHoldSfxField.vue'
-// import OptionalSizeField from '../../../modals/form/OptionalSizeField.vue'
-// import OptionalSkipField from '../../../modals/form/OptionalSkipField.vue'
-// import OptionalTimeScaleEaseField from '../../../modals/form/OptionalTimeScaleEaseField.vue'
-import OptionalTimeScaleField from '../../../modals/form/OptionalTimeScaleField.vue'
 import PropertiesModal from '../../../modals/form/PropertiesModal.vue'
-import { brushProperties } from '../../tools/brush'
-import { useProperties } from '../../utils/properties'
-import OptionalMarkerField from '../../../modals/form/OptionalMarkerField.vue'
-import CommentField from '../../../modals/form/CommentField.vue'
-
-const createModel = useProperties(brushProperties)
-
-const groupId = createModel('groupId')
-const noteType = createModel('noteType')
-const isAttached = createModel('isAttached')
-// const size = createModel('size')
-// const isCritical = createModel('isCritical')
-const flickDirection = createModel('flickDirection')
-const shortenEarlyWindow = createModel('shortenEarlyWindow')
-// const isFake = createModel('isFake')
-const sfx = createModel('sfx')
-const holdSfx = createModel('holdSfx')
-// const isConnectorSeparator = createModel('isConnectorSeparator')
-// const connectorType = createModel('connectorType')
-const connectorEase = createModel('connectorEase')
-const marker = createModel('marker')
-const comment = createModel('comment')
-// const connectorActiveIsCritical = createModel('connectorActiveIsCritical')
-// const connectorActiveIsFake = createModel('connectorActiveIsFake')
-// const connectorGuideColor = createModel('connectorGuideColor')
-// const connectorGuideAlpha = createModel('connectorGuideAlpha')
-// const connectorLayer = createModel('connectorLayer')
-const timeScale = createModel('timeScale')
-// const skip = createModel('skip')
-// const ease = createModel('ease')
-// const hideNotes = createModel('hideNotes')
+import BrushPropertiesFields from '../../tools/brush/BrushPropertiesFields.vue'
 </script>
 
 <template>
     <PropertiesModal :title="i18n.commands.brush.modal.title">
-        <OptionalNoteTypeField v-model="noteType" />
-        <OptionalGroupField v-model="groupId" />
-        <OptionalIsAttachedField v-model="isAttached" />
-        <!--OptionalSizeField v-model="size" />
-        <OptionalIsCriticalField v-model="isCritical" /-->
-        <OptionalFlickDirectionField v-model="flickDirection" />
-        <OptionalShortenEarlyWindowField v-model="shortenEarlyWindow" />
-        <!--OptionalIsFakeField v-model="isFake" /-->
-        <OptionalSfxField v-model="sfx" />
-        <OptionalHoldSfxField v-model="holdSfx" />
-        <!--OptionalIsConnectorSeparatorField v-model="isConnectorSeparator" />
-        <OptionalConnectorTypeField v-model="connectorType" /-->
-        <OptionalConnectorEaseField v-model="connectorEase" />
-        <OptionalMarkerField v-model="marker" />
-        <CommentField v-model="comment" />
-        <!--OptionalConnectorActiveIsCriticalField v-model="connectorActiveIsCritical" />
-        <OptionalConnectorActiveIsFakeField v-model="connectorActiveIsFake" />
-        <OptionalConnectorGuideColorField v-model="connectorGuideColor" />
-        <OptionalConnectorGuideAlphaField v-model="connectorGuideAlpha" />
-        <OptionalConnectorLayerField v-model="connectorLayer" /-->
-        <OptionalTimeScaleField v-model="timeScale" />
-        <!--OptionalSkipField v-model="skip" />
-        <OptionalTimeScaleEaseField v-model="ease" />
-        <OptionalHideNotesField v-model="hideNotes" /-->
+        <BrushPropertiesFields />
     </PropertiesModal>
 </template>
