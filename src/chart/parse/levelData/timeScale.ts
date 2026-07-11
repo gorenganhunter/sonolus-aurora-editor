@@ -10,7 +10,7 @@ export const parseTimeScalesToChart = ({ chart, entities, getGroupId }: ParseCtx
         chart.timeScales.push({
             groupId: getGroupId(entity),
             beat: getValue(entity, EngineArchetypeDataName.Beat, beatSchema),
-            editorLane: getOptionalValue(entity, 'editorLane', editorLaneSchema) ?? -6,
+            editorLane: getOptionalValue(entity, '#lane', editorLaneSchema) ?? -4.5,
             timeScale: getValue(entity, EngineArchetypeDataName.TimeScale, valueSchema),
             // skip: getValue(entity, '#TIMESCALE_SKIP', skipSchema),
             // ease: eases[getValue(entity, '#TIMESCALE_EASE', easeSchema)],

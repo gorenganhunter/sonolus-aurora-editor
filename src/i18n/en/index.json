@@ -745,6 +745,9 @@
             "copyProperties": {
                 "label": "Copy Properties"
             },
+            "editorLane": {
+                "label": "Editor Lane"
+            },
             "file": {
                 "select": "Select File..."
             },

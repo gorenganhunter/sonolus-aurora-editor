@@ -15,6 +15,7 @@ const createDefaultChart = (): Chart => {
         {
             beat: 0,
             timeScale: 1,
+            editorLane: -4.5,
             groupId: id
         }
     ]
@@ -23,6 +24,7 @@ const createDefaultChart = (): Chart => {
         timeScales.push({
             beat: 0,
             timeScale: 1,
+            editorLane: -4.5,
             groupId: id
         })
     }
