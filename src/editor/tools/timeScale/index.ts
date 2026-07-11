@@ -20,7 +20,7 @@ import {
     setViewHover,
     snapYToBeat,
     view,
-    xToValidLane,
+    xToValidEditorLane,
     yToValidBeat,
 } from '../../view'
 import { hitEntitiesAtPoint } from '../utils'
@@ -184,7 +184,7 @@ export const timeScale: Tool = {
 
         setViewHover(y)
 
-        const lane = xToValidLane(x)
+        const lane = xToValidEditorLane(x)
 
         switch (active.type) {
             case 'add': {
@@ -234,7 +234,7 @@ export const timeScale: Tool = {
     dragEnd(x, y) {
         if (!active) return
 
-        const lane = xToValidLane(x)
+        const lane = xToValidEditorLane(x)
 
         switch (active.type) {
             case 'add': {
@@ -327,7 +327,7 @@ const tryFind = (x: number, y: number): [TimeScaleEntity] | [undefined, number, 
     const nearest = find(view.groupId, beat)
     if (nearest) return [nearest]
 
-    return [undefined, beat, xToValidLane(x)]
+    return [undefined, beat, xToValidEditorLane(x)]
 }
 
 const editMoveOrReplace = (entity: TimeScaleEntity, object: TimeScaleObject) => {

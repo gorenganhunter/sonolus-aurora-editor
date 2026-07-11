@@ -294,6 +294,8 @@ export const updateViewLastActive = () => {
 
 export const laneToValidLane = (lane: number) => Math.max(-4, Math.min(4, align(lane)))
 
+export const laneToValidEditorLane = (lane: number) => Math.max(-5, Math.min(5, align(lane, 2)))
+
 export const xToLane = (x: number) => ((x - view.x) / view.w - 0.5) * settings.width + view.lane
 
 export const xToValidLane = (x: number) => /*{
@@ -302,6 +304,8 @@ export const xToValidLane = (x: number) => /*{
     console.log(l, vl)
     return vl
 } */laneToValidLane(xToLane(x))
+
+export const xToValidEditorLane = (x: number) => laneToValidEditorLane(xToLane(x))
 
 export const yToTime = (y: number) => (0.5 * view.h - y + view.y) / settings.pps + view.time
 

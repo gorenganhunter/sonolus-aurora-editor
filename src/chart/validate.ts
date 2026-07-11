@@ -9,7 +9,8 @@ export const validateChart = (chart: Chart) => {
             chart.timeScales.push({
                 groupId: gid,
                 beat: 0,
-                timeScale: 1
+                timeScale: 1,
+                editorLane: -4.5
             })
     }
 }

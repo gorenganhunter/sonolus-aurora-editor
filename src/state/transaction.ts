@@ -59,7 +59,7 @@ export const createTransaction = (state: State) => {
                 timeScales ??= structuredClone(state.timeScales)
                 for (const id of (groups ?? state.groups).keys()) {
                     if (!timeScales.get(id)) {
-                        const entity = toTimeScaleEntity({ beat: 0, timeScale: 1, groupId: id })
+                        const entity = toTimeScaleEntity({ beat: 0, timeScale: 1, groupId: id, editorLane: -4.5 })
                         addToStoreGrid(this.store.grid, entity, entity.beat)
                     }
                     timeScales.set(id, calculateTimeScales(bpms ?? state.bpms, timeScales.get(id) ?? [{ beat: 0, x: 0, y: 0, s: 1 }]))
