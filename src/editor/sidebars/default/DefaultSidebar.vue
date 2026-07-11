@@ -73,7 +73,7 @@ const comment = createModel('comment')
             <!--MultiSkipField v-if="types.timeScale" v-model="skip" />
             <MultiTimeScaleEaseField v-if="types.timeScale" v-model="ease" />
             <MultiHideNotesField v-if="types.timeScale" v-model="hideNotes" /-->
-            <MultiNoteTypeField v-if="types.note" v-model="noteType" />
+            <MultiNoteTypeField v-if="types.note && noteFields.noteType !== false" v-model="noteType" />
             <MultiGroupField v-if="types.timeScale || types.note" v-model="groupId" />
             <MultiBeatField
                 v-if="entities.length === 1 || (!types.bpm && !types.timeScale)"

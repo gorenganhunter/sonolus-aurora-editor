@@ -125,7 +125,7 @@ export const serializeSlidesToLevelDataEntities = (
 
             // entity.archetype = info.note.isFake ? 'Fake' : ''
 
-            if (info.note.noteType === 'anchor') {
+            if (info.note.noteType === 'anchor' && !(isFirst && isLast)) {
                 entity.archetype += 'Ignored'
                 /*else if (info.note.noteType === 'damage') {
                    entity.archetype += 'Accident'

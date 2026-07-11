@@ -73,5 +73,5 @@ const copyProperties = createModel('copyProperties')
     <OptionalConnectorGuideColorField v-model="connectorGuideColor" />
     <OptionalConnectorGuideAlphaField v-model="connectorGuideAlpha" />
     <OptionalConnectorLayerField v-model="connectorLayer" /-->
-    <CopyPropertiesField v-model="copyProperties" />        <DefaultNotePropertiesFields />
+    <CopyPropertiesField v-model="copyProperties" />
 </template>

@@ -55,7 +55,7 @@ const comment = createModel('comment')
 
 <template>
     <PropertiesModal :title="i18n.tools.slide.modal.title">
-        <MultiNoteTypeField v-model="noteType" />
+        <MultiNoteTypeField v-if="noteFields.noteType !== false" v-model="noteType" />
         <MultiGroupField v-model="groupId" />
         <MultiBeatField v-model="beat" />
         <MultiIsAttachedField v-if="noteFields.isAttached !== false" v-model="isAttached" />

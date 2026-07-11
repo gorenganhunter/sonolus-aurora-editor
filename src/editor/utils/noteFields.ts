@@ -2,6 +2,7 @@ import { store } from '../../history/store'
 import type { NoteEntity } from '../../state/entities/slides/note'
 
 export type NoteFields = {
+    noteType: boolean
     isAttached: boolean
     // left: boolean
     // size: boolean
@@ -43,6 +44,7 @@ export const getNoteFields = (note: NoteEntity): NoteFields => {
     // const isGuideTail = info.guideTail === info.note
 
     return {
+        noteType: !(isFirst && isLast),
         isAttached: !isFirst && !isLast,
         lane: isFirst || isLast || !note.isAttached,
         // size: isFirst || isLast || !note.isAttached,
