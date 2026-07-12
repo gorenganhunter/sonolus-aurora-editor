@@ -1,5 +1,5 @@
 import type { Command } from '..'
-import type { ClipboardData } from '../../../clipboardData/schema'
+import { setClipboardData } from '../../../clipboard/index.ts'
 import { pushState, replaceState, state } from '../../../history'
 import { groups } from '../../../history/groups'
 import { initialLife } from '../../../history/initialLife'
@@ -26,7 +26,7 @@ export const cut: Command = {
         is: CutIcon,
     },
 
-    async execute() {
+    execute() {
         const entities = selectedEntities.value
 
         if (!entities.length) {
@@ -34,7 +34,7 @@ export const cut: Command = {
             return
         }
 
-        const data: ClipboardData = {
+        setClipboardData({
             lane: xToLane(view.pointer.x),
             beat: yToValidBeat(view.pointer.y),
             entities: serializeToLevelDataEntities(
@@ -48,10 +48,7 @@ export const cut: Command = {
                 }),
                 groups.value,
             ),
-        }
-        const text = JSON.stringify(data)
-
-        await navigator.clipboard.writeText(text)
+        })
 
         const removeEntities = entities.filter(
             (entity) => canRemoves[entity.type]?.(entity as never) ?? true,
