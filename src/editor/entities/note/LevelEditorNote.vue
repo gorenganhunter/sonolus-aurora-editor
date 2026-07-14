@@ -92,10 +92,10 @@ const type = computed(() => {
                 entity.groupId !== defaultGroupId &&
                 (isHighlighted || isViewRecentlyActive)
             "
-            :x="0.7"
+            :x="0"
             :y="0.4"
             font-size="0.4"
-            text-anchor="start"
+            text-anchor="middle"
             dominant-baseline="middle"
             fill="#0aa"
         >
