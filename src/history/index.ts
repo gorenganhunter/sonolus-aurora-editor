@@ -7,6 +7,7 @@ import ConfirmModal from '../modals/ConfirmModal.vue'
 import { settings } from '../settings'
 import { createState, type State } from '../state'
 import { cleanupWaveform } from '../waveform'
+import { resetAutoSave } from './autoSave/index.ts'
 
 const createDefaultChart = (): Chart => {
     const groups: Groups = new Map()
@@ -125,6 +126,7 @@ export const resetState = (
     })
     setLevelDataHandle(handle)
 
+    resetAutoSave()
     cleanupWaveform()
 }
 
